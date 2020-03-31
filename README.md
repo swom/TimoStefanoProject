@@ -1,4 +1,4 @@
-# s.tiso@rug.nl
+# s.tiso@rug.nl & t.j.b.van.eldijk@rug.nl
 Project of Stefano Tiso and Timo van Eldijk
 
 - Goal: observe evolution of mutational switches
