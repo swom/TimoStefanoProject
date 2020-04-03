@@ -6,7 +6,8 @@ population::population()
 }
 
 
-void test_population() noexcept{
+void test_population() noexcept
+{
 
 
 }
