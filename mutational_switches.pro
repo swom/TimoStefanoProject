@@ -1,10 +1,12 @@
 # Entry point for user
 
-HEADERS += 
+HEADERS +=  \
+  simulation.h
 
 
 SOURCES +=  \
-  main.cpp
+  main.cpp \
+  simulation.cpp
 
 
 CONFIG += c++17
