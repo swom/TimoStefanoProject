@@ -4,3 +4,8 @@ environment::environment()
 {
 
 }
+
+void test_environment() noexcept{
+
+
+}
