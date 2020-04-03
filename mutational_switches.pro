@@ -3,7 +3,8 @@
 HEADERS += 
 
 
-SOURCES += 
+SOURCES +=  \
+  main.cpp
 
 
 CONFIG += c++17

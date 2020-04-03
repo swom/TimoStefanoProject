@@ -30,9 +30,9 @@ services:
 
 script: 
   # Build the project, then:
-  - qmake -qt=qt5 simulation.pro
+  - qmake -qt=qt5 mutational_switches.pro
   - make --silent debug
-  - ./simulation --test
+  - ./mutational_switches --test
   # OCLint, failed OCLint does not break the build
   - ./scripts/do_oclint
   # Get code coverage
