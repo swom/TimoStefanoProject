@@ -1,5 +1,7 @@
 
+#include "population.h"
 #include "simulation.h"
+
 
 #include <cassert>
 #include <string>
@@ -7,6 +9,7 @@
 
 void test() {
   test_simulation();
+  test_population();
 }
 
 

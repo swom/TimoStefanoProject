@@ -1,11 +1,13 @@
 # Entry point for user
 
 HEADERS +=  \
+  population.h \
   simulation.h
 
 
 SOURCES +=  \
   main.cpp \
+  population.cpp \
   simulation.cpp
 
 
