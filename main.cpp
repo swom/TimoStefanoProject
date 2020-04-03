@@ -1,4 +1,5 @@
 
+#include "environment.h"
 #include "population.h"
 #include "simulation.h"
 
@@ -8,8 +9,9 @@
 #include <vector>
 
 void test() {
-  test_simulation();
+  test_environment();
   test_population();
+  test_simulation();
 }
 
 
