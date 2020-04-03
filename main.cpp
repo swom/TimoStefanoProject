@@ -1,11 +1,16 @@
 
+#include "environment.h"
+#include "population.h"
 #include "simulation.h"
+
 
 #include <cassert>
 #include <string>
 #include <vector>
 
 void test() {
+  test_environment();
+  test_population();
   test_simulation();
 }
 
