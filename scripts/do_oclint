@@ -1,5 +1,7 @@
 #!/bin/bash
-
+#
+# Do OCLint on all files
+#
 cpp_files=`ls *.cpp | egrep -v "^.*_test\.cpp$"| egrep -v "^qrc_.*\.cpp$"`
 h_files=`ls *.h`
 
