@@ -16,10 +16,7 @@ private:
     double m_target_value;
 };
 
-<<<<<<< HEAD
 void test_environment() noexcept;
-=======
-void   test_environment() noexcept;
->>>>>>> stefano
+
 
 #endif // ENVIRONMENT_H
