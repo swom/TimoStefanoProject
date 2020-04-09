@@ -1,8 +1,17 @@
+
+#include "environment.h"
+#include "population.h"
+#include "simulation.h"
+
+
 #include <cassert>
 #include <string>
 #include <vector>
-void test() {
 
+void test() {
+  test_environment();
+  test_population();
+  test_simulation();
 }
 
 
@@ -21,5 +30,6 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
   assert(1 == 2);
 #endif
 
+  simulation s;
   return 0;
 }

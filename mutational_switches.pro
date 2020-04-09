@@ -1,10 +1,16 @@
 # Entry point for user
 
-HEADERS += 
+HEADERS +=  \
+  environment.h \
+  population.h \
+  simulation.h
 
 
 SOURCES +=  \
-  main.cpp
+  environment.cpp \
+  main.cpp \
+  population.cpp \
+  simulation.cpp
 
 
 CONFIG += c++17
