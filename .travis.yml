@@ -52,7 +52,7 @@ script:
   - rm -rf .git
   - rm -rf debug
   - rm -rf release
-  - cd ..; sloccount --overhead 1 --personcost 22614 Timo-s-and-Stefano-s-project | egrep -v "Adding"; cd Timo-s-and-Stefano-s-project
+  - cd ..; sloccount --overhead 1 --personcost 22614 TimoStefanoProject | egrep -v "Adding"; cd TimoStefanoProject
 
 after_success:
   # Codecov
