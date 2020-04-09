@@ -1,5 +1,6 @@
 
 #include "environment.h"
+#include "individual.h"
 #include "population.h"
 #include "simulation.h"
 
@@ -10,6 +11,7 @@
 
 void test() {
   test_environment();
+  test_individual();
   test_population();
   test_simulation();
 }

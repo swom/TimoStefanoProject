@@ -2,12 +2,14 @@
 
 HEADERS +=  \
   environment.h \
+  individual.h \
   population.h \
   simulation.h
 
 
 SOURCES +=  \
   environment.cpp \
+  individual.cpp \
   main.cpp \
   population.cpp \
   simulation.cpp

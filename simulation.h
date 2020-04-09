@@ -8,7 +8,8 @@ class simulation
 public:
   simulation(double init_target_value = 0);
 
-   environment get_env() const noexcept {return m_environment;}
+  ///Returns the environment of the simulation
+  const environment& get_env() const noexcept {return m_environment;}
 
   private:
 

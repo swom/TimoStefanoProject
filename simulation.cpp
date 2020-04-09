@@ -10,13 +10,13 @@ simulation::simulation(double init_target_value):
 
 
 
-void test_simulation() noexcept
+void test_simulation() noexcept //!OCLINT test may be many
 {
-simulation s;
-assert (s.get_env().get_target_value()<1000000);
-
-
-
-
-
+  //Checks that simulation does have a environment member
+  //The value 123456789 is irrelevant is just needed to call
+  //get_env()
+  {
+    simulation s;
+    assert (s.get_env().get_target_value() < 123456789);
+  }
 }
