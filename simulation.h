@@ -15,8 +15,6 @@ public:
 
    environment m_environment;
 
-
-
 };
 
 
