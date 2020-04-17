@@ -15,6 +15,7 @@ private:
   ///The age of the individual
   int m_age;
 
+
 };
 
 void test_individual();
