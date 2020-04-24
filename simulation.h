@@ -2,6 +2,9 @@
 #define SIMULATION_H
 
 #include "environment.h"
+#include "population.h"
+
+#include <vector>
 
 class simulation
 {
@@ -10,10 +13,12 @@ public:
 
   ///Returns the environment of the simulation
   const environment& get_env() const noexcept {return m_environment;}
+  const population& get_pop() const noexcept {return m_population;}
 
   private:
 
    environment m_environment;
+   population m_population;
 
 };
 

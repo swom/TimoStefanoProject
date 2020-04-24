@@ -1,9 +1,11 @@
 #include "simulation.h"
 
 #include <cassert>
+#include <vector>
 
 simulation::simulation(double init_target_value):
-  m_environment{init_target_value}
+  m_environment{init_target_value},
+  m_population{}
 {
 
 }
@@ -20,12 +22,12 @@ void test_simulation() noexcept//!OCLINT test may be many
     assert (s.get_env().get_target_value() < 123456789);
   }
 
-#ifdef FIX_ISSUE_13
+
   //A simulation has a member of type population
   //The population has a vector of individuals of size 1 by default
   {
     simulation s;
-    assert(s.get_pop().size() == 1u);
+    assert(s.get_pop().get_ind_vec().size() == 1u);
   }
-#endif
+
 }
