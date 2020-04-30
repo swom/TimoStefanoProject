@@ -3,9 +3,9 @@
 #include <cassert>
 #include <vector>
 
-simulation::simulation(double init_target_value):
+simulation::simulation(double init_target_value, int n_ind):
   m_environment{init_target_value},
-  m_population{}
+  m_population{n_ind}
 {
 
 }

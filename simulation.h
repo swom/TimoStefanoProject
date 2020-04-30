@@ -9,16 +9,18 @@
 class simulation
 {
 public:
-  simulation(double init_target_value = 0);
+  simulation(double init_target_value = 0, int n_ind = 1);
 
   ///Returns the environment of the simulation
   const environment& get_env() const noexcept {return m_environment;}
   const population& get_pop() const noexcept {return m_population;}
 
+
   private:
 
    environment m_environment;
    population m_population;
+
 
 };
 
