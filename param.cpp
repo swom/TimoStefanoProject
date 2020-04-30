@@ -29,6 +29,6 @@ void test_param() noexcept
         double target_value = 0.142;
         param p(1,target_value);
         assert(p.get_target_value() - target_value < 0.00001 &&
-               p.get_target_value() - target_value > - 0.00001);
+               p.get_target_value() - target_value > -0.00001);
     }
 }

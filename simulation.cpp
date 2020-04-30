@@ -30,4 +30,9 @@ void test_simulation() noexcept//!OCLINT test may be many
     assert(s.get_pop().get_ind_vec().size() == 1u);
   }
 
+    //A simulation has a parameter member
+    {
+      simulation s;
+      assert(s.get_param().get_init_pop_size() > 0);
+    }
 }
