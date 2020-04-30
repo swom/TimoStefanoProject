@@ -3,13 +3,13 @@
 #include <cassert>
 #include <vector>
 
-simulation::simulation(double init_target_value, int n_ind):
-  m_environment{init_target_value},
-  m_population{n_ind}
+simulation::simulation(param parameters):
+    m_param{parameters},
+    m_environment{m_param.get_target_value()},
+    m_population{m_param.get_init_pop_size()}
 {
 
 }
-
 
 
 void test_simulation() noexcept//!OCLINT test may be many
@@ -33,6 +33,19 @@ void test_simulation() noexcept//!OCLINT test may be many
     //A simulation has a parameter member
     {
       simulation s;
-      assert(s.get_param().get_init_pop_size() > 0);
+      assert(s.get_param().get_init_pop_size() > -100000);
+    }
+
+    //A simulation can be initialized with a parameter object
+    {
+        int init_pop = 42;
+        double target_value = 0.42;
+        param p(init_pop, target_value);
+        simulation s(p);
+        assert(s.get_param().get_init_pop_size() == init_pop);
+        assert(s.get_param().get_target_value() - target_value < 0.0001 &&
+               s.get_param().get_target_value() - target_value > -0.0001);
+
+
     }
 }
