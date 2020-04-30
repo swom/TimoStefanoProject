@@ -3,8 +3,7 @@
 #include <cassert>
 
 population::population(int init_nr_indiv):
-
-    m_vec_indiv (init_nr_indiv)
+    m_vec_indiv(static_cast<unsigned int>(init_nr_indiv))
 {
 
 }
