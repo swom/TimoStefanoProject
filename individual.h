@@ -1,6 +1,7 @@
 #ifndef INDIVIDUAL_H
 #define INDIVIDUAL_H
 
+#include "network.h"
 
 class individual
 {
@@ -14,6 +15,7 @@ private:
 
   ///The age of the individual
   int m_age;
+
 
 
 };
