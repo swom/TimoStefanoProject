@@ -9,7 +9,7 @@
 class simulation
 {
 public:
-  simulation(double init_target_value = 0);
+  simulation(double init_target_value = 0, int init_pop_size = 1);
 
   ///Returns the environment of the simulation
   const environment& get_env() const noexcept {return m_environment;}
