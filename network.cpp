@@ -28,15 +28,15 @@ std::vector<double> response(const network& n, const std::vector<double>& input)
     std::vector<double>previous_layer_value = input;
     assert(input.size() == n.get_input_size());
 
-    for(size_t i = 0; i != n.get_net_weights().size(); i++)
+    for(size_t i = 0; i != n.get_net_weights_const().size(); i++)
     {
         auto temp_vector = std::vector<double>{};
 
-        for(size_t j = 0; j != n.get_net_weights()[i].size(); j++)
+        for(size_t j = 0; j != n.get_net_weights_const()[i].size(); j++)
         {
           double node_value = std::inner_product(previous_layer_value.begin(),
                                                  previous_layer_value.end(),
-                                                 n.get_net_weights()[i].begin(),
+                                                 n.get_net_weights_const()[i].begin(),
                                                  0.0);
           temp_vector.push_back(node_value);
         }
@@ -79,5 +79,25 @@ void test_network()
         network n{very_simple_nodes};
         auto output = response(n,input);
         assert(output == expected_output);
+
+        //Let-s change the weights of the network to something else than 0(e.g 1)
+        for(auto& layer : n.get_net_weights())
+            for(auto& node : layer)
+                for(auto& weight : node)
+                {
+                    weight = 1;
+                }
+
     }
+
+///STEFI Cyes?
+/// can you save and push to github?
+/// sure
+/// thx mate
+///
+/// <3
+
+
+
+
 }
