@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <random>
 
 class network
 {
@@ -29,6 +30,8 @@ private:
 };
 
 std::vector<double> response (const network& n);
+
+network mutate (const network& n, const double& mut_rate, const double& mut_step, std::minstd_rand &rng);
 
 void test_network();
 

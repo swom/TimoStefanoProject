@@ -1,5 +1,6 @@
 #include "network.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <numeric>
@@ -13,8 +14,8 @@ network::network(std::vector<int> nodes_per_layer):
         size_t n_nodes_prev_layer = nodes_per_layer[i-1];
         for(int j = 0; j != nodes_per_layer[i]; j++)
         {
-          std::vector<double> temp_weights(n_nodes_prev_layer, 0);
-          temp_layer_vector.push_back(temp_weights);
+            std::vector<double> temp_weights(n_nodes_prev_layer, 0);
+            temp_layer_vector.push_back(temp_weights);
         }
 
         //A vector of the size of the number of connections is pushed back in the weight matrix
@@ -34,11 +35,11 @@ std::vector<double> response(const network& n, const std::vector<double>& input)
 
         for(size_t j = 0; j != n.get_net_weights_const()[i].size(); j++)
         {
-          double node_value = std::inner_product(previous_layer_value.begin(),
-                                                 previous_layer_value.end(),
-                                                 n.get_net_weights_const()[i][j].begin(),
-                                                 0.0);
-          temp_vector.push_back(node_value);
+            double node_value = std::inner_product(previous_layer_value.begin(),
+                                                   previous_layer_value.end(),
+                                                   n.get_net_weights_const()[i][j].begin(),
+                                                   0.0);
+            temp_vector.push_back(node_value);
         }
 
         previous_layer_value = temp_vector;
@@ -47,6 +48,33 @@ std::vector<double> response(const network& n, const std::vector<double>& input)
     auto output = previous_layer_value;
     return output;
 }
+
+
+network mutate (const network& n,
+                const double& mut_rate,
+                const double& mut_step,
+                std::minstd_rand& rng)
+{
+
+    std::bernoulli_distribution mut_p{mut_rate};
+    std::normal_distribution<double> mut_st{0,mut_step};
+
+    network new_n = n;
+
+    for(auto& layer : new_n.get_net_weights())
+        for(auto& node : layer)
+            for(auto& weight : node)
+            {
+                if(mut_p(rng))
+                {weight += mut_st(rng);}
+            }
+
+    return new_n;
+}
+
+
+
+
 
 void test_network()
 {
@@ -89,10 +117,51 @@ void test_network()
                 for(auto& weight : node)
                 {
                     weight = 1;
-            }
+                }
         expected_output = std::vector<double>{2};
         output = response(n,input);
         assert(output == expected_output);
+
+    }
+
+    ///Network weights mutate following a normal distribution
+    {
+        double mut_rate = 0.01;
+        double mut_step = 0.1;
+        std::minstd_rand rng;
+
+        int repeats = 100000;
+        std::vector<double> networks_weights;
+
+        auto very_simple_nodes = std::vector<int>{1,2,1};
+        network n{very_simple_nodes};
+
+        for(int i = 0; i != repeats; i++)
+        {
+
+            auto n_new = mutate(n, mut_rate, mut_step, rng);
+
+            for(auto& layer : n_new.get_net_weights())
+                for(auto& node : layer)
+                    for(auto& weight : node)
+                    {
+                        if(weight > 0.000001 || weight < -0.000001)
+                        networks_weights.push_back(weight);
+                    }
+        }
+
+        auto mean = std::accumulate(networks_weights.begin(), networks_weights.end(), 0.0)/networks_weights.size();
+        double accum = 0.0;
+        std::for_each (std::begin(networks_weights), std::end(networks_weights), [&](const double weight) {
+            accum += (weight - mean) * (weight - mean);});
+
+        double stdev = sqrt(accum / (networks_weights.size()-1));
+
+        auto expected_mean_value  = 0;
+        auto expected_stdev = mut_step;
+        assert(mean - expected_mean_value < 0.01 && mean - expected_mean_value > -0.01);
+        assert(stdev - expected_stdev < 0.01 && stdev - expected_stdev > -0.01);
+
 
     }
 
