@@ -36,7 +36,7 @@ std::vector<double> response(const network& n, const std::vector<double>& input)
         {
           double node_value = std::inner_product(previous_layer_value.begin(),
                                                  previous_layer_value.end(),
-                                                 n.get_net_weights_const()[i].begin(),
+                                                 n.get_net_weights_const()[i][j].begin(),
                                                  0.0);
           temp_vector.push_back(node_value);
         }
@@ -64,9 +64,12 @@ void test_network()
         // minus 1 (the input layer does not have connections to previous layers)
         assert(n.get_net_weights().size() == testvec.size() -1);
 
+
+        //The size of the input is stored even though is not saved in n_connection_weights
+        //
         for(size_t  i = 0; i != n.get_net_weights().size(); i++)
         {
-            assert (static_cast<int>(n.get_net_weights()[i].size()) == testvec[i]*testvec[i - 1]);
+            assert (static_cast<int>(n.get_net_weights()[i].size()) == testvec[i + 1]);
         }
 
     }
@@ -86,16 +89,13 @@ void test_network()
                 for(auto& weight : node)
                 {
                     weight = 1;
-                }
+            }
+        expected_output = std::vector<double>{2};
+        output = response(n,input);
+        assert(output == expected_output);
 
     }
 
-///STEFI Cyes?
-/// can you save and push to github?
-/// sure
-/// thx mate
-///
-/// <3
 
 
 
