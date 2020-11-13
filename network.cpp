@@ -76,7 +76,7 @@ network mutate (const network& n,
 
 
 
-void test_network()
+void test_network() //!OCLINT
 {
     ///A network can be initialized
     /// by a vector of int that is going to
@@ -150,9 +150,12 @@ void test_network()
                     }
         }
 
-        auto mean = std::accumulate(networks_weights.begin(), networks_weights.end(), 0.0)/networks_weights.size();
+        auto mean = std::accumulate(networks_weights.begin(),
+                                    networks_weights.end(), 0.0)/networks_weights.size();
         double accum = 0.0;
-        std::for_each (std::begin(networks_weights), std::end(networks_weights), [&](const double weight) {
+        std::for_each (std::begin(networks_weights),
+                       std::end(networks_weights),
+                       [&](const double weight) {
             accum += (weight - mean) * (weight - mean);});
 
         double stdev = sqrt(accum / (networks_weights.size()-1));
@@ -161,7 +164,6 @@ void test_network()
         auto expected_stdev = mut_step;
         assert(mean - expected_mean_value < 0.01 && mean - expected_mean_value > -0.01);
         assert(stdev - expected_stdev < 0.01 && stdev - expected_stdev > -0.01);
-
 
     }
 
