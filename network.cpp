@@ -166,9 +166,4 @@ void test_network() //!OCLINT
         assert(stdev - expected_stdev < 0.01 && stdev - expected_stdev > -0.01);
 
     }
-
-
-
-
-
 }

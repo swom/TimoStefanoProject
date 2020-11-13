@@ -30,5 +30,7 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
   // In release mode, all asserts are removed from the code
   assert(1 == 2);
 #endif
+
+
   return 0;
 }
