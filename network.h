@@ -29,6 +29,7 @@ private:
     int m_input_size;
 };
 
+
 std::vector<double> response (const network& n);
 
 network mutate (const network& n, const double& mut_rate, const double& mut_step, std::minstd_rand &rng);

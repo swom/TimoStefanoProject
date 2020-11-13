@@ -5,7 +5,7 @@
 class environment
 {
 public:
-    environment(double init_target_value = 0);
+    environment(double target_value = 0);
 
     ///Returns the target value of the environment
     double get_target_value() const noexcept {return m_target_value;}
