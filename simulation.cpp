@@ -48,4 +48,12 @@ void test_simulation() noexcept//!OCLINT test may be many
 
 
     }
+
+#ifdef FIX_ISSUE_20
+  //A simulation has an absolute counter and you can access it
+  {
+    simulation s;
+    assert(s.get_absolute_time() > 0 | s.get_absolute_time() <= 0);
+  }
+#endif
 }
