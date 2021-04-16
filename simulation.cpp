@@ -83,7 +83,6 @@ void test_simulation() noexcept//!OCLINT test may be many
 #endif
 
 #ifdef FIX_ISSUE_26
- #endif
   //Every tick simulation timer increases by one
   {
     simulation s;
@@ -100,4 +99,6 @@ void test_simulation() noexcept//!OCLINT test may be many
       }
     assert(s2.get_time() == init_timer_value + repeats);
   }
+#endif
+
 }
