@@ -78,7 +78,26 @@ void test_simulation() noexcept//!OCLINT test may be many
   //A simulation has an absolute counter and you can access it
   {
     simulation s;
-    assert(s.get_absolute_time() > 0 | s.get_absolute_time() <= 0);
+    assert(s.get_time() > 0 | s.get_time() <= 0);
   }
 #endif
+
+#ifdef FIX_ISSUE_26
+ #endif
+  //Every tick simulation timer increases by one
+  {
+    simulation s;
+    auto init_timer_value = s.get_time();
+    tick(s);
+    assert(s.get_time == init_timer_value + 1);
+
+    simulation s2;
+    init_timer_value = s2.get_time();
+    int repeats = 123;
+    for(int i = 0; i != repeats; i++)
+      {
+        tick(s);
+      }
+    assert(s2.get_time() == init_timer_value + repeats);
+  }
 }
