@@ -10,20 +10,27 @@
 class simulation
 {
 public:
-    simulation(param parameters = param());
 
-    ///Returns the environment of the simulation
-    const environment& get_env() const noexcept {return m_environment;}
-    const population& get_pop() const noexcept {return m_population;}
-    const param& get_param() const noexcept {return m_param;}
+  simulation(double target_valueA = 0,
+             double target_valueB = 1,
+             int init_pop_size = 1,
+             int seed = 0,
+             int t_change_interval = 10
+          );
 
 
-private:
+  const population& get_pop() const noexcept {return m_population;}
+  std::minstd_rand& get_rng() noexcept {return m_rng;}
+  const environment& get_envA() const noexcept {return m_environmentA;}
+  const environment& get_envB() const noexcept {return m_environmentB;}
+  const std::geometric_distribution<int> get_t_change_env_distr() noexcept {return m_t_change_env_distr;}
 
-    param m_param;
-    environment m_environment;
-    population m_population;
-
+  private:
+   environment m_environmentA;
+   environment m_environmentB;
+   population m_population;
+   std::minstd_rand m_rng;
+   std::geometric_distribution<int> m_t_change_env_distr;
 
 };
 

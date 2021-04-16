@@ -14,6 +14,7 @@ void test() {
   test_environment();
   test_individual();
   test_param();
+  test_network();
   test_population();
   test_simulation();
 }
@@ -33,5 +34,7 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
   // In release mode, all asserts are removed from the code
   assert(1 == 2);
 #endif
+
+
   return 0;
 }

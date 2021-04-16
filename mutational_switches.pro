@@ -4,6 +4,7 @@ HEADERS +=  \
   environment.h \
   individual.h \
   param.h \
+  network.h \
   population.h \
   simulation.h
 
@@ -13,6 +14,7 @@ SOURCES +=  \
   individual.cpp \
   main.cpp \
   param.cpp \
+  network.cpp \
   population.cpp \
   simulation.cpp
 
