@@ -11,9 +11,7 @@ class simulation
 {
 public:
 
-  simulation(double target_valueA = 0,
-             double target_valueB = 1,
-             int init_pop_size = 1,
+  simulation(int init_pop_size = 1,
              int seed = 0,
              int t_change_interval = 10
           );
