@@ -5,15 +5,15 @@
 class environment
 {
 public:
-    environment(double target_value = 0);
+    environment();
 
     ///Returns the target value of the environment
-    double get_target_value() const noexcept {return m_target_value;}
+    double get_current_target_value() const noexcept {return m_current_target_value;}
 
 private:
 
     ///The target value of the environment
-    double m_target_value;
+    double m_current_target_value;
 };
 
 void test_environment() noexcept;

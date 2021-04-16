@@ -21,16 +21,15 @@ public:
 
   const population& get_pop() const noexcept {return m_population;}
   std::minstd_rand& get_rng() noexcept {return m_rng;}
-  const environment& get_envA() const noexcept {return m_environmentA;}
-  const environment& get_envB() const noexcept {return m_environmentB;}
-  const std::geometric_distribution<int> get_t_change_env_distr() noexcept {return m_t_change_env_distr;}
+  const environment& get_env() const noexcept {return m_environment;}
+  const std::bernoulli_distribution& get_t_change_env_distr() const noexcept {return m_t_change_env_distr;}
+  std::bernoulli_distribution& get_t_change_env_distr() noexcept {return m_t_change_env_distr;}
 
   private:
-   environment m_environmentA;
-   environment m_environmentB;
+   environment m_environment;
    population m_population;
    std::minstd_rand m_rng;
-   std::geometric_distribution<int> m_t_change_env_distr;
+   std::bernoulli_distribution m_t_change_env_distr;
 
 };
 
