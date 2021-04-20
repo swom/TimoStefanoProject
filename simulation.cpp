@@ -28,7 +28,7 @@ void test_simulation() noexcept//!OCLINT test may be many
         assert(s.get_pop().get_ind_vec().size() == 1u);
     }
 
-#ifdef FIX_ISSUE_27
+
     ///A simulation can be initialized by
     /// target values for the environment
     /// and the number of individuals in
@@ -42,7 +42,7 @@ void test_simulation() noexcept//!OCLINT test may be many
                && s.get_env().get_target_valueB() == target_valueB
                && s.get_pop().get_ind_vec().size() == static_cast<unsigned int>(init_pop_size));
     }
-#endif
+
     ////A simulation should have a random engine, intialized with a seed that is fed to simulation
 
     {
