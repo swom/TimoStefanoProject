@@ -1,4 +1,5 @@
 #include "environment.h"
+#include "utilities.h"
 #include <cassert>
 
 environment::environment()
@@ -36,5 +37,28 @@ void test_environment() noexcept
   }
 #endif
 
+#ifdef FIX_ISSUE_29
+  //Current target value is initialized to the first of the 2 target values
+  {
+    double targetA = 0.123456;
+    double targetB = 0.654321;
+    environment e{targetA,targetB};
+    assert(are_equal_with_tolerance(e.get_current_target_value(), targetA));
+    assert(are_not_equal_with_tolerance(e.get_current_target_value(), targetB));
+  }
+#endif
 
+#ifdef FIX_ISSUE_25
+  //An environment can switch target values
+  {
+    double targetA = 0.123456;
+    double targetB = 0.654321;
+    environment e{targetA,targetB};
+    assert(are_equal_with_tolerance(e.get_current_target_value(), targetA));
+    switc_target(e);
+    assert(are_equal_with_tolerance(e.get_current_target_value(), targetB));
+    switc_target(e);
+    assert(are_equal_with_tolerance(e.get_current_target_value(), targetA));
+  }
+#endif
 }
