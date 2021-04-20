@@ -4,11 +4,11 @@
 #include <vector>
 
 
-simulation::simulation(//double targetA, double targetB,
+simulation::simulation(double targetA, double targetB,
                        int init_pop_size,
                        int seed,
                        int t_change_interval):
-    m_environment{/*targetA, targetB*/},
+    m_environment{targetA, targetB},
     m_population{init_pop_size},
     m_rng{seed},
     m_t_change_env_distr{1.0/static_cast<double>(t_change_interval)},
@@ -46,11 +46,11 @@ void test_simulation() noexcept//!OCLINT test may be many
     ////A simulation should have a random engine, intialized with a seed that is fed to simulation
 
     {
-//      double targetA = 1.0;
-//      double targetB = 0;
+     double targetA = 1.0;
+     double targetB = 0;
         int pop_size = 1;
         int seed = 123456789;
-        simulation s{//targetA, targetB
+        simulation s{targetA, targetB,
           pop_size,seed};
 
         std::minstd_rand copy_rng(seed);
@@ -62,13 +62,13 @@ void test_simulation() noexcept//!OCLINT test may be many
     /// that determines the interval of environmental change
     /// Default initialization value is 10
     {
-//      double targetA = 1.0;
-//      double targetB = 0;
+     double targetA = 1.0;
+     double targetB = 0;
         int pop_size = 1;
         int seed = 123456789;
         int t_change_interval = 20;
 
-        simulation s {// targetA, targetB,
+        simulation s { targetA, targetB,
               pop_size, seed, t_change_interval};
         std::bernoulli_distribution mockdistrotchange(1.0 / static_cast<double>(t_change_interval));
         assert (s.get_t_change_env_distr() == mockdistrotchange);
