@@ -537,7 +537,7 @@ template <typename Real = double, typename URNG>
 inline Real uniform01(URNG& reng)
 {
   return detail::generate_canonical<Real, size_t(-1), URNG>(reng);
-};
+}
 
 
 // The simplest one. Just missing in <random>
@@ -994,8 +994,8 @@ public:
   template <typename W>
   void mutate(W const& w)
   {
-    mutate_transform_partial(w.cbegin(), w.cend(), 0, [](weight_type w) {
-      return w;
+    mutate_transform_partial(w.cbegin(), w.cend(), 0, [](weight_type w1) {
+      return w1;
     });
   }
 
@@ -1010,8 +1010,8 @@ public:
   template <typename W>
   void mutate_partial(W const& w, size_t ofs)
   {
-    mutate_transform_partial(w.cbegin(), w.cend(), ofs, [](weight_type w) {
-      return w;
+    mutate_transform_partial(w.cbegin(), w.cend(), ofs, [](weight_type w1) {
+      return w1;
     });
   }
 

@@ -6,6 +6,7 @@ HEADERS +=  \
   param.h \
   network.h \
   population.h \
+  rndutils.hpp \
   simulation.h \
   utilities.h
 
