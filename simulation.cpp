@@ -7,15 +7,20 @@
 simulation::simulation(//double targetA, double targetB,
                        int init_pop_size,
                        int seed,
-                       int t_change_interval):
+                       int t_change_interval,
+                       std::vector<int> net_arch):
     m_environment{/*targetA, targetB*/},
-    m_population{init_pop_size},
+    m_population{net_arch, init_pop_size},
     m_rng{seed},
     m_t_change_env_distr{1.0/static_cast<double>(t_change_interval)}
 {
 
 }
 
+const network& get_nth_ind_net(const simulation& s, size_t ind_index)
+{
+  return get_nth_ind_net(s.get_pop(), ind_index);
+}
 
 void test_simulation() noexcept//!OCLINT test may be many
 {
@@ -24,7 +29,7 @@ void test_simulation() noexcept//!OCLINT test may be many
     ///The population has a vector of individuals of size 1 by default
     {
         simulation s;
-        assert(s.get_pop().get_ind_vec().size() == 1u);
+        assert(s.get_pop().get_inds().size() == 1u);
     }
 
 #ifdef FIX_ISSUE_27
@@ -102,4 +107,11 @@ void test_simulation() noexcept//!OCLINT test may be many
   }
 #endif
 
+  ///Simulation can be initialized with network architecture for inds in pop
+  {
+    std::vector<int> net_arch{1,33,2,1};
+    simulation s{1,0,0, net_arch};
+
+    assert(get_nth_ind_net(s, 0) == network{net_arch});
+  }
 }

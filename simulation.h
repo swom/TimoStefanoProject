@@ -13,7 +13,8 @@ public:
 
   simulation(int init_pop_size = 1,
              int seed = 0,
-             int t_change_interval = 10
+             int t_change_interval = 10,
+             std::vector<int> net_arch = {1,2,1}
           );
 
 

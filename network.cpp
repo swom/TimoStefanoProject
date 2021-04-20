@@ -5,22 +5,33 @@
 #include <cmath>
 #include <numeric>
 
+network::network(std::vector<int> nodes_per_layer):
+  m_input_size{nodes_per_layer[0]}
+{
+  for (size_t i = 1; i != nodes_per_layer.size(); i++ )
+    {
+      std::vector<std::vector<double>>temp_layer_vector;
+      size_t n_nodes_prev_layer = nodes_per_layer[i-1];
+      for(int j = 0; j != nodes_per_layer[i]; j++)
+        {
+          std::vector<double> temp_weights(n_nodes_prev_layer, 0);
+          temp_layer_vector.push_back(temp_weights);
+        }
 
-double calc_mean(const std::vector<double>& numbers){
-  return std::accumulate(numbers.begin(),
-                              numbers.end(), 0.0)/numbers.size();
+      //A vector of the size of the number of connections is pushed back in the weight matrix
+      m_network_weights.push_back(temp_layer_vector);
+    }
 }
 
-double calc_stdev(const std::vector<double>& numbers)
+bool operator==(const network& lhs, const network& rhs)
 {
-  double accum = 0.0;
-  auto mean = calc_mean(numbers);
-  std::for_each (std::begin(numbers),
-                 std::end(numbers),
-                 [&](const double weight) {
-      accum += (weight - mean) * (weight - mean);});
+  return lhs.get_input_size() == rhs.get_input_size() &&
+  lhs.get_net_weights() == rhs.get_net_weights();
+}
 
-  return sqrt(accum / (numbers.size()-1));
+bool operator!=(const network& lhs, const network& rhs)
+{
+  return !(lhs == rhs);
 }
 
 network change_all_weights(network n, double new_weight)
@@ -53,23 +64,6 @@ std::vector<double> register_n_mutations(network n, double mut_rate, double mut_
   return  networks_weights;
 }
 
-network::network(std::vector<int> nodes_per_layer):
-  m_input_size{nodes_per_layer[0]}
-{
-  for (size_t i = 1; i != nodes_per_layer.size(); i++ )
-    {
-      std::vector<std::vector<double>>temp_layer_vector;
-      size_t n_nodes_prev_layer = nodes_per_layer[i-1];
-      for(int j = 0; j != nodes_per_layer[i]; j++)
-        {
-          std::vector<double> temp_weights(n_nodes_prev_layer, 0);
-          temp_layer_vector.push_back(temp_weights);
-        }
-
-      //A vector of the size of the number of connections is pushed back in the weight matrix
-      m_network_weights.push_back(temp_layer_vector);
-    }
-}
 
 
 std::vector<double> response(const network& n, const std::vector<double>& input)
@@ -162,6 +156,14 @@ void test_network() //!OCLINT
     n = change_all_weights(n,new_weight_value);
     expected_output = std::vector<double>{2};
     output = response(n,input);
+    assert(output == expected_output);
+
+    //Testing a more complex arhitecture
+    std::vector<int> not_too_simple_nodes{1,3,3,1};
+    network not_too_simple{not_too_simple_nodes};
+    not_too_simple = change_all_weights(not_too_simple, new_weight_value);
+    expected_output = {1 * 3 * 3};
+    output = response(not_too_simple, input);
     assert(output == expected_output);
 
   }

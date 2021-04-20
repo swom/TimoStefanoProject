@@ -55,9 +55,9 @@ void test_environment() noexcept
     double targetB = 0.654321;
     environment e{targetA,targetB};
     assert(are_equal_with_tolerance(e.get_current_target_value(), targetA));
-    switc_target(e);
+    switch_target(e);
     assert(are_equal_with_tolerance(e.get_current_target_value(), targetB));
-    switc_target(e);
+    switch_target(e);
     assert(are_equal_with_tolerance(e.get_current_target_value(), targetA));
   }
 #endif

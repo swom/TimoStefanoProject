@@ -1,6 +1,6 @@
 #ifndef NETWORK_H
 #define NETWORK_H
-
+#include "utilities.h"
 #include <iostream>
 #include <vector>
 #include <random>
@@ -29,11 +29,9 @@ private:
     int m_input_size;
 };
 
-///Claculates mean of a vector of doubles
-double calc_mean(const std::vector<double> &numbers);
+bool operator==(const network& lhs, const network& rhs);
 
-///Calculates stdev of vector of doubles
-double calc_stdev(const std::vector<double>& numbers);
+bool operator!=(const network& lhs, const network& rhs);
 
 network change_all_weights(network n, double new_weight);
 
