@@ -22,12 +22,14 @@ public:
   const environment& get_env() const noexcept {return m_environment;}
   const std::bernoulli_distribution& get_t_change_env_distr() const noexcept {return m_t_change_env_distr;}
   std::bernoulli_distribution& get_t_change_env_distr() noexcept {return m_t_change_env_distr;}
+  const int& get_time() const noexcept {return m_time;}
 
   private:
    environment m_environment;
    population m_population;
    std::minstd_rand m_rng;
    std::bernoulli_distribution m_t_change_env_distr;
+   int m_time;
 
 };
 

@@ -11,7 +11,8 @@ simulation::simulation(//double targetA, double targetB,
     m_environment{/*targetA, targetB*/},
     m_population{init_pop_size},
     m_rng{seed},
-    m_t_change_env_distr{1.0/static_cast<double>(t_change_interval)}
+    m_t_change_env_distr{1.0/static_cast<double>(t_change_interval)},
+    m_time {0} ///I initialized time at 0
 {
 
 }
@@ -75,13 +76,13 @@ void test_simulation() noexcept//!OCLINT test may be many
     }
 
 
-#ifdef FIX_ISSUE_20
+
   //A simulation has an absolute counter and you can access it
   {
     simulation s;
-    assert(s.get_time() > 0 | s.get_time() <= 0);
+    assert((s.get_time() > 0) | (s.get_time() <= 0));
   }
-#endif
+
 
 #ifdef FIX_ISSUE_26
   //Every tick simulation timer increases by one
