@@ -83,7 +83,7 @@ double find_min_fitness(const simulation&s)
   auto min_ind =
       std::min_element(inds.begin(), inds.end(), [](const individual& lhs, const individual& rhs){
       return lhs.get_fitness() > rhs.get_fitness();});
-
+  std::cout << min_ind->get_fitness();
   return min_ind->get_fitness();
 }
 
@@ -224,7 +224,7 @@ void test_simulation() noexcept//!OCLINT test may be many
     assert(get_nth_ind_fitness(s,0) == 1);
 
     ///ind 1 response is 0, therefore its fitness would be the lowest in all the population
-    assert(find_min_fitness(s) == get_nth_ind_fitness(s,1));
+    assert(are_equal_with_tolerance(find_min_fitness(s), get_nth_ind_fitness(s,1)));
 
   }
 
