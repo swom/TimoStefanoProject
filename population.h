@@ -2,7 +2,7 @@
 #define POPULATION_H
 
 #include "individual.h"
-
+#include "rndutils.hpp"
 #include <vector>
 
 class population
