@@ -2,10 +2,10 @@
 
 #include <cassert>
 
-population::population(std::vector<int> net_arch,
-                       int init_nr_indiv,
+population::population(int init_nr_indiv,
                        double mut_rate,
-                       double mut_step
+                       double mut_step,
+    std::vector<int> net_arch
                        ):
   m_vec_indiv(static_cast<unsigned int>(init_nr_indiv),individual{net_arch}),
   m_vec_new_indiv(static_cast<unsigned int>(init_nr_indiv)),
@@ -13,6 +13,32 @@ population::population(std::vector<int> net_arch,
   m_mut_step{mut_step}
 {
 
+}
+
+bool all_nets_equals_to(const population& p, const network& n)
+{
+  return std::all_of(p.get_inds().begin(), p.get_inds().end(),
+                         [n](const individual& i)
+      {return i.get_net() == n;});
+}
+
+population calc_fitness(population p, double env_value)
+{
+  std::vector<double> distance_from_target;
+  for(auto& ind : p.get_inds())
+   {
+     distance_from_target.push_back(calc_distance(ind, env_value));
+   }
+  assert(distance_from_target.size() == p.get_inds().size());
+
+  double max_distance = *std::max(distance_from_target.begin(),distance_from_target.end());
+
+  for(size_t i = 0; i != distance_from_target.size(); i++)
+    {
+      set_nth_ind_fitness(p, i, 1 - distance_from_target[i] / max_distance);
+    }
+
+ return p;
 }
 
 const individual& get_nth_ind(const population& p, size_t ind_index)
@@ -25,6 +51,11 @@ individual& get_nth_ind(population& p, size_t ind_index)
   return p.get_inds()[ind_index];
 }
 
+double get_nth_ind_fitness(const population& p, const size_t& ind_index)
+{
+   return p.get_inds()[ind_index].get_fitness();
+}
+
 const network& get_nth_ind_net(const population& p, size_t ind_index)
 {
   return get_nth_ind(p, ind_index).get_net();
@@ -35,12 +66,17 @@ network& get_nth_ind_net( population& p, size_t ind_index)
   return get_nth_ind(p, ind_index).get_net();
 }
 
+void set_nth_ind_fitness (population& p, size_t ind_index, double fitness)
+{
+  auto& ind = p.get_inds()[ind_index];
+  ind.set_fitness(fitness);
+}
 
 void test_population() noexcept
 {
   {
     int nelement = 10;
-    population pop{{1}, 10};
+    population pop{10};
     assert (static_cast<int>(pop.get_inds().size()) == nelement );
   }
   //A population has a member variable called m_mut_step
@@ -53,18 +89,18 @@ void test_population() noexcept
     assert(are_equal_with_tolerance(p.get_mut_step(), 0.1));
 
     auto mut_rate = 5.0;
-    population p2{{1}, 0, mut_rate};
+    population p2{0, mut_rate};
     assert(are_equal_with_tolerance(p2.get_mut_rate(), mut_rate));
 
     auto mut_step = 5.0;
-    population p3{{1}, 0,0,mut_step};
+    population p3{0 ,0, mut_step};
     assert(are_equal_with_tolerance(p3.get_mut_step(), mut_step));
   }
 
   ///Population can be initialized with network architecture for inds
   {
     std::vector<int> net_arch{1,33,3,1};
-    population p{net_arch, 1, 0, 0};
+    population p{1, 0, 0, net_arch};
     assert(get_nth_ind_net(p, 0) == network{net_arch});
   }
 
@@ -73,4 +109,26 @@ void test_population() noexcept
     population p;
     assert(p.get_new_inds().size() == p.get_inds().size());
   }
+
+#ifdef FIX_ISSUE_32
+  ///Individuals with higher fitness are preferentially selected for the next generation
+  {
+    int n_inds = 2;
+    size_t first_ind = 0;
+    size_t second_ind = 1;
+    population p{n_inds};
+
+    //make first ind net recognizable
+    auto new_net =  change_all_weights(get_nth_ind_net(p,first_ind), 123456);
+    change_nth_ind_net(p, first_ind, new_net);
+
+    set_fintess_nth_ind(p, first_ind, 1);
+    set_fitness_nth_ind(p, second_ind, 0);
+
+    reproduce(p);
+
+    assert(all_nets_equals_to(p, new_net));
+  }
+#endif
+
 }

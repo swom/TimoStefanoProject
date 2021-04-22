@@ -45,6 +45,12 @@ public:
 
 };
 
+///Calculates fitness of inds in pop given current env values
+void calc_fitness(simulation& s);
+
+///Changes all the weights of a given individual to a given value
+void change_all_weights_nth_ind(simulation& s, size_t ind_index, double new_weight);
+
 ///Changes the network of the nth individual for a given network
 void change_nth_ind_net(simulation& s, size_t ind_index, const network& n);
 
@@ -56,6 +62,9 @@ double& get_current_env_value(simulation&s);
 
 ///Returns the individuals in the simualtion
 const std::vector<individual>& get_inds(const simulation&s);
+
+///Returns the fitness of the nth ind in pop
+double get_nth_ind_fitness(const simulation& s, const size_t ind_index);
 
 ///Returns const or non-onst ref to the network of the nth individual in the
 /// popoulation member of a simulation

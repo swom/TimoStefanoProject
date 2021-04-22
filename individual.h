@@ -14,16 +14,26 @@ public:
   ///Return const referernce to vector of fixed input values
   const std::vector<double>& get_input_values() const noexcept {return m_input_values;}
 
+  ///Returns the fitness
+  double get_fitness() const noexcept {return m_fitness;}
+
   ///Returns const ref to network
   const network& get_net() const noexcept {return m_network;}
 
   ///Returns ref to network
   network& get_net() noexcept {return m_network;}
 
+
+  ///Sets the fitness of an ind
+  void set_fitness(double fitness) {m_fitness = fitness;}
+
 private:
 
   ///The age of the individual
   int m_age;
+
+  ///The fitness of an individual
+  double m_fitness = 0;
 
   ///The vector of fixed input values that will be given to the network
   std::vector<double> m_input_values;
@@ -32,6 +42,12 @@ private:
   network m_network;
 };
 
+///Calculates the distance of a response of a network
+/// and a given value
+double calc_distance(const individual& i, double env_value);
+
+///Lets a network send out an ouput signal
+///!!!!Attention!!! for now no input is provided
 std::vector<double> response(const individual& ind);
 
 void test_individual();

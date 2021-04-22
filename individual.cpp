@@ -5,10 +5,16 @@
 
 individual::individual(std::vector<int> net_arch, int age) :
   m_age{age},
+  ///!!!!Attention!!!! input values are for now a fixed amount
   m_input_values(net_arch[0], 1.0),
   m_network{net_arch}
 {
 
+}
+
+double calc_distance(const individual& i, double env_value)
+{
+   return std::abs(response(i)[0] - env_value);
 }
 
 std::vector<double> response(const individual& ind)
