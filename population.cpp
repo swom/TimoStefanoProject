@@ -8,15 +8,31 @@ population::population(std::vector<int> net_arch,
                        double mut_step
                        ):
   m_vec_indiv(static_cast<unsigned int>(init_nr_indiv),individual{net_arch}),
+  m_vec_new_indiv(static_cast<unsigned int>(init_nr_indiv)),
   m_mut_rate{mut_rate},
   m_mut_step{mut_step}
 {
 
 }
 
+const individual& get_nth_ind(const population& p, size_t ind_index)
+{
+  return p.get_inds()[ind_index];
+}
+
+individual& get_nth_ind(population& p, size_t ind_index)
+{
+  return p.get_inds()[ind_index];
+}
+
 const network& get_nth_ind_net(const population& p, size_t ind_index)
 {
-  return p.get_inds()[ind_index].get_net();
+  return get_nth_ind(p, ind_index).get_net();
+}
+
+network& get_nth_ind_net( population& p, size_t ind_index)
+{
+  return get_nth_ind(p, ind_index).get_net();
 }
 
 
@@ -52,9 +68,9 @@ void test_population() noexcept
     assert(get_nth_ind_net(p, 0) == network{net_arch});
   }
 
-  //Population has a buffer_vector for the new_population
+  //Population has a buffer_vector for the new_population, with size equal to number of inds
   {
     population p;
-    assert(p.get_new_inds().size() == 0);
+    assert(p.get_new_inds().size() == p.get_inds().size());
   }
 }

@@ -146,12 +146,14 @@ void test_network() //!OCLINT
   {
     auto very_simple_nodes = std::vector<int>{1,2,1};
     auto input = std::vector<double>{1};
+
+    //For simple net with weights == 0
     auto expected_output = std::vector<double>{0};
     network n{very_simple_nodes};
     auto output = response(n,input);
     assert(output == expected_output);
 
-    //Let-s change the weights of the network to something else than 0(e.g 1)
+    //Let's change the weights of the network to something else than 0(e.g 1)
     double new_weight_value = 1.0;
     n = change_all_weights(n,new_weight_value);
     expected_output = std::vector<double>{2};

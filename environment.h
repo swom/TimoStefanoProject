@@ -10,6 +10,9 @@ public:
     ///Returns the target value of the environment
     double get_current_target_value() const noexcept {return m_current_target_value;}
 
+    ///Returns the target value of the environment
+    double& get_current_target_value() noexcept {return m_current_target_value;}
+
 private:
 
     ///The target value of the environment

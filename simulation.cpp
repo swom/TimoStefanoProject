@@ -17,7 +17,41 @@ simulation::simulation(//double targetA, double targetB,
 
 }
 
+void change_current_target_value(simulation& s, double new_target_value)
+{
+  get_current_env_value(s) = new_target_value;
+}
+void change_nth_ind_net(simulation& s, size_t ind_index, const network& n)
+{
+  get_nth_ind_net(s, ind_index) = n;
+}
+
+double get_current_env_value(const simulation&s)
+{
+  return s.get_env().get_current_target_value();
+}
+
+double& get_current_env_value(simulation&s)
+{
+  return s.get_env().get_current_target_value();
+}
+
+const std::vector<individual>& get_inds(const simulation&s)
+{
+  return s.get_pop().get_inds();
+}
+
+const individual& get_nth_ind(const simulation& s, size_t ind_index)
+{
+  return get_nth_ind(s.get_pop(), ind_index);
+}
+
 const network& get_nth_ind_net(const simulation& s, size_t ind_index)
+{
+  return get_nth_ind_net(s.get_pop(), ind_index);
+}
+
+network& get_nth_ind_net( simulation& s, size_t ind_index)
 {
   return get_nth_ind_net(s.get_pop(), ind_index);
 }
@@ -113,5 +147,29 @@ void test_simulation() noexcept//!OCLINT test may be many
     simulation s{1,0,0, net_arch};
 
     assert(get_nth_ind_net(s, 0) == network{net_arch});
+  }
+
+///individuals in a pop are selected based on how closely they match the current_env_target_value
+  {
+    int pop_size = 2;
+    simulation s{pop_size};
+
+    //change ind 0 net
+    auto new_net = change_all_weights(network{{1,2,1}}, 1);
+    change_nth_ind_net(s, 0, new_net);
+
+    //change target value to match output of ind 0 net
+    change_current_target_value(s, response(get_nth_ind(s, 0))[0]);
+
+    assert(response(get_nth_ind(s, 0))[0] == get_current_env_value(s));
+    assert(response(get_nth_ind(s, 1))[0] != get_current_env_value(s));
+
+    select_inds(s);
+
+    //all inds should now have the network that matches the target values
+    for(const auto& ind :get_inds(s))
+      {
+        assert(ind.get_net() == new_net);
+      }
   }
 }

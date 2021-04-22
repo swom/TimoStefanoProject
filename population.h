@@ -14,8 +14,11 @@ public:
              double mut_step = 0.1
              );
 
-  ///Get vector of individuals
+  ///Get const ref to vector of individuals
   const std::vector<individual>& get_inds() const noexcept{return m_vec_indiv;}
+
+  ///Get ref to vector of individuals
+  std::vector<individual>& get_inds() noexcept{return m_vec_indiv;}
 
   ///Get vector of individuals
   const std::vector<individual>& get_new_inds() const noexcept{return m_vec_new_indiv;}
@@ -35,7 +38,11 @@ private:
 
 };
 
+const individual& get_nth_ind(const population& p, size_t ind_index);
+individual& get_nth_ind(population& p, size_t ind_index);
+
 const network& get_nth_ind_net(const population& p, size_t ind_index);
+network& get_nth_ind_net( population& p, size_t ind_index);
 
 void test_population() noexcept;
 
