@@ -31,7 +31,7 @@ population calc_fitness(population p, double env_value)
     }
   assert(distance_from_target.size() == p.get_inds().size());
 
-  double max_distance = *std::max(distance_from_target.begin(),distance_from_target.end());
+  double max_distance = *std::max_element(distance_from_target.begin(),distance_from_target.end());
 
   for(size_t i = 0; i != distance_from_target.size(); i++)
     {

@@ -82,9 +82,8 @@ double find_min_fitness(const simulation&s)
 
   auto min_ind =
       std::min_element(inds.begin(), inds.end(), [](const individual& lhs, const individual& rhs){
-      return lhs.get_fitness() > rhs.get_fitness();});
+      return lhs.get_fitness() < rhs.get_fitness();});
 
-  std::cout << min_ind->get_fitness();
 
   return min_ind->get_fitness();
 }
@@ -230,7 +229,8 @@ void test_simulation() noexcept//!OCLINT test may be many
     auto second_ind_fit =  get_nth_ind_fitness(s,1) ;
     auto min_fit = find_min_fitness(s);
 
-    std::cout << second_ind_fit << min_fit;
+    std::cout << second_ind_fit << std::endl <<
+                 min_fit << std::endl;
 
     assert(are_equal_with_tolerance(min_fit,second_ind_fit));
 
