@@ -14,6 +14,9 @@ public:
     double get_target_valueA() const noexcept {return m_target_valueA;}
     double get_target_valueB() const noexcept {return m_target_valueB;}
 
+    ///Returns the target value of the environment
+    double& get_current_target_value() noexcept {return m_current_target_value;}
+
 private:
 
     ///The target value of the environment
