@@ -22,20 +22,21 @@ bool all_nets_equals_to(const population& p, const network& n)
   {return i.get_net() == n;});
 }
 
-population calc_fitness(population p, double env_value)
+population calc_fitness(population p, double env_value, double sel_str)
 {
   std::vector<double> distance_from_target;
   for(auto& ind : p.get_inds())
     {
-      distance_from_target.push_back(calc_distance(ind, env_value));
+      distance_from_target.push_back(calc_sqr_distance(ind, env_value));
     }
   assert(distance_from_target.size() == p.get_inds().size());
 
-  double max_distance = *std::max_element(distance_from_target.begin(),distance_from_target.end());
+  double min_distance = *std::min_element(distance_from_target.begin(),distance_from_target.end());
 
   for(size_t i = 0; i != distance_from_target.size(); i++)
     {
-      set_nth_ind_fitness(p, i, 1 - distance_from_target[i] / max_distance);
+      auto ind_fit  = pow(1 - (1 - min_distance / distance_from_target[i] ), sel_str);
+      set_nth_ind_fitness(p, i, ind_fit);
     }
 
   return p;

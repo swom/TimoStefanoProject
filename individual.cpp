@@ -12,9 +12,9 @@ individual::individual(std::vector<int> net_arch, int age) :
 
 }
 
-double calc_distance(const individual& i, double env_value)
+double calc_sqr_distance(const individual& i, double env_value)
 {
-   return std::abs(response(i)[0] - env_value);
+   return (response(i)[0] - env_value) * (response(i)[0] - env_value);
 }
 
 individual mutate(individual i, double mut_rate, double mut_step, std::minstd_rand& rng)

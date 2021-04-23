@@ -44,7 +44,7 @@ private:
 };
 
 ///Calculates the fitness of inds in pop given a target env_value
-population calc_fitness(population p, double env_value);
+population calc_fitness(population p, double env_value, double sel_str);
 
 ///changes the net of the nth individual to a given net
 void change_nth_ind_net(population& p, size_t ind_index, network n);
