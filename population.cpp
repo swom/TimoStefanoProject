@@ -15,6 +15,15 @@ population::population(int init_nr_indiv,
 
 }
 
+std::vector<double> adjust_distances(std::vector<double> distances)
+{
+  for(double& dist : distances)
+    {
+      dist += 0.0000000000000001;
+    }
+  return distances;
+}
+
 bool all_nets_equals_to(const population& p, const network& n)
 {
   return std::all_of(p.get_inds().begin(), p.get_inds().end(),
@@ -22,22 +31,29 @@ bool all_nets_equals_to(const population& p, const network& n)
   {return i.get_net() == n;});
 }
 
-population calc_fitness(population p, double env_value, double sel_str)
+std::vector<double> calc_dist_from_target(const std::vector<individual>& inds, double env_value)
 {
   std::vector<double> distance_from_target;
-  for(auto& ind : p.get_inds())
+
+  for(auto& ind : inds)
     {
       distance_from_target.push_back(calc_sqr_distance(ind, env_value));
     }
-  assert(distance_from_target.size() == p.get_inds().size());
+
+  return distance_from_target;
+}
+
+population calc_fitness(population p, const double& env_value,const double &sel_str)
+{
+  std::vector<double> distance_from_target = calc_dist_from_target(p.get_inds(), env_value);
 
   double min_distance = *std::min_element(distance_from_target.begin(),distance_from_target.end());
 
-  for(size_t i = 0; i != distance_from_target.size(); i++)
-    {
-      auto ind_fit  = pow(1 - (1 - min_distance / distance_from_target[i] ), sel_str);
-      set_nth_ind_fitness(p, i, ind_fit);
-    }
+  auto fitness_vector = rescale_dist_to_fit(distance_from_target,
+                                            min_distance,
+                                            sel_str);
+
+  set_fitness_inds(p, fitness_vector);
 
   return p;
 }
@@ -51,9 +67,37 @@ rndutils::mutable_discrete_distribution<>  create_mut_dist_fit(population& p)
   return  mut_dist;
 }
 
+std::vector<double> create_rescaled_fitness_vec(std::vector<double> distance_from_target,
+                                                double min_distance,
+                                                double selection_strength)
+{
+  std::vector<double> fitness_inds;
+  for(size_t i = 0; i != distance_from_target.size(); i++)
+    {
+
+      auto scaled_dist = min_distance / distance_from_target[i];
+
+      auto ind_fit = pow(1 - (1 -  scaled_dist), selection_strength);
+
+      fitness_inds.push_back(ind_fit);
+    }
+  return fitness_inds;
+}
+
 void change_nth_ind_net(population& p, size_t ind_index, network n)
 {
   get_nth_ind_net(p, ind_index) = n;
+}
+
+void check_and_correct_dist(std::vector<double>& distance_from_target, double& min_distance)
+{
+  if(min_distance == 0)
+    {
+      distance_from_target =  adjust_distances(distance_from_target);
+
+      min_distance = *std::min_element(distance_from_target.begin(),
+                                       distance_from_target.end());
+    }
 }
 
 void select_new_pop(population& p,
@@ -99,6 +143,17 @@ network& get_nth_ind_net( population& p, size_t ind_index)
   return get_nth_ind(p, ind_index).get_net();
 }
 
+std::vector<double> rescale_dist_to_fit(std::vector<double> distance_from_target,
+                                        double min_distance,
+                                        double selection_strength)
+{
+  check_and_correct_dist(distance_from_target, min_distance);
+
+  auto fitness_inds = create_rescaled_fitness_vec(distance_from_target, min_distance, selection_strength);
+
+  return fitness_inds;
+}
+
 void reproduce(population& p, std::minstd_rand& rng)
 {
   auto mut_dist = create_mut_dist_fit(p);
@@ -107,6 +162,17 @@ void reproduce(population& p, std::minstd_rand& rng)
 
   swap_new_with_old_pop(p);
 }
+
+void set_fitness_inds(population& p, const std::vector<double>& fitness_vector)
+{
+  assert(p.get_inds().size() == fitness_vector.size());
+
+  for(size_t i = 0; i != fitness_vector.size(); i++)
+    {
+      set_nth_ind_fitness(p, i, fitness_vector[i]);
+    }
+}
+
 void set_nth_ind_fitness (population& p, size_t ind_index, double fitness)
 {
   auto& ind = p.get_inds()[ind_index];

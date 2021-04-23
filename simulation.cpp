@@ -8,11 +8,13 @@ simulation::simulation(double targetA, double targetB,
                        int init_pop_size,
                        int seed,
                        int t_change_interval,
-                       std::vector<int> net_arch):
+                       std::vector<int> net_arch,
+                       double sel_str):
   m_environment{targetA, targetB},
   m_population{init_pop_size},
   m_rng{seed},
-  m_t_change_env_distr{1.0/static_cast<double>(t_change_interval)}
+  m_t_change_env_distr{1.0/static_cast<double>(t_change_interval)},
+  m_sel_str{sel_str}
 {
   for(auto& ind : m_population.get_inds())
     {
@@ -23,7 +25,7 @@ simulation::simulation(double targetA, double targetB,
 
 void calc_fitness(simulation& s)
 {
-  s.get_pop() = calc_fitness(s.get_pop(), get_current_env_value(s));
+  s.get_pop() = calc_fitness(s.get_pop(), get_current_env_value(s), s.get_sel_str());
 }
 
 
@@ -218,8 +220,11 @@ void test_simulation() noexcept//!OCLINT test may be many
     int pop_size = 2;
     simulation s{0,0,pop_size};
 
-    size_t changed_ind = 0;
-    change_all_weights_nth_ind(s, changed_ind, 1);
+    size_t first_ind = 0;
+    size_t second_ind = 1;
+    change_all_weights_nth_ind(s, first_ind, 1);
+    change_all_weights_nth_ind(s, second_ind, 0.99);
+
 
     //change target value to match output of ind 0 net
     change_current_target_value(s, response(get_nth_ind(s, 0))[0]);

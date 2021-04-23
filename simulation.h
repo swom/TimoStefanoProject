@@ -16,7 +16,8 @@ public:
              int init_pop_size = 1,
              int seed = 0,
              int t_change_interval = 10,
-             std::vector<int> net_arch = {1,2,1}
+             std::vector<int> net_arch = {1,2,1},
+             double sel_str = 2
           );
 
 
@@ -41,6 +42,8 @@ public:
   const int& get_time() const noexcept {return m_time;}
   void increase_time() {++m_time;}
 
+  ///Returns the strength of selection
+  double get_sel_str() const noexcept {return m_sel_str;}
 
   private:
    environment m_environment;
@@ -48,6 +51,7 @@ public:
    std::minstd_rand m_rng;
    std::bernoulli_distribution m_t_change_env_distr;
    int m_time;
+   double m_sel_str;
 
 };
 
@@ -78,8 +82,6 @@ const network& get_nth_ind_net(const simulation& s, size_t ind_index);
 network& get_nth_ind_net( simulation& s, size_t ind_index);
 
 void tick(simulation &s);
-
-
 
 void test_simulation() noexcept;
 

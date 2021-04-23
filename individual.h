@@ -44,7 +44,7 @@ private:
 
 ///Calculates the distance of a response of a network
 /// and a given value
-double calc_distance(const individual& i, double env_value);
+double calc_sqr_distance(const individual& i, double env_value);
 
 ///Mutates the network of an individual
 individual mutate(individual i, double mut_rate, double mut_step, std::minstd_rand& rng);
