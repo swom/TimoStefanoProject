@@ -38,7 +38,7 @@ void change_current_target_value(simulation& s, double new_target_value)
 }
 void change_nth_ind_net(simulation& s, size_t ind_index, const network& n)
 {
-  get_nth_ind_net(s, ind_index) = n;
+  change_nth_ind_net(s.get_pop(), ind_index, n) ;
 }
 
 double get_current_env_value(const simulation&s)

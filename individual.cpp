@@ -17,6 +17,12 @@ double calc_distance(const individual& i, double env_value)
    return std::abs(response(i)[0] - env_value);
 }
 
+individual mutate(individual i, double mut_rate, double mut_step, std::minstd_rand& rng)
+{
+  i.get_net() = mutate(i.get_net(), mut_rate, mut_step, rng);
+  return i;
+}
+
 std::vector<double> response(const individual& ind)
 {
   return response(ind.get_net(),ind.get_input_values());

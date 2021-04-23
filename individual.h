@@ -46,6 +46,9 @@ private:
 /// and a given value
 double calc_distance(const individual& i, double env_value);
 
+///Mutates the network of an individual
+individual mutate(individual i, double mut_rate, double mut_step, std::minstd_rand& rng);
+
 ///Lets a network send out an ouput signal
 ///!!!!Attention!!! for now no input is provided
 std::vector<double> response(const individual& ind);
