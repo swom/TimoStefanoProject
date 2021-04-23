@@ -39,7 +39,8 @@ public:
   const std::bernoulli_distribution& get_t_change_env_distr() const noexcept {return m_t_change_env_distr;}
   std::bernoulli_distribution& get_t_change_env_distr() noexcept {return m_t_change_env_distr;}
   const int& get_time() const noexcept {return m_time;}
-  void tick() {++m_time;}
+  void increase_time() {++m_time;}
+
 
   private:
    environment m_environment;
@@ -75,6 +76,8 @@ double get_nth_ind_fitness(const simulation& s, const size_t ind_index);
 /// popoulation member of a simulation
 const network& get_nth_ind_net(const simulation& s, size_t ind_index);
 network& get_nth_ind_net( simulation& s, size_t ind_index);
+
+void tick(simulation &s);
 
 
 
