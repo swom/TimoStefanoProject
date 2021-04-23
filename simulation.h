@@ -25,6 +25,7 @@ public:
   const std::bernoulli_distribution& get_t_change_env_distr() const noexcept {return m_t_change_env_distr;}
   std::bernoulli_distribution& get_t_change_env_distr() noexcept {return m_t_change_env_distr;}
   const int& get_time() const noexcept {return m_time;}
+  void tick() {++m_time;}
 
   private:
    environment m_environment;

@@ -17,7 +17,6 @@ simulation::simulation(double targetA, double targetB,
 
 }
 
-
 void test_simulation() noexcept//!OCLINT test may be many
 {
 
@@ -84,23 +83,23 @@ void test_simulation() noexcept//!OCLINT test may be many
   }
 
 
-#ifdef FIX_ISSUE_26
+
   //Every tick simulation timer increases by one
   {
     simulation s;
     auto init_timer_value = s.get_time();
-    tick(s);
-    assert(s.get_time == init_timer_value + 1);
+    s.tick();
+    assert(s.get_time() == init_timer_value + 1);
 
     simulation s2;
     init_timer_value = s2.get_time();
     int repeats = 123;
     for(int i = 0; i != repeats; i++)
       {
-        tick(s);
+        s2.tick();
       }
     assert(s2.get_time() == init_timer_value + repeats);
   }
-#endif
+
 
 }
