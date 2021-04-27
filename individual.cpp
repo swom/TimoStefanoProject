@@ -66,4 +66,18 @@ void test_individual()
     individual i;
     assert( response(i) == response(i.get_net(),i.get_input_values()));
   }
+
+  //#define FIX_ISSUE_36
+  #ifdef  FIX_ISSUE_36
+  {
+    std::vector<int> net_arc{1,23,45,678,9};
+    int age = 123456789;
+    ind_param i_p{net_arc, age};
+    individual i{i_p};
+    assert(i.get_net() == network{net_arc});
+    assert(are_equal_with_tolerance(i.get_age(), age));
+  }
+  #endif
+
+
 }
