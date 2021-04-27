@@ -260,4 +260,58 @@ void test_simulation() noexcept//!OCLINT test may be many
            n_switches - s.get_change_freq() / repeats > -10);
   }
 #endif
+
+  //#define FIX_ISSUE_38
+#ifdef FIX_ISSUE_38
+  {
+
+    //env_par
+    double targetA = 123456;
+    double targetB = 46589;
+
+    env_param e_p{targetA, targetB};
+    environment e{e_p};
+
+    //ind_par
+    std::vector<int> net_arc{1,23,456,789};
+    int age = 123456789;
+
+    ind_param i_p{net_arc, age};
+
+    //pop_par
+    int number_of_inds = 13245679;
+    double mut_rate = 0.314;
+    double mut_step = 0.1414;
+
+    pop_param p_p{number_of_inds, mut_rate, mut_step};
+
+    //sim_par
+    int seed = 10126789;
+    double change_freq = 123789;
+    double selection_strength = 0.321546;
+
+    sim_par s_p{seed, change_freq, selection_strength};
+    simulation s{e_p, i_p, p_p, s_p};
+
+    //test env
+    assert(are_equal_with_tolerance(e.get_target_valueA(), targetA));
+    assert(are_equal_with_tolerance(e.get_target_valueB(), targetB));
+
+    //test pop and ind
+    for(const auto& ind : get_inds(s))
+      {
+        assert(ind.get_net() == network{net_arc});
+      }
+
+    assert(are_equal_with_tolerance(p.get_inds().size(), number_of_inds) &
+           are_equal_with_tolerance(p.get_mut_rate(), mut_rate) &
+           are_equal_with_tolerance(p.get_mut_step(), mut_step));
+
+    //test sim
+    assert(are_equal_with_tolerance(s.get_change_freq(), change_freq) &
+           are_equal_with_tolerance(s.get_sel_str(), selection_strength) &
+           s.get_seed() == seed);
+  }
+#endif
+
 }
