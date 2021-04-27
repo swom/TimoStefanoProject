@@ -128,7 +128,7 @@ void test_simulation() noexcept//!OCLINT test may be many
     int seed = 123456789;
     simulation s{targetA,
           targetB,
-      pop_size,
+          pop_size,
           seed};
     std::minstd_rand copy_rng(seed);
     assert ( s.get_rng()() == copy_rng());
@@ -146,7 +146,7 @@ void test_simulation() noexcept//!OCLINT test may be many
     int t_change_interval = 20;
 
     simulation s { targetA, targetB,
-      pop_size, seed, t_change_interval};
+          pop_size, seed, t_change_interval};
     std::bernoulli_distribution mockdistrotchange(1.0 / static_cast<double>(t_change_interval));
     assert (s.get_t_change_env_distr() == mockdistrotchange);
 
@@ -243,5 +243,21 @@ void test_simulation() noexcept//!OCLINT test may be many
 
   }
 
+  //#define FIX_ISSUE_34
+#ifdef FIX_ISSUE_34
+  {
+    simulation s;
+    int repeats = 10000;
+    int n_switches = 0;
+    for(int i = 0; i != repeats; i++)
+      {
+        if(is_environment_changing(s))
+          {
+            n_switches++;
+          }
+      }
+    assert(n_switches - s.get_change_freq() / repeats < 10 &&
+           n_switches - s.get_change_freq() / repeats > -10);
+  }
+#endif
 }
-
