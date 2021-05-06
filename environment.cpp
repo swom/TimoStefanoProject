@@ -6,9 +6,8 @@ environment::environment(double target_valueA, double target_valueB):
 
 m_target_valueA{target_valueA},
 m_target_valueB{target_valueB},
-m_ref_target_values{target_valueA,target_valueB}
-
-
+m_ref_target_values{target_valueA,target_valueB},
+m_current_target_value {target_valueA}
 
 {
 
@@ -51,7 +50,7 @@ void test_environment() noexcept
   }
 
 
-#ifdef FIX_ISSUE_29
+
   //Current target value is initialized to the first of the 2 target values
   {
     double targetA = 0.123456;
@@ -60,7 +59,7 @@ void test_environment() noexcept
     assert(are_equal_with_tolerance(e.get_current_target_value(), targetA));
     assert(are_not_equal_with_tolerance(e.get_current_target_value(), targetB));
   }
-#endif
+
 
 #ifdef FIX_ISSUE_25
   //An environment can switch target values

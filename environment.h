@@ -20,10 +20,10 @@ public:
 private:
 
     ///The target value of the environment
-    double m_current_target_value;
     double m_target_valueA;
     double m_target_valueB;
     std::vector<double> m_ref_target_values;
+    double m_current_target_value;
 };
 
 void test_environment() noexcept;
