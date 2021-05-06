@@ -14,7 +14,8 @@ simulation::simulation(double targetA, double targetB,
   m_population{init_pop_size},
   m_rng{seed},
   m_t_change_env_distr{1.0/static_cast<double>(t_change_interval)},
-  m_sel_str{sel_str}
+  m_sel_str{sel_str},
+  m_change_freq {1.0/static_cast<double>(t_change_interval)}
 {
   for(auto& ind : m_population.get_inds())
     {
@@ -92,6 +93,15 @@ double find_min_fitness(const simulation&s)
 }
 
 void tick(simulation &s) {s.increase_time();}
+
+
+bool is_environment_changing (simulation &s) {
+
+std::bernoulli_distribution distro = s.get_t_change_env_distr();
+return distro (s.get_rng());
+
+}
+
 
 
 
@@ -249,7 +259,7 @@ void test_simulation() noexcept//!OCLINT test may be many
   }
 
   //#define FIX_ISSUE_34
-#ifdef FIX_ISSUE_34
+
   {
     simulation s;
     int repeats = 10000;
@@ -261,10 +271,10 @@ void test_simulation() noexcept//!OCLINT test may be many
             n_switches++;
           }
       }
-    assert(n_switches - s.get_change_freq() / repeats < 10 &&
-           n_switches - s.get_change_freq() / repeats > -10);
+    assert(n_switches - s.get_change_freq() * repeats < 10 &&
+           n_switches - s.get_change_freq() * repeats > -10);
   }
-#endif
+
 
   //#define FIX_ISSUE_38
 #ifdef FIX_ISSUE_38

@@ -45,6 +45,9 @@ public:
   ///Returns the strength of selection
   double get_sel_str() const noexcept {return m_sel_str;}
 
+  ///Returns change frequency
+  double get_change_freq() const noexcept {return m_change_freq;}
+
   private:
    environment m_environment;
    population m_population;
@@ -52,6 +55,7 @@ public:
    std::bernoulli_distribution m_t_change_env_distr;
    int m_time;
    double m_sel_str;
+   double m_change_freq;
 
 };
 
