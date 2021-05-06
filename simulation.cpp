@@ -93,6 +93,11 @@ double find_min_fitness(const simulation&s)
 
 void tick(simulation &s) {s.increase_time();}
 
+
+
+
+
+
 void test_simulation() noexcept//!OCLINT test may be many
 {
 

@@ -17,6 +17,10 @@ public:
     ///Returns the target value of the environment
     double& get_current_target_value() noexcept {return m_current_target_value;}
 
+    ///Sets current target value
+    void set_current_target_value(double target_value) {m_current_target_value = target_value;}
+
+
 private:
 
     ///The target value of the environment
@@ -25,6 +29,8 @@ private:
     std::vector<double> m_ref_target_values;
     double m_current_target_value;
 };
+
+void switch_target (environment &e);
 
 void test_environment() noexcept;
 

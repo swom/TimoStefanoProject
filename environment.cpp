@@ -2,6 +2,7 @@
 #include "utilities.h"
 #include <cassert>
 
+
 environment::environment(double target_valueA, double target_valueB):
 
 m_target_valueA{target_valueA},
@@ -15,6 +16,24 @@ m_current_target_value {target_valueA}
 
 
 }
+
+
+void switch_target(environment &e){
+    //Check which target value is the current one and switch it over to the other
+
+    if (e.get_current_target_value()==e.get_target_valueA()){
+    e.set_current_target_value(e.get_target_valueB());
+    }
+
+    else
+    {
+        e.set_current_target_value(e.get_target_valueA());
+    }
+
+    ;}
+
+
+
 
 void test_environment() noexcept
 {
@@ -61,7 +80,7 @@ void test_environment() noexcept
   }
 
 
-#ifdef FIX_ISSUE_25
+//ISSUE_25
   //An environment can switch target values
   {
     double targetA = 0.123456;
@@ -73,7 +92,7 @@ void test_environment() noexcept
     switch_target(e);
     assert(are_equal_with_tolerance(e.get_current_target_value(), targetA));
   }
-#endif
+
 
 //#define FIX_ISSUE_35
 #ifdef  FIX_ISSUE_35
