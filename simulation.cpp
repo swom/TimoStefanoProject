@@ -251,6 +251,10 @@ void test_simulation() noexcept//!OCLINT test may be many
     assert(are_equal_with_tolerance( first_ind_fit, 1));
 
     ///ind 1 response is 0, therefore its fitness would be the lowest in all the population
+    auto first_response = response(get_nth_ind(s, 0))[0];
+    auto second_response = response(get_nth_ind(s, 1))[0];
+    assert(!are_equal_with_tolerance(first_response, second_response));
+
     auto second_ind_fit =  get_nth_ind_fitness(s,1) ;
     auto min_fit = find_min_fitness(s);
 
@@ -259,7 +263,6 @@ void test_simulation() noexcept//!OCLINT test may be many
   }
 
   //#define FIX_ISSUE_34
-
   {
     simulation s;
     int repeats = 10000;
