@@ -332,4 +332,27 @@ void test_simulation() noexcept//!OCLINT test may be many
   }
 #endif
 
+#ifdef FIX_ISSUE_39
+  {
+    simulation s;
+    int repeats =  10000;
+    auto previous_env_value = get_current_env_value(s);
+
+    int number_of_env_change = 0;
+
+    for( int i = 0; i != repeats; i++)
+      {
+        tick(s);
+        if(previous_env_value != get_current_env_value(s))
+          {
+            previous_env_value = get_current_env_value(s);
+            number_of_env_change++;
+          }
+      }
+    assert( number_of_env_change - repeats * s.get_change_freq() < 10 &&
+            number_of_env_change - repeats * s.get_change_freq() > -10);
+
+  }
+#endif
+
 }
