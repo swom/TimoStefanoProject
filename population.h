@@ -66,6 +66,9 @@ network& get_nth_ind_net( population& p, size_t ind_index);
 std::vector<double> rescale_dist_to_fit(std::vector<double> distance_from_target,
                                         double selection_strength);
 
+///Reproduces inds with a probability proportional to their fitness
+void reproduce(population& p, std::minstd_rand& rng);
+
 ///Select inds for new pop from old pop based on mutable dist
 /// and mutates them
 void select_new_pop(population& p,

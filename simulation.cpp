@@ -92,9 +92,6 @@ double find_min_fitness(const simulation&s)
   return min_ind->get_fitness();
 }
 
-void tick(simulation &s) {s.increase_time();}
-
-
 bool is_environment_changing (simulation &s) {
 
 std::bernoulli_distribution distro = s.get_t_change_env_distr();
@@ -102,11 +99,20 @@ return distro (s.get_rng());
 
 }
 
+void reproduce(simulation& s)
+{
+  reproduce(s.get_pop(), s.get_rng());
+
+}
+
+void tick(simulation &s) {s.increase_time();}
 
 
-
-
-
+void select_inds(simulation& s)
+{
+  calc_fitness(s);
+  reproduce(s);
+}
 
 void test_simulation() noexcept//!OCLINT test may be many
 {
@@ -203,11 +209,12 @@ void test_simulation() noexcept//!OCLINT test may be many
     assert(get_nth_ind_net(s, 0) == network{net_arch});
   }
 
+#define FIX_ISSUE_30
 #ifdef FIX_ISSUE_30
   ///individuals in a pop are selected based on how closely they match the current_env_target_value
   {
     int pop_size = 2;
-    simulation s{pop_size};
+    simulation s{0,0, pop_size};
 
     //change ind 0 net
     size_t changed_ind = 0;
