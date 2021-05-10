@@ -4,11 +4,15 @@
 #include <iostream>
 #include <vector>
 #include <random>
-
+#include "json.hpp"
 class network
 {
 public:
     network(std::vector<int> nodes_per_layer);
+
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(network,
+                                   m_input_size,
+                                   m_network_weights);
 
     ///Returns const ref to vector of weights
     const std::vector<std::vector<std::vector<double>>>& get_net_weights() const noexcept{return m_network_weights;}

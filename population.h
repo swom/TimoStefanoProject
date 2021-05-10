@@ -13,6 +13,11 @@ public:
              double mut_step = 0.1
              , std::vector<int> net_arch = {1,2,1});
 
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(population,
+                               m_vec_indiv,
+                               m_mut_rate,
+                               m_mut_step);
+
   ///Get const ref to vector of individuals
   const std::vector<individual>& get_inds() const noexcept{return m_vec_indiv;}
 
@@ -42,6 +47,8 @@ private:
   rndutils::mutable_discrete_distribution<> m_fitness_dist;
 
 };
+///Checks that 2 populations are equal
+bool operator== (const population& lhs, const population& rhs);
 
 ///Calculates the fitness of inds in pop given a target env_value
 population calc_fitness(population p, const double &env_value, const double &sel_str);

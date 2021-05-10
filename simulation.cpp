@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <vector>
+#include <fstream>
 
 
 simulation::simulation(double targetA, double targetB,
@@ -23,6 +24,16 @@ simulation::simulation(double targetA, double targetB,
     }
 }
 
+bool operator ==(const simulation& lhs, const simulation& rhs)
+{
+  bool pop = lhs.get_pop() == rhs.get_pop();
+  bool env = lhs.get_env() == rhs.get_env();
+  bool time = lhs.get_time() == rhs.get_time();
+  bool sel_str = are_equal_with_tolerance(lhs.get_sel_str(), rhs.get_sel_str());
+  bool change_freq = are_equal_with_tolerance(lhs.get_change_freq(), rhs.get_change_freq());
+
+  return pop && env && time && sel_str && change_freq;
+}
 
 void calc_fitness(simulation& s)
 {
@@ -100,6 +111,17 @@ return distro (s.get_rng());
 
 }
 
+simulation load_json(
+        const std::string& filename
+        )
+{
+    std::ifstream f(filename);
+    nlohmann::json json_in;
+    simulation s;
+    f >> json_in;
+    return s = json_in;
+}
+
 void reproduce(simulation& s)
 {
   reproduce(s.get_pop(), s.get_rng());
@@ -108,6 +130,13 @@ void reproduce(simulation& s)
 
 void tick(simulation &s) {s.increase_time();}
 
+void save_json(const simulation& s, const std::string& filename)
+{
+  std::ofstream  f(filename);
+  nlohmann::json json_out;
+  json_out = s;
+  f << json_out;
+}
 
 void select_inds(simulation& s)
 {
@@ -360,6 +389,18 @@ void test_simulation() noexcept//!OCLINT test may be many
     assert( number_of_env_change - repeats * s.get_change_freq() < 10 &&
             number_of_env_change - repeats * s.get_change_freq() > -10);
 
+  }
+#endif
+
+#define FIX_ISSUE_40
+#ifdef FIX_ISSUE_40
+  {
+    //create a non-default simulaiton
+    simulation s{13, 32, 2, 132, 548, {1,2,3,4,5,6}, 3.14};
+    auto name = "sim_save_test";
+    save_json(s, name);
+    auto loaded_s = load_json(name);
+    assert(s == loaded_s);
   }
 #endif
 

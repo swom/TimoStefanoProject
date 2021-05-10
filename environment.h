@@ -2,7 +2,7 @@
 #define ENVIRONMENT_H
 
 #include <vector>
-
+#include "json.hpp"
 struct env_param
 {
 
@@ -13,6 +13,9 @@ class environment
 public:
     environment(double target_valueA, double target_valueB);
 
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(environment,
+                                   m_ref_target_values,
+                                   m_current_target_value);
     ///Returns the target value of the environment
     double get_current_target_value() const noexcept {return m_current_target_value;}
     const std::vector<double>& get_ref_target_values() const noexcept {return m_ref_target_values;}
@@ -25,8 +28,12 @@ private:
 
     ///The target value of the environment
     std::vector<double> m_ref_target_values;
+
     double m_current_target_value;
 };
+
+///checks if 2 environments are equal
+bool operator== (const environment& lhs, const environment& rhs);
 
 void switch_target (environment &e);
 

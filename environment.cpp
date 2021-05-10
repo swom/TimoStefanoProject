@@ -13,6 +13,14 @@ m_current_target_value {target_valueA}
 
 }
 
+bool operator== (const environment& lhs, const environment& rhs)
+{
+  bool ref_t_values = lhs.get_ref_target_values() == rhs.get_ref_target_values();
+  bool current_t_value = are_equal_with_tolerance(lhs.get_current_target_value(), rhs.get_current_target_value());
+
+  return ref_t_values && current_t_value;
+}
+
 double get_target_valueA(const environment& e)
 {
   return e.get_ref_target_values()[0];

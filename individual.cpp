@@ -12,6 +12,15 @@ individual::individual(std::vector<int> net_arch, int age) :
 
 }
 
+bool operator== (const individual& lhs, const individual& rhs)
+{
+  bool fitness = are_equal_with_tolerance(lhs.get_fitness(), rhs.get_fitness());
+  bool network = lhs.get_net() == rhs.get_net();
+  bool inputs = lhs.get_input_values() == rhs.get_input_values();
+
+  return fitness && network && inputs;
+}
+
 double calc_sqr_distance(const individual& i, double env_value)
 {
    return (response(i)[0] - env_value) * (response(i)[0] - env_value);

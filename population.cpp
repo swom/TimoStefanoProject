@@ -15,6 +15,15 @@ population::population(int init_nr_indiv,
 
 }
 
+bool operator== (const population& lhs, const population& rhs)
+{
+  bool inds = lhs.get_inds() == rhs.get_inds();
+  bool mut_rate = are_equal_with_tolerance(lhs.get_mut_rate(), rhs.get_mut_rate());
+  bool mut_step = are_equal_with_tolerance(lhs.get_mut_step(), rhs.get_mut_step());
+
+  return inds && mut_rate && mut_step;
+}
+
 std::vector<double> adjust_distances(std::vector<double> distances)
 {
   for(double& dist : distances)

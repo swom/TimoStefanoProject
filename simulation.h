@@ -3,7 +3,6 @@
 
 #include "environment.h"
 #include "population.h"
-
 #include <vector>
 
 class simulation
@@ -19,6 +18,12 @@ public:
              double sel_str = 2
           );
 
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(simulation,
+                                 m_environment,
+                                 m_population,
+                                 m_time,
+                                 m_change_freq,
+                                 m_sel_str)
 
   ///Returns const ref ot population memeber
   const population& get_pop() const noexcept {return m_population;}
@@ -57,6 +62,8 @@ public:
    double m_change_freq;
 
 };
+///Checks if 2 simulations are equal
+bool operator ==(const simulation& lhs, const simulation& rhs);
 
 ///Calculates fitness of inds in pop given current env values
 void calc_fitness(simulation& s);

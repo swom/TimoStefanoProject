@@ -8,6 +8,11 @@ class individual
 public:
   individual( std::vector<int> net_arch = std::vector<int>{1,2,1}, int age = 0);
 
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(individual,
+                                 m_fitness,
+                                 m_input_values,
+                                 m_network);
+
   ///Returns the age of the individual
   int get_age() const noexcept {return m_age;}
 
@@ -41,6 +46,9 @@ private:
   ///The network of an individual
   network m_network;
 };
+
+/// Checks if 2 individuals are the same
+bool operator== (const individual& lhs, const individual& rhs);
 
 ///Calculates the distance of a response of a network
 /// and a given value
