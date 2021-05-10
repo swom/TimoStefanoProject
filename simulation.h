@@ -2,7 +2,6 @@
 #define SIMULATION_H
 
 #include "environment.h"
-#include "param.h"
 #include "population.h"
 
 #include <vector>
@@ -72,7 +71,7 @@ void change_nth_ind_net(simulation& s, size_t ind_index, const network& n);
 double get_current_env_value(const simulation&s);
 
 ///Returns the current target value of the environment in the simualtion
-double& get_current_env_value(simulation&s);
+double get_current_env_value(simulation&s);
 
 ///Returns the individuals in the simualtion
 const std::vector<individual>& get_inds(const simulation&s);

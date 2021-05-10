@@ -4,12 +4,8 @@
 
 
 environment::environment(double target_valueA, double target_valueB):
-
-m_target_valueA{target_valueA},
-m_target_valueB{target_valueB},
 m_ref_target_values{target_valueA,target_valueB},
 m_current_target_value {target_valueA}
-
 {
 
 
@@ -17,17 +13,26 @@ m_current_target_value {target_valueA}
 
 }
 
+double get_target_valueA(const environment& e)
+{
+  return e.get_ref_target_values()[0];
+}
+
+double get_target_valueB(const environment& e)
+{
+  return e.get_ref_target_values()[1];
+}
 
 void switch_target(environment &e){
     //Check which target value is the current one and switch it over to the other
 
-    if (e.get_current_target_value()==e.get_target_valueA()){
-    e.set_current_target_value(e.get_target_valueB());
+    if (e.get_current_target_value()==get_target_valueA(e)){
+    e.set_current_target_value(get_target_valueB(e));
     }
 
     else
     {
-        e.set_current_target_value(e.get_target_valueA());
+        e.set_current_target_value(get_target_valueA(e));
     }
 
     ;}
@@ -61,11 +66,11 @@ void test_environment() noexcept
     double target_valueB = 0.654321;
     environment e{target_valueA, target_valueB};
 
-    assert(e.get_target_valueA() - target_valueA < 0.0001
-           && e.get_target_valueA() - target_valueA > -0.0001);
+    assert(get_target_valueA(e) - target_valueA < 0.0001
+           && get_target_valueA(e) - target_valueA > -0.0001);
 
-    assert(e.get_target_valueB() - target_valueB < 0.0001
-           && e.get_target_valueB() - target_valueB > -0.0001);
+    assert(get_target_valueB(e) - target_valueB < 0.0001
+           && get_target_valueB(e) - target_valueB > -0.0001);
   }
 
 

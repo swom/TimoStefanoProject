@@ -38,8 +38,9 @@ void change_all_weights_nth_ind(simulation& s, size_t ind_index, double new_weig
 
 void change_current_target_value(simulation& s, double new_target_value)
 {
-  get_current_env_value(s) = new_target_value;
+  s.get_env().set_current_target_value(new_target_value);
 }
+
 void change_nth_ind_net(simulation& s, size_t ind_index, const network& n)
 {
   change_nth_ind_net(s.get_pop(), ind_index, n) ;
@@ -50,7 +51,7 @@ double get_current_env_value(const simulation&s)
   return s.get_env().get_current_target_value();
 }
 
-double& get_current_env_value(simulation&s)
+double get_current_env_value(simulation&s)
 {
   return s.get_env().get_current_target_value();
 }
