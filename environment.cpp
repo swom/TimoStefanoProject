@@ -108,17 +108,17 @@ void test_environment() noexcept
 
 
 //#define FIX_ISSUE_35
-#ifdef  FIX_ISSUE_35
+
   {
     double targetA = 123456;
     double targetB = 46589;
 
     env_param e_p{targetA, targetB};
-    environment e{e_p};
-    assert(are_equal_with_tolerance(e.get_target_valueA(), targetA));
-    assert(are_equal_with_tolerance(e.get_target_valueB(), targetB));
+    environment e{e_p.targetA, e_p.targetB};
+    assert(are_equal_with_tolerance(get_target_valueA(e), targetA));
+    assert(are_equal_with_tolerance(get_target_valueB(e), targetB));
 
   }
-#endif
+
 
 }

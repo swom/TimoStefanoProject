@@ -5,8 +5,10 @@
 #include "json.hpp"
 struct env_param
 {
-
+double targetA;
+double targetB;
 };
+
 
 class environment
 {
