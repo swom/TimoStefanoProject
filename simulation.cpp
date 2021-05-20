@@ -128,7 +128,26 @@ void reproduce(simulation& s)
 
 }
 
-void tick(simulation &s) {s.increase_time();}
+void tick(simulation &s)
+{
+    s.increase_time();
+
+
+   if(is_environment_changing(s)){
+
+
+    if (s.get_env().get_current_target_value()==s.get_env().get_ref_target_values()[0]){
+    s.get_env().set_current_target_value(s.get_env().get_ref_target_values()[1]);
+    }
+
+    else
+    {
+        s.get_env().set_current_target_value(s.get_env().get_ref_target_values()[0]);
+    }
+
+   }
+
+}
 
 void save_json(const simulation& s, const std::string& filename)
 {
@@ -369,7 +388,7 @@ void test_simulation() noexcept//!OCLINT test may be many
   }
 #endif
 
-#ifdef FIX_ISSUE_39
+    //#define FIX_ISSUE_39
   {
     simulation s;
     int repeats =  10000;
@@ -390,7 +409,7 @@ void test_simulation() noexcept//!OCLINT test may be many
             number_of_env_change - repeats * s.get_change_freq() > -10);
 
   }
-#endif
+
 
 #define FIX_ISSUE_40
 #ifdef FIX_ISSUE_40

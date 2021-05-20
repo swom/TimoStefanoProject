@@ -10,7 +10,7 @@ class simulation
 public:
 
   simulation(double targetA = 0,
-             double targetB = 0,
+             double targetB = 0.1,
              int init_pop_size = 1,
              int seed = 0,
              int t_change_interval = 10,
