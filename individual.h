@@ -3,6 +3,14 @@
 
 #include "network.h"
 
+struct ind_param
+{
+std::vector<int> net_arc;
+int age;
+};
+
+
+
 class individual
 {
 public:
