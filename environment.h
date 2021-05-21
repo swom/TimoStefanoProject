@@ -14,6 +14,7 @@ class environment
 {
 public:
     environment(double target_valueA, double target_valueB);
+    environment(env_param e_p);
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(environment,
                                    m_ref_target_values,

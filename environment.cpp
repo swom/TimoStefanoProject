@@ -13,6 +13,18 @@ m_current_target_value {target_valueA}
 
 }
 
+environment::environment(env_param e_p):
+m_ref_target_values{e_p.targetA,e_p.targetB},
+m_current_target_value {e_p.targetA}
+{
+
+
+
+
+}
+
+
+
 bool operator== (const environment& lhs, const environment& rhs)
 {
   bool ref_t_values = lhs.get_ref_target_values() == rhs.get_ref_target_values();
@@ -114,7 +126,7 @@ void test_environment() noexcept
     double targetB = 46589;
 
     env_param e_p{targetA, targetB};
-    environment e{e_p.targetA, e_p.targetB};
+    environment e{e_p};
     assert(are_equal_with_tolerance(get_target_valueA(e), targetA));
     assert(are_equal_with_tolerance(get_target_valueB(e), targetB));
 

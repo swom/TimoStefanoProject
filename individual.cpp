@@ -12,6 +12,19 @@ individual::individual(std::vector<int> net_arch, int age) :
 
 }
 
+individual::individual(ind_param i_p) :
+  m_age{i_p.age},
+  ///!!!!Attention!!!! input values are for now a fixed amount
+  m_input_values(i_p.net_arc[0], 1.0),
+  m_network{i_p.net_arc}
+{
+
+}
+
+
+
+
+
 bool operator== (const individual& lhs, const individual& rhs)
 {
   bool fitness = are_equal_with_tolerance(lhs.get_fitness(), rhs.get_fitness());
@@ -82,7 +95,7 @@ void test_individual()
     std::vector<int> net_arc{1,23,45,678,9};
     int age = 123456789;
     ind_param i_p{net_arc, age};
-    individual i{i_p.net_arc, i_p.age};
+    individual i{i_p};
     assert(i.get_net() == network{net_arc});
     assert(are_equal_with_tolerance(i.get_age(), age));
   }

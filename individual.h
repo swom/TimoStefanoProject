@@ -15,6 +15,7 @@ class individual
 {
 public:
   individual( std::vector<int> net_arch = std::vector<int>{1,2,1}, int age = 0);
+  individual(ind_param i_p);
 
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(individual,
                                  m_fitness,
