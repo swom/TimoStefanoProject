@@ -4,8 +4,8 @@
 
 
 environment::environment(double target_valueA, double target_valueB):
-m_ref_target_values{target_valueA,target_valueB},
-m_current_target_value {target_valueA}
+  m_ref_target_values{target_valueA,target_valueB},
+  m_current_target_value {target_valueA}
 {
 
 
@@ -14,8 +14,8 @@ m_current_target_value {target_valueA}
 }
 
 environment::environment(env_param e_p):
-m_ref_target_values{e_p.targetA,e_p.targetB},
-m_current_target_value {e_p.targetA}
+  m_ref_target_values{e_p.targetA,e_p.targetB},
+  m_current_target_value {e_p.targetA}
 {
 
 
@@ -44,18 +44,19 @@ double get_target_valueB(const environment& e)
 }
 
 void switch_target(environment &e){
-    //Check which target value is the current one and switch it over to the other
+  //Check which target value is the current one and switch it over to the other
 
-    if (e.get_current_target_value()==get_target_valueA(e)){
-    e.set_current_target_value(get_target_valueB(e));
-    }
-
-    else
+  if (are_equal_with_tolerance(e.get_current_target_value(),
+                               get_target_valueA(e))
+      )
     {
-        e.set_current_target_value(get_target_valueA(e));
+      e.set_current_target_value(get_target_valueB(e));
     }
-
-    ;}
+  else
+    {
+      e.set_current_target_value(get_target_valueA(e));
+    }
+}
 
 
 
@@ -65,17 +66,17 @@ void test_environment() noexcept
 
   //an environment has a m_current_target_value member
   {
-        double target_valueA = 0.123456;
-        double target_valueB = 0.654321;
-        environment e{target_valueA, target_valueB};
+    double target_valueA = 0.123456;
+    double target_valueB = 0.654321;
+    environment e{target_valueA, target_valueB};
     assert(e.get_current_target_value() < 0 || e.get_current_target_value() > 0);
   }
 
 
   //an env has 2 reference target values;
   {
-        double target_valueA = 0.123456;
-        double target_valueB = 0.654321;
+    double target_valueA = 0.123456;
+    double target_valueB = 0.654321;
     environment e{target_valueA, target_valueB};
     assert(e.get_ref_target_values().size() == 2);
   }
@@ -105,7 +106,7 @@ void test_environment() noexcept
   }
 
 
-//ISSUE_25
+  //ISSUE_25
   //An environment can switch target values
   {
     double targetA = 0.123456;
@@ -119,7 +120,7 @@ void test_environment() noexcept
   }
 
 
-//#define FIX_ISSUE_35
+  //#define FIX_ISSUE_35
 
   {
     double targetA = 123456;
