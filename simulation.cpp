@@ -132,7 +132,6 @@ void tick(simulation &s)
 {
     s.increase_time();
 
-
    if(is_environment_changing(s)){
 
     switch_target(s.get_env());
