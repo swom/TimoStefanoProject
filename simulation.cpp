@@ -136,18 +136,9 @@ void tick(simulation &s)
    if(is_environment_changing(s)){
 
     switch_target(s.get_env());
-
-
-   // if (s.get_env().get_current_target_value()==s.get_env().get_ref_target_values()[0]){
-   // s.get_env().set_current_target_value(s.get_env().get_ref_target_values()[1]);
-   // }
-
-   // else
-    //{
-   //     s.get_env().set_current_target_value(s.get_env().get_ref_target_values()[0]);
-   // }
-
    }
+
+   select_inds(s);
 
 }
 

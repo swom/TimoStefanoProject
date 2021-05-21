@@ -33,6 +33,13 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
   assert(1 == 2);
 #endif
 
+  simulation s {0.5, 0, 1000, 0, 0, {1,1}, 2};
+
+
+
+
+
+
 
   return 0;
 }

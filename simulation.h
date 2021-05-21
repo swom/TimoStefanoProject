@@ -91,6 +91,9 @@ double get_nth_ind_fitness(const simulation& s, const size_t ind_index);
 const network& get_nth_ind_net(const simulation& s, size_t ind_index);
 network& get_nth_ind_net( simulation& s, size_t ind_index);
 
+///Calculates fitness and selects a new population based on fitness
+void select_inds(simulation& s);
+
 void tick(simulation &s);
 
 void test_simulation() noexcept;
