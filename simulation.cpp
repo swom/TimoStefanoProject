@@ -8,15 +8,15 @@
 simulation::simulation(double targetA, double targetB,
                        int init_pop_size,
                        int seed,
-                       int t_change_interval,
+                       double t_change_interval,
                        std::vector<int> net_arch,
                        double sel_str):
   m_environment{targetA, targetB},
   m_population{init_pop_size},
   m_rng{seed},
-  m_t_change_env_distr{1.0/static_cast<double>(t_change_interval)},
+  m_t_change_env_distr{static_cast<double>(t_change_interval)},
   m_sel_str{sel_str},
-  m_change_freq {1.0/static_cast<double>(t_change_interval)}
+  m_change_freq {static_cast<double>(t_change_interval)}
 {
   for(auto& ind : m_population.get_inds())
     {
@@ -206,11 +206,11 @@ void test_simulation() noexcept//!OCLINT test may be many
     double targetB = 0;
     int pop_size = 1;
     int seed = 123456789;
-    int t_change_interval = 20;
+    double t_change_interval = 0.2;
 
     simulation s { targetA, targetB,
           pop_size, seed, t_change_interval};
-    std::bernoulli_distribution mockdistrotchange(1.0 / static_cast<double>(t_change_interval));
+    std::bernoulli_distribution mockdistrotchange(static_cast<double>(t_change_interval));
     assert (s.get_t_change_env_distr() == mockdistrotchange);
 
   }
@@ -398,8 +398,8 @@ void test_simulation() noexcept//!OCLINT test may be many
             number_of_env_change++;
           }
       }
-    assert( number_of_env_change - repeats * s.get_change_freq() < 10 &&
-            number_of_env_change - repeats * s.get_change_freq() > -10);
+    assert( number_of_env_change - repeats * s.get_change_freq() < 20 &&
+            number_of_env_change - repeats * s.get_change_freq() > -20);
 
   }
 

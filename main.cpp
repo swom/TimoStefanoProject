@@ -35,6 +35,11 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
 
   simulation s {0.5, 0, 1000, 0, 0, {1,1}, 2};
 
+  for (int i = 0; i < 10; i++)
+  {
+      tick (s);
+      save_json(s, "generation"+std::to_string(s.get_time()));
+  }
 
 
 

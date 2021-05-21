@@ -13,7 +13,7 @@ public:
              double targetB = 0.1,
              int init_pop_size = 1,
              int seed = 0,
-             int t_change_interval = 10,
+             double t_change_interval = 0.1,
              std::vector<int> net_arch = {1,2,1},
              double sel_str = 2
           );
@@ -57,7 +57,7 @@ public:
    population m_population;
    std::minstd_rand m_rng;
    std::bernoulli_distribution m_t_change_env_distr;
-   int m_time;
+   int m_time = 0;
    double m_sel_str;
    double m_change_freq;
 
@@ -94,7 +94,11 @@ network& get_nth_ind_net( simulation& s, size_t ind_index);
 ///Calculates fitness and selects a new population based on fitness
 void select_inds(simulation& s);
 
+///Ticks time one generation into the future
 void tick(simulation &s);
+
+///Saves the enitre GODDDAM SIMULATIONNNN!!!!!!! WHOO NEEDS MEMORRYYYY
+void save_json(const simulation& s, const std::string& filename);
 
 void test_simulation() noexcept;
 
