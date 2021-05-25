@@ -34,8 +34,6 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
 #endif
 
   simulation s {0.5, 0, 1000, 0, 0, {1,1}, 2};
-
-<<<<<<< HEAD
   for (int i = 0; i < 10; i++)
   {
       tick (s);
@@ -43,11 +41,5 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
   }
 
 
-
-
-
-
-=======
->>>>>>> 2850751acc50285933cad251a62c015fefbc2fea
   return 0;
 }
