@@ -115,7 +115,7 @@ network mutate (network n,
 
 
 
-
+#ifndef NDEBUG
 void test_network() //!OCLINT
 {
   ///A network can be initialized
@@ -194,3 +194,4 @@ void test_network() //!OCLINT
 
   }
 }
+#endif

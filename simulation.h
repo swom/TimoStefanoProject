@@ -65,6 +65,9 @@ public:
 ///Checks if 2 simulations are equal
 bool operator ==(const simulation& lhs, const simulation& rhs);
 
+///Calculates the avg_fitness of the population
+double avg_fitness(const simulation& s);
+
 ///Calculates fitness of inds in pop given current env values
 void calc_fitness(simulation& s);
 
@@ -73,6 +76,9 @@ void change_all_weights_nth_ind(simulation& s, size_t ind_index, double new_weig
 
 ///Changes the network of the nth individual for a given network
 void change_nth_ind_net(simulation& s, size_t ind_index, const network& n);
+
+///Gets the best n individuals in a pop
+std::vector<individual> get_best_n_inds(const simulation& s, int n);
 
 ///Returns the current target value of the environment in the simualtion
 double get_current_env_value(const simulation&s);
@@ -99,6 +105,9 @@ void tick(simulation &s);
 
 ///Saves the enitre GODDDAM SIMULATIONNNN!!!!!!! WHOO NEEDS MEMORRYYYY
 void save_json(const simulation& s, const std::string& filename);
+
+///Calculates the standard devaition of the population fitness
+double var_fitness(const simulation&s);
 
 void test_simulation() noexcept;
 

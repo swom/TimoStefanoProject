@@ -24,6 +24,12 @@ bool operator== (const population& lhs, const population& rhs)
   return inds && mut_rate && mut_step;
 }
 
+double avg_fitness(const population& p)
+{
+    auto fitnesses = extract_fitnesses(p.get_inds());
+    return calc_mean(fitnesses);
+}
+
 std::vector<double> adjust_distances(std::vector<double> distances)
 {
   for(double& dist : distances)
@@ -102,6 +108,16 @@ void check_and_correct_dist(std::vector<double>& distance_from_target, double& m
     }
 }
 
+std::vector<double> extract_fitnesses(const std::vector<individual>& inds)
+{
+    std::vector<double> fitnesses;
+    for(const auto& ind : inds)
+    {
+        fitnesses.push_back(ind.get_fitness());
+    }
+    return fitnesses;
+}
+
 void select_new_pop(population& p,
                     const rndutils::mutable_discrete_distribution<>& mut_dist,
                     std::minstd_rand& rng)
@@ -118,6 +134,16 @@ void select_new_pop(population& p,
 void swap_new_with_old_pop(population& p)
 {
   p.get_inds().swap(p.get_new_inds());
+}
+
+std::vector<individual> get_best_n_inds(const population& p, int nth)
+{
+    auto inds = p.get_inds();
+    std::nth_element(inds.begin(), inds.begin() + nth, inds.end(),
+                     [](const individual& lhs, const individual& rhs)
+    {return lhs.get_fitness() > rhs.get_fitness();});
+
+    return std::vector<individual>(inds.begin(), inds.begin() + nth);
 }
 
 const individual& get_nth_ind(const population& p, size_t ind_index)
@@ -178,6 +204,14 @@ void set_nth_ind_fitness (population& p, size_t ind_index, double fitness)
   ind.set_fitness(fitness);
 }
 
+double var_fitness(const population& p)
+{
+    auto inds = p.get_inds();
+    auto fitnesses = extract_fitnesses(inds);
+    return calc_stdev(fitnesses);
+}
+
+#ifndef NDEBUG
 void test_population() noexcept
 {
   {
@@ -266,3 +300,4 @@ void test_population() noexcept
   }
 #endif
 }
+#endif

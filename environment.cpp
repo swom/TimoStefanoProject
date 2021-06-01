@@ -61,6 +61,7 @@ void switch_target(environment &e){
 
 
 
+#ifndef NDEBUG
 void test_environment() noexcept
 {
 
@@ -135,3 +136,4 @@ void test_environment() noexcept
 
 
 }
+#endif

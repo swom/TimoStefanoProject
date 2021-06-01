@@ -50,6 +50,7 @@ std::vector<double> response(const individual& ind)
   return response(ind.get_net(),ind.get_input_values());
 }
 
+#ifndef NDEBUG
 void test_individual()
 {
   //An individual has a member variable called m_age
@@ -103,3 +104,4 @@ void test_individual()
 
 
 }
+#endif

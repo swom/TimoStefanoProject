@@ -1,14 +1,10 @@
-
-#include "environment.h"
-#include "individual.h"
-#include "population.h"
-#include "simulation.h"
-
-
+#include "observer.h"
 #include <cassert>
 #include <string>
 #include <vector>
 
+
+#ifndef NDEBUG
 void test() {
   test_environment();
   test_individual();
@@ -16,7 +12,7 @@ void test() {
   test_population();
   test_simulation();
 }
-
+#endif
 
 int main(int argc, char ** argv) //!OCLINT tests may be long
 {
@@ -34,12 +30,17 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
 #endif
 
   simulation s {0.5, 0, 1000, 0, 0, {1,1}, 2};
-  for (int i = 0; i < 10; i++)
+  observer o;
+  for (int i = 0; i < 10000; i++)
   {
       tick (s);
-      save_json(s, "generation"+std::to_string(s.get_time()));
+      o.save_avg_fit_and_env(s);
+      if(i % 100 == 0)
+      {
+          o.save_best_100_inds(s);
+      }
   }
-
+save_json(o, "test_observer.json");
 
   return 0;
 }

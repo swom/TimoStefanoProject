@@ -50,6 +50,9 @@ private:
 ///Checks that 2 populations are equal
 bool operator== (const population& lhs, const population& rhs);
 
+///Calculates the avg_fitness of the population
+double avg_fitness(const population& p);
+
 ///Calculates the fitness of inds in pop given a target env_value
 population calc_fitness(population p, const double &env_value, const double &sel_str);
 
@@ -58,6 +61,12 @@ void change_nth_ind_net(population& p, size_t ind_index, network n);
 
 ///Creates a mutable distribution from whihc to draw inds based on fitness
 rndutils::mutable_discrete_distribution<>  create_mut_dist_fit(population& p);
+
+///Extracts a vector of the fitnesses of individuals into a double vectors
+std::vector<double> extract_fitnesses(const std::vector<individual>& inds);
+
+///Gets the best n individuals in a pop
+std::vector<individual> get_best_n_inds(const population& p, int nth);
 
 const individual& get_nth_ind(const population& p, size_t ind_index);
 individual& get_nth_ind(population& p, size_t ind_index);
@@ -90,6 +99,9 @@ void swap_new_with_old_pop(population& p);
 
 ///Sets the fitness of the nth ind in the population
 void set_nth_ind_fitness (population& p, size_t ind_index, double fitness);
+
+///Calculates the standard deviation
+double var_fitness(const population &p);
 
 void test_population() noexcept;
 

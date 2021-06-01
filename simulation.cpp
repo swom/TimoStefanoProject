@@ -35,6 +35,11 @@ bool operator ==(const simulation& lhs, const simulation& rhs)
   return pop && env && time && sel_str && change_freq;
 }
 
+double avg_fitness(const simulation& s)
+{
+    return avg_fitness(s.get_pop());
+}
+
 void calc_fitness(simulation& s)
 {
   s.get_pop() = calc_fitness(s.get_pop(), get_current_env_value(s), s.get_sel_str());
@@ -55,6 +60,11 @@ void change_current_target_value(simulation& s, double new_target_value)
 void change_nth_ind_net(simulation& s, size_t ind_index, const network& n)
 {
   change_nth_ind_net(s.get_pop(), ind_index, n) ;
+}
+
+std::vector<individual> get_best_n_inds(const simulation& s, int n)
+{
+    return get_best_n_inds(s.get_pop(), n);
 }
 
 double get_current_env_value(const simulation&s)
@@ -155,6 +165,12 @@ void select_inds(simulation& s)
   reproduce(s);
 }
 
+double var_fitness(const simulation&s)
+{
+    return var_fitness(s.get_pop());
+}
+
+#ifndef NDEBUG
 void test_simulation() noexcept//!OCLINT test may be many
 {
 
@@ -416,3 +432,4 @@ void test_simulation() noexcept//!OCLINT test may be many
 #endif
 
 }
+#endif
