@@ -27,6 +27,9 @@ private:
     std::vector<double> m_env_values;
 };
 
+///Executes a simulation for n generations
+void exec(simulation& s , observer& o, int n_generations);
+
 ///Saves the enitre GODDDAM SIMULATIONNNN!!!!!!! WHOO NEEDS MEMORRYYYY
 void save_json(const observer &o, const std::string& filename);
 

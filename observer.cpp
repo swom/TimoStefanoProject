@@ -24,3 +24,16 @@ void save_json(const observer& o, const std::string& filename)
   json_out = o;
   f << json_out;
 }
+
+void exec(simulation& s , observer& o, int n_generations)
+{
+    for (int i = 0; i < n_generations; i++)
+    {
+        tick (s);
+        o.save_avg_fit_and_env(s);
+        if(i % 100 == 0)
+        {
+            o.save_best_100_inds(s);
+        }
+    }
+}

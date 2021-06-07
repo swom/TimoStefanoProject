@@ -29,18 +29,11 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
   assert(1 == 2);
 #endif
 
-  simulation s {0.5, 0, 1000, 0, 0, {1,1}, 2};
+  simulation s {0.5, 0, 1000, 0, 0.1, {1,10,2,1}, 2};
   observer o;
-  for (int i = 0; i < 10000; i++)
-  {
-      tick (s);
-      o.save_avg_fit_and_env(s);
-      if(i % 100 == 0)
-      {
-          o.save_best_100_inds(s);
-      }
-  }
-save_json(o, "test_observer.json");
+  exec(s, o, 100000);
+
+  save_json(o, "test_observer.json");
 
   return 0;
 }
