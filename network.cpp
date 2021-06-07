@@ -51,7 +51,8 @@ std::vector<double> register_n_mutations(network n, double mut_rate, double mut_
   for(int i = 0; i != repeats; i++)
     {
 
-      auto n_new = mutate(n, mut_rate, mut_step, rng);
+      n.mutate(mut_rate, mut_step, rng);
+      auto n_new = n;
 
       for(auto& layer : n_new.get_net_weights())
         for(auto& node : layer)
@@ -92,7 +93,7 @@ std::vector<double> response(const network& n, const std::vector<double>& input)
 }
 
 
-network mutate (network n,
+void network::mutate (
                 const double& mut_rate,
                 const double& mut_step,
                 std::minstd_rand& rng)
@@ -101,15 +102,13 @@ network mutate (network n,
   std::bernoulli_distribution mut_p{mut_rate};
   std::normal_distribution<double> mut_st{0,mut_step};
 
-  for(auto& layer : n.get_net_weights())
+  for(auto& layer : m_network_weights)
     for(auto& node : layer)
       for(auto& weight : node)
         {
           if(mut_p(rng))
             {weight += mut_st(rng);}
         }
-
-  return n;
 }
 
 

@@ -20,7 +20,26 @@ simulation::simulation(double targetA, double targetB,
 {
   for(auto& ind : m_population.get_inds())
     {
-      ind.get_net() = net_arch;
+      ind.set_net(net_arch);
+    }
+}
+
+simulation::simulation(double targetA, double targetB,
+                       int init_pop_size,
+                       int seed,
+                       double t_change_interval,
+                       GRN grn,
+                       double sel_str):
+  m_environment{targetA, targetB},
+  m_population{init_pop_size},
+  m_rng{seed},
+  m_t_change_env_distr{static_cast<double>(t_change_interval)},
+  m_sel_str{sel_str},
+  m_change_freq {static_cast<double>(t_change_interval)}
+{
+  for(auto& ind : m_population.get_inds())
+    {
+      ind.set_net(grn);
     }
 }
 
@@ -142,8 +161,8 @@ void tick(simulation &s)
 {
     s.increase_time();
 
-   if(is_environment_changing(s)){
-
+   if(is_environment_changing(s))
+   {
     switch_target(s.get_env());
    }
 

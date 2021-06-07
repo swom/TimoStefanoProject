@@ -18,6 +18,15 @@ public:
              double sel_str = 2
           );
 
+  simulation(double targetA,
+             double targetB,
+             int init_pop_size,
+             int seed,
+             double t_change_interval,
+             GRN grn,
+             double sel_str
+          );
+
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(simulation,
                                  m_environment,
                                  m_population,

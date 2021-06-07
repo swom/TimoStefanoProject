@@ -12,6 +12,13 @@ individual::individual(std::vector<int> net_arch, int age) :
 
 }
 
+individual::individual(GRN grn):
+    m_network{{0}},
+    m_grn{grn}
+{
+
+}
+
 individual::individual(ind_param i_p) :
   m_age{i_p.age},
   ///!!!!Attention!!!! input values are for now a fixed amount
@@ -34,15 +41,14 @@ bool operator== (const individual& lhs, const individual& rhs)
   return fitness && network && inputs;
 }
 
-double calc_sqr_distance(const individual& i, double env_value)
+float calc_sqr_distance(individual& i, double env_value)
 {
-   return (response(i)[0] - env_value) * (response(i)[0] - env_value);
+   return (i.grn_response() - env_value) * (i.grn_response() - env_value);
 }
 
-individual mutate(individual i, double mut_rate, double mut_step, std::minstd_rand& rng)
+void individual::mutate(double mut_rate, double mut_step, std::minstd_rand& rng)
 {
-  i.get_net() = mutate(i.get_net(), mut_rate, mut_step, rng);
-  return i;
+  m_network.mutate(mut_rate, mut_step, rng);
 }
 
 std::vector<double> response(const individual& ind)

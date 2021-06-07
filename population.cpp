@@ -46,7 +46,7 @@ bool all_nets_equals_to(const population& p, const network& n)
   {return i.get_net() == n;});
 }
 
-std::vector<double> calc_dist_from_target(const std::vector<individual>& inds, double env_value)
+std::vector<double> calc_dist_from_target(std::vector<individual>& inds, double env_value)
 {
   std::vector<double> distance_from_target;
 
@@ -124,10 +124,11 @@ void select_new_pop(population& p,
 {
   for( size_t i = 0; i != p.get_inds().size(); i++)
     {
-      p.get_new_inds()[i] = mutate(p.get_inds()[mut_dist(rng)],
-          p.get_mut_rate(),
-          p.get_mut_step(),
-          rng);
+      p.get_new_inds()[i] = p.get_inds()[mut_dist(rng)];
+      p.get_new_inds()[i].mutate(
+                p.get_mut_rate(),
+                p.get_mut_step(),
+                rng);
     }
 }
 

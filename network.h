@@ -23,6 +23,7 @@ public:
     ///Returns the input size
     size_t get_input_size() const noexcept {return static_cast<size_t>(m_input_size);}
 
+    void mutate (const double& mut_rate, const double& mut_step, std::minstd_rand &rng);
 
 
 private:
@@ -45,8 +46,6 @@ network change_all_weights(network n, double new_weight);
 std::vector<double> register_n_mutations(network n, double mut_rate, double mut_step, std::minstd_rand& rng, int repeats);
 
 std::vector<double> response(const network& n, const std::vector<double> &input);
-
-network mutate (network n, const double& mut_rate, const double& mut_step, std::minstd_rand &rng);
 
 void test_network();
 
