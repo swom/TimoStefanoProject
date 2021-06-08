@@ -32,7 +32,7 @@ public:
   population& get_pop() noexcept {return m_population;}
 
   ///Returns ref to rng
-  std::minstd_rand& get_rng() noexcept {return m_rng;}
+  std::mt19937_64& get_rng() noexcept {return m_rng;}
 
   ///Returns const ref to env_member
   const environment& get_env() const noexcept {return m_environment;}
@@ -55,7 +55,7 @@ public:
   private:
    environment m_environment;
    population m_population;
-   std::minstd_rand m_rng;
+   std::mt19937_64 m_rng;
    std::bernoulli_distribution m_t_change_env_distr;
    int m_time = 0;
    double m_sel_str;

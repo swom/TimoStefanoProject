@@ -83,13 +83,13 @@ std::vector<double> rescale_dist_to_fit(std::vector<double> distance_from_target
                                         double selection_strength);
 
 ///Reproduces inds with a probability proportional to their fitness
-void reproduce(population& p, std::minstd_rand& rng);
+void reproduce(population& p, std::mt19937_64& rng);
 
 ///Select inds for new pop from old pop based on mutable dist
 /// and mutates them
 void select_new_pop(population& p,
                     const rndutils::mutable_discrete_distribution<>& mut_dist,
-                    std::minstd_rand& rng);
+                    std::mt19937_64 &rng);
 
 ///Sets the fitness of the individuals to the one contained in the fitness vector
 void set_fitness_inds(population& p, const std::vector<double>& fitness_vector);

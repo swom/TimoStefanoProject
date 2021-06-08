@@ -14,7 +14,7 @@ public:
                                    m_env_values)
 
     ///Saves the avg fitness and current environment value
-    void save_avg_fit_and_env(const simulation& s);
+    void store_avg_fit_and_env(const simulation& s);
 
     ///Saves the 100 best individuals in the population
     void save_best_100_inds(const simulation& s);

@@ -45,7 +45,6 @@ void calc_fitness(simulation& s)
   s.get_pop() = calc_fitness(s.get_pop(), get_current_env_value(s), s.get_sel_str());
 }
 
-
 void change_all_weights_nth_ind(simulation& s, size_t ind_index, double new_weight)
 {
   auto new_net = change_all_weights(get_nth_ind_net(s, ind_index), new_weight);
@@ -135,7 +134,6 @@ simulation load_json(
 void reproduce(simulation& s)
 {
   reproduce(s.get_pop(), s.get_rng());
-
 }
 
 void tick(simulation &s)
@@ -208,7 +206,7 @@ void test_simulation() noexcept//!OCLINT test may be many
           targetB,
           pop_size,
           seed};
-    std::minstd_rand copy_rng(seed);
+    std::mt19937_64 copy_rng(seed);
     assert ( s.get_rng()() == copy_rng());
 
   }
@@ -273,23 +271,26 @@ void test_simulation() noexcept//!OCLINT test may be many
     int pop_size = 2;
     simulation s{0,0, pop_size};
 
-    //change ind 0 net
-    size_t changed_ind = 0;
-    auto new_net = change_all_weights(get_nth_ind_net(s,changed_ind), 1);
-    change_nth_ind_net(s, changed_ind, new_net);
-
     //change target value to match output of ind 0 net
-    change_current_target_value(s, response(get_nth_ind(s, 0))[0]);
+    size_t best_ind = 0;
+    change_current_target_value(s, response(get_nth_ind(s, best_ind))[0]);
+    auto best_net = get_nth_ind_net(s, best_ind);
+    auto resp_best = response(get_nth_ind(s, best_ind))[0];
 
-    assert(response(get_nth_ind(s, 0))[0] == get_current_env_value(s));
-    assert(response(get_nth_ind(s, 1))[0] != get_current_env_value(s));
+    size_t worst_ind = 1;
+    auto worst_net = change_all_weights(get_nth_ind_net(s,worst_ind), 100);
+    change_nth_ind_net(s, worst_ind, worst_net);
+    auto resp_worst = response(get_nth_ind(s, worst_ind))[0];
+
+    assert(resp_best == get_current_env_value(s));
+    assert(resp_worst != get_current_env_value(s));
 
     select_inds(s);
 
     //all inds should now have the network that matches the target values
     for(const auto& ind :get_inds(s))
       {
-        assert(ind.get_net() == new_net);
+        assert(ind.get_net() == best_net);
       }
   }
 #endif
@@ -329,7 +330,7 @@ void test_simulation() noexcept//!OCLINT test may be many
   //#define FIX_ISSUE_34
   {
     simulation s;
-    int repeats = 10000;
+    int repeats = 100000;
     int n_switches = 0;
     for(int i = 0; i != repeats; i++)
       {
@@ -338,8 +339,10 @@ void test_simulation() noexcept//!OCLINT test may be many
             n_switches++;
           }
       }
-    assert(n_switches - s.get_change_freq() * repeats < 10 &&
-           n_switches - s.get_change_freq() * repeats > -10);
+
+    auto expected_repeats = s.get_change_freq() * repeats;
+    assert(n_switches - expected_repeats < 20 &&
+           n_switches - expected_repeats > -20);
   }
 
 
@@ -398,8 +401,8 @@ void test_simulation() noexcept//!OCLINT test may be many
 
     //#define FIX_ISSUE_39
   {
-    simulation s;
-    int repeats =  10000;
+        simulation s{0, 0.1, 0};
+    int repeats =  100000;
     auto previous_env_value = get_current_env_value(s);
 
     int number_of_env_change = 0;
@@ -413,8 +416,10 @@ void test_simulation() noexcept//!OCLINT test may be many
             number_of_env_change++;
           }
       }
-    assert( number_of_env_change - repeats * s.get_change_freq() < 20 &&
-            number_of_env_change - repeats * s.get_change_freq() > -20);
+
+    auto expected_changes = s.get_change_freq() * repeats;
+    assert( number_of_env_change - expected_changes < repeats / 1000 &&
+            number_of_env_change - expected_changes > -repeats / 1000);
 
   }
 

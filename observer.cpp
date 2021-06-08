@@ -1,11 +1,12 @@
 #include "observer.h"
 #include <fstream>
+#include "Stopwatch.hpp"
 
 observer::observer()
 {
 }
 
-void observer::save_avg_fit_and_env(const simulation& s)
+void observer::store_avg_fit_and_env(const simulation& s)
 {
  m_avg_fitnesses.push_back(avg_fitness(s));
  m_var_fitnesses.push_back(var_fitness(s));
@@ -27,13 +28,21 @@ void save_json(const observer& o, const std::string& filename)
 
 void exec(simulation& s , observer& o, int n_generations)
 {
+    stopwatch::Stopwatch sw;
     for (int i = 0; i < n_generations; i++)
     {
         tick (s);
-        o.save_avg_fit_and_env(s);
+        o.store_avg_fit_and_env(s);
         if(i % 100 == 0)
         {
-            o.save_best_100_inds(s);
+            std::cout << "Cycle " << i << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
+            //o.save_best_100_inds(s);
+        }
+        if(i % 1000 == 0)
+        {
+            stopwatch::Stopwatch sw2;
+            save_json(o,"sim.json");
+            std::cout << "saving takes: " << sw2.elapsed() << " milliseconds" << std::endl;
         }
     }
 }

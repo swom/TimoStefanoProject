@@ -39,15 +39,14 @@ double calc_sqr_distance(const individual& i, double env_value)
    return (response(i)[0] - env_value) * (response(i)[0] - env_value);
 }
 
-individual mutate(individual i, double mut_rate, double mut_step, std::minstd_rand& rng)
+void individual::mutate(double mut_rate, double mut_step, std::mt19937_64& rng)
 {
-  i.get_net() = mutate(i.get_net(), mut_rate, mut_step, rng);
-  return i;
+  m_network.mutate(mut_rate, mut_step, rng);
 }
 
 std::vector<double> response(const individual& ind)
 {
-  return response(ind.get_net(),ind.get_input_values());
+    return response(ind.get_net(),ind.get_input_values(), &sigmoid);
 }
 
 #ifndef NDEBUG

@@ -37,6 +37,8 @@ public:
   ///Returns ref to network
   network& get_net() noexcept {return m_network;}
 
+  ///Mutates the network of an individual
+  void mutate(double mut_rate, double mut_step, std::mt19937_64 &rng);
 
   ///Sets the fitness of an ind
   void set_fitness(double fitness) {m_fitness = fitness;}
@@ -62,9 +64,6 @@ bool operator== (const individual& lhs, const individual& rhs);
 ///Calculates the distance of a response of a network
 /// and a given value
 double calc_sqr_distance(const individual& i, double env_value);
-
-///Mutates the network of an individual
-individual mutate(individual i, double mut_rate, double mut_step, std::minstd_rand& rng);
 
 ///Lets a network send out an ouput signal
 ///!!!!Attention!!! for now no input is provided

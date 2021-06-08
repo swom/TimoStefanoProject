@@ -1,6 +1,7 @@
 # Entry point for user
 
 HEADERS +=  \
+  Stopwatch.hpp \
   environment.h \
   individual.h \
   network.h \
