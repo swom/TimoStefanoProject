@@ -16,6 +16,7 @@ void test() {
 
 int main(int argc, char ** argv) //!OCLINT tests may be long
 {
+
   const std::vector<std::string> args(argv, argv + argc);
 #ifndef NDEBUG
   if (args.size() > 1 && args[1] == "--test")
@@ -32,6 +33,6 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
   simulation s {0.5, 0.1, 1000, 0, 0.01, {1,2,1}, 10};
   observer o;
   exec(s, o, 1000000);
-  save_json(o,"sim1.json");
+  save_json(o,"Boomshakalalka.json");
   return 0;
 }
