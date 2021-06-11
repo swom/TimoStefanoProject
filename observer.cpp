@@ -35,14 +35,14 @@ void exec(simulation& s , observer& o, int n_generations)
         o.store_avg_fit_and_env(s);
         if(i % 100 == 0)
         {
-            std::cout << "Cycle " << i << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
             //o.save_best_100_inds(s);
         }
         if(i % 1000 == 0)
         {
-            stopwatch::Stopwatch sw2;
-            save_json(o,"sim.json");
-            std::cout << "saving takes: " << sw2.elapsed() << " milliseconds" << std::endl;
+            std::cout << "Cycle " << i << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
+//            stopwatch::Stopwatch sw2;
+//            save_json(o,"sim.json");
+//            std::cout << "saving takes: " << sw2.elapsed() << " milliseconds" << std::endl;
         }
     }
 }

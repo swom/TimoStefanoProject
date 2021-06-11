@@ -29,9 +29,9 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
   assert(1 == 2);
 #endif
 
-  simulation s {0.5, 0, 1000, 0, 0.1, {1,10,2,1,1}, 2};
+  simulation s {0.5, 0.1, 1000, 0, 0.01, {1,2,1}, 10};
   observer o;
-  exec(s, o, 100000);
-
+  exec(s, o, 1000000);
+  save_json(o,"sim1.json");
   return 0;
 }
