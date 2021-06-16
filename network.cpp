@@ -76,7 +76,7 @@ std::vector<double> response(const network& n, const std::vector<double>& input,
 
     for(size_t layer = 0; layer != n.get_net_weights().size(); layer++)
     {
-        auto current_layer_values = std::vector<double>{};
+        auto current_layer_values = std::vector<double>(n.get_net_weights().size());
 
         for(size_t node = 0; node != n.get_net_weights()[layer].size(); node++)
         {
@@ -86,10 +86,10 @@ std::vector<double> response(const network& n, const std::vector<double>& input,
                                        n.get_net_weights()[layer][node].begin(),
                                        0.0);
 
-            current_layer_values.push_back(fun(node_value));
+            current_layer_values[node] = fun(node_value);
         }
 
-        previous_layer_value = current_layer_values;
+        previous_layer_value = std::move(current_layer_values);
     }
     ;
     auto output = previous_layer_value;
