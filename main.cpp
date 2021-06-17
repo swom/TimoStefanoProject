@@ -16,12 +16,11 @@ void test() {
 
 int main(int argc, char ** argv) //!OCLINT tests may be long
 {
-
   const std::vector<std::string> args(argv, argv + argc);
 #ifndef NDEBUG
+  test();
   if (args.size() > 1 && args[1] == "--test")
     {
-      test();
       // We've already tested, so the program is done
       return 0;
     }
@@ -30,9 +29,11 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
   assert(1 == 2);
 #endif
 
-  simulation s {0.5, 0.1, 1000, 0, 0.01, {1,2,1}, 10};
+  simulation s {0.5, 0, 1000, 0, 0.1, {1,10,2,1}, 2};
   observer o;
-  exec(s, o, 1000000);
-  save_json(o,"Boomshakalalka.json");
+  exec(s, o, 10);
+
+  save_json(o, "test_observer.json");
+
   return 0;
 }
