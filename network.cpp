@@ -68,34 +68,6 @@ std::vector<double> register_n_mutations(network n, double mut_rate, double mut_
     return  networks_weights;
 }
 
-
-std::vector<double> response(const network& n, const std::vector<double>& input, std::function<double(double)> fun)
-{
-    std::vector<double>previous_layer_value = input;
-    assert(input.size() == n.get_input_size());
-
-    for(size_t layer = 0; layer != n.get_net_weights().size(); layer++)
-    {
-        auto current_layer_values = std::vector<double>(n.get_net_weights().size());
-
-        for(size_t node = 0; node != n.get_net_weights()[layer].size(); node++)
-        {
-            double node_value = n.get_biases()[layer][node] +
-                    std::inner_product(previous_layer_value.begin(),
-                                       previous_layer_value.end(),
-                                       n.get_net_weights()[layer][node].begin(),
-                                       0.0);
-
-            current_layer_values[node] = fun(node_value);
-        }
-
-        previous_layer_value = std::move(current_layer_values);
-    }
-    ;
-    auto output = previous_layer_value;
-    return output;
-}
-
 double sigmoid(double x)
 {
     return x / (1 + std::abs(x));
@@ -168,14 +140,14 @@ void test_network() //!OCLINT
         //For simple net with weights == 0
         auto expected_output = std::vector<double>{0};
         network n{very_simple_nodes};
-        auto output = response(n,input);
+        auto output = response(n, input, &linear);
         assert(output == expected_output);
 
         //Let's change the weights of the network to something else than 0(e.g 1)
         double new_weight_value = 1.0;
         n = change_all_weights(n,new_weight_value);
         expected_output = std::vector<double>{2};
-        output = response(n,input);
+        output = response(n,input, &linear);
         assert(output == expected_output);
 
         //Testing a more complex arhitecture
@@ -183,7 +155,7 @@ void test_network() //!OCLINT
         network not_too_simple{not_too_simple_nodes};
         not_too_simple = change_all_weights(not_too_simple, new_weight_value);
         expected_output = {1 * 3 * 3};
-        output = response(not_too_simple, input);
+        output = response(not_too_simple, input, &linear);
         assert(output == expected_output);
 
     }

@@ -46,7 +46,7 @@ void individual::mutate(double mut_rate, double mut_step, std::mt19937_64& rng)
 
 std::vector<double> response(const individual& ind)
 {
-    return response(ind.get_net(),ind.get_input_values()/*, &sigmoid*/);
+    return response(ind.get_net(),ind.get_input_values(), &sigmoid);
 }
 
 #ifndef NDEBUG
@@ -86,7 +86,7 @@ void test_individual()
   ///When an individual responds to environment it uses its input values as input
   {
     individual i;
-    assert( response(i) == response(i.get_net(),i.get_input_values()));
+    assert( response(i) == response(i.get_net(),i.get_input_values(), &linear));
   }
 
   //#define FIX_ISSUE_36

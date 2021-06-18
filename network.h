@@ -54,8 +54,30 @@ std::vector<double> register_n_mutations(network n, double mut_rate, double mut_
 double sigmoid(double x);
 double linear(double x);
 
-std::vector<double> response(const network& n, const std::vector<double>& input, std::function<double(double)> fun = &linear);
+template <typename Fun>
+inline std::vector<double> response(const network& n, std::vector<double> input, Fun fun = &linear)
+{
+    assert(input.size() == n.get_input_size());
 
+    for(size_t layer = 0; layer != n.get_net_weights().size(); layer++)
+    {
+        auto output = std::vector<double>(n.get_net_weights().size());
+
+        for(size_t node = 0; node != n.get_net_weights()[layer].size(); node++)
+        {
+            double node_value = n.get_biases()[layer][node] +
+                    std::inner_product(input.begin(),
+                                       input.end(),
+                                       n.get_net_weights()[layer][node].begin(),
+                                       0.0);
+
+            output[node] = fun(node_value);
+        }
+        input = std::move(output);
+    }
+
+    return input;
+}
 
 void test_network();
 
