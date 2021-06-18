@@ -13,9 +13,9 @@ void observer::store_avg_fit_and_env(const simulation& s)
  m_env_values.push_back(get_current_env_value(s));
 }
 
-void observer::save_best_100_inds(const simulation &s)
+void observer::save_best_n_inds(const simulation &s, int n)
 {
-    m_top_100_inds.push_back(get_best_n_inds(s,100));
+    m_top_inds.push_back(get_best_n_inds(s, n));
 }
 
 void save_json(const observer& o, const std::string& filename)
@@ -33,16 +33,13 @@ void exec(simulation& s , observer& o, int n_generations)
     {
         tick (s);
         o.store_avg_fit_and_env(s);
-        if(i % 100 == 0)
+        if(i % 1000 == 0)
         {
-            //o.save_best_100_inds(s);
+            o.save_best_n_inds(s,10);
         }
         if(i % 1000 == 0)
         {
             std::cout << "Cycle " << i << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
-//            stopwatch::Stopwatch sw2;
-//            save_json(o,"sim.json");
-//            std::cout << "saving takes: " << sw2.elapsed() << " milliseconds" << std::endl;
         }
     }
 }
