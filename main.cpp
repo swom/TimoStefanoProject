@@ -1,4 +1,5 @@
 #include "observer.h"
+#include "parser.h"
 #include <cassert>
 #include <string>
 #include <vector>
@@ -9,6 +10,8 @@ void test() {
   test_environment();
   test_individual();
   test_network();
+  test_observer();
+  test_parser();
   test_population();
   test_simulation();
 }

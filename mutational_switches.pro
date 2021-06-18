@@ -6,6 +6,7 @@ HEADERS +=  \
   individual.h \
   network.h \
   observer.h \
+  parser.h \
   population.h \
   rndutils.hpp \
   simulation.h \
@@ -18,6 +19,7 @@ SOURCES +=  \
   main.cpp \
   network.cpp \
   observer.cpp \
+  parser.cpp \
   population.cpp \
   simulation.cpp \
   utilities.cpp
