@@ -109,7 +109,7 @@ std::vector<double> response(const network& n, std::vector<double> input)
 
     for(size_t layer = 0; layer != n.get_net_weights().size(); layer++)
     {
-        auto output = std::vector<double>(n.get_net_weights().size());
+        auto output = std::vector<double>(n.get_net_weights()[layer].size());
 
         for(size_t node = 0; node != n.get_net_weights()[layer].size(); node++)
         {
