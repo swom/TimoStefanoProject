@@ -5,8 +5,9 @@
 #include <cmath>
 #include <numeric>
 
-network::network(std::vector<int> nodes_per_layer):
-    m_input_size{nodes_per_layer[0]}
+network::network(std::vector<int> nodes_per_layer, std::function<double(double)> activation_function):
+    m_input_size{nodes_per_layer[0]},
+    m_activation_function{activation_function}
 {
     for (size_t i = 1; i != nodes_per_layer.size(); i++ )
     {
@@ -102,6 +103,29 @@ void network::mutate(const double& mut_rate,
         }
 }
 
+std::vector<double> response(const network& n, std::vector<double> input)
+{
+    assert(input.size() == n.get_input_size());
+
+    for(size_t layer = 0; layer != n.get_net_weights().size(); layer++)
+    {
+        auto output = std::vector<double>(n.get_net_weights().size());
+
+        for(size_t node = 0; node != n.get_net_weights()[layer].size(); node++)
+        {
+            double node_value = n.get_biases()[layer][node] +
+                    std::inner_product(input.begin(),
+                                       input.end(),
+                                       n.get_net_weights()[layer][node].begin(),
+                                       0.0);
+
+            output[node] = n(node_value);
+        }
+        input = std::move(output);
+    }
+
+    return input;
+}
 
 
 
@@ -131,6 +155,14 @@ void test_network() //!OCLINT
         }
 
     }
+ ///A network can be initialized with a specific activation function
+ {
+    network n{{1}, linear};
+    std::vector<double> input{1.123};
+    auto using_member_function = response(n,{input});
+    auto using_given_function = response(n,input, &linear);
+    assert(using_given_function == using_member_function);
+  }
 
     ///The function resposne returns the output of the network
     {

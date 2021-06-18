@@ -5,10 +5,15 @@
 #include <vector>
 #include <random>
 #include "json.hpp"
+
+
+double sigmoid(double x);
+double linear(double x);
+
 class network
 {
 public:
-    network(std::vector<int> nodes_per_layer);
+    network(std::vector<int> nodes_per_layer, std::function<double(double)> activation_function = &linear);
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(network,
                                    m_input_size,
@@ -29,6 +34,8 @@ public:
     ///Mutates the network
     void mutate(const double& mut_rate, const double& mut_step, std::mt19937_64 &rng);
 
+    double operator ()(double n) const {return m_activation_function(n);}
+
 private:
     ///Vector of of vectors, representing the weights coming into each node
     std::vector<std::vector<std::vector<double>>> m_network_weights;
@@ -38,6 +45,9 @@ private:
 
     ///The size of the input vector the network will receive
     int m_input_size;
+
+    ///The activation function of the nodes
+    std::function<double(double)> m_activation_function;
 };
 
 bool operator==(const network& lhs, const network& rhs);
@@ -50,9 +60,6 @@ network change_all_weights(network n, double new_weight);
 /// rate and step and returns vector all mutated weights
 /// of network in all times it was mutated
 std::vector<double> register_n_mutations(network n, double mut_rate, double mut_step, std::mt19937_64 &rng, int repeats);
-
-double sigmoid(double x);
-double linear(double x);
 
 template <typename Fun>
 inline std::vector<double> response(const network& n, std::vector<double> input, Fun fun = &linear)
@@ -78,6 +85,9 @@ inline std::vector<double> response(const network& n, std::vector<double> input,
 
     return input;
 }
+
+std::vector<double> response(const network& n, std::vector<double> input);
+
 
 void test_network();
 
