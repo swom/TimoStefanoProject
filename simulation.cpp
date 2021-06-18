@@ -356,12 +356,15 @@ void test_simulation() noexcept//!OCLINT test may be many
 
     env_param e_p{targetA, targetB};
     environment e{e_p};
-
-    //ind_par
+    //net_param
     std::vector<int> net_arc{1,23,456,789};
+    std::function<double(double)> func = linear;
+    net_param net_par{net_arc, func};
+
+    //ind_param
     int age = 123456789;
 
-    ind_param i_p{net_arc, age};
+    ind_param i_p{net_par, age};
 
     //pop_par
     int number_of_inds = 13245679;
@@ -375,8 +378,9 @@ void test_simulation() noexcept//!OCLINT test may be many
     double change_freq = 123789;
     double selection_strength = 0.321546;
 
-    sim_par s_p{seed, change_freq, selection_strength};
-    simulation s{e_p, i_p, p_p, s_p};
+    sim_param  s_p{seed, change_freq, selection_strength};
+    all_params params{e_p, i_p, p_p, s_p};
+    simulation s{params};
 
     //test env
     assert(are_equal_with_tolerance(e.get_target_valueA(), targetA));
@@ -385,7 +389,7 @@ void test_simulation() noexcept//!OCLINT test may be many
     //test pop and ind
     for(const auto& ind : get_inds(s))
       {
-        assert(ind.get_net() == network{net_arc});
+        assert(ind.get_net() == network{net_par});
       }
 
     assert(are_equal_with_tolerance(p.get_inds().size(), number_of_inds) &

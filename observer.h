@@ -33,4 +33,6 @@ void exec(simulation& s , observer& o, int n_generations);
 ///Saves the enitre GODDDAM SIMULATIONNNN!!!!!!! WHOO NEEDS MEMORRYYYY
 void save_json(const observer &o, const std::string& filename);
 
+void test_observer();
+
 #endif // OBSERVER_H

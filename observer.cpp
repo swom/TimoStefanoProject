@@ -8,9 +8,9 @@ observer::observer()
 
 void observer::store_avg_fit_and_env(const simulation& s)
 {
- m_avg_fitnesses.push_back(avg_fitness(s));
- m_var_fitnesses.push_back(var_fitness(s));
- m_env_values.push_back(get_current_env_value(s));
+    m_avg_fitnesses.push_back(avg_fitness(s));
+    m_var_fitnesses.push_back(var_fitness(s));
+    m_env_values.push_back(get_current_env_value(s));
 }
 
 void observer::save_best_n_inds(const simulation &s, int n)
@@ -20,10 +20,10 @@ void observer::save_best_n_inds(const simulation &s, int n)
 
 void save_json(const observer& o, const std::string& filename)
 {
-  std::ofstream  f(filename);
-  nlohmann::json json_out;
-  json_out = o;
-  f << json_out;
+    std::ofstream  f(filename);
+    nlohmann::json json_out;
+    json_out = o;
+    f << json_out;
 }
 
 void exec(simulation& s , observer& o, int n_generations)
@@ -43,3 +43,22 @@ void exec(simulation& s , observer& o, int n_generations)
         }
     }
 }
+
+#ifndef NDEBUG
+void test_observer()
+{
+#ifdef FIX_ISSUE_47
+    ///An observer can store the sim_param of a simulation
+    {
+        observer o;
+        all_params params;
+        simulation s{params};
+        assert(o.get_params() != params);
+
+        o.store_sim_par(s);
+
+        assert(o.get_sim_par() == sim_par);
+    }
+#endif
+}
+#endif

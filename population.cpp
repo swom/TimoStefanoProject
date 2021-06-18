@@ -276,10 +276,10 @@ void test_population() noexcept
     //#define FIX_ISSUE_37
 #ifdef FIX_ISSUE_37
     {
-        std::vector<int> net_arc{1,23,456,789};
+        net_param net_par;
         int age = 123456789;
 
-        ind_param i_p{net_arc, age};
+        ind_param i_p{net_par, age};
 
         int number_of_inds = 13245679;
         double mut_rate = 0.314;
@@ -291,7 +291,7 @@ void test_population() noexcept
 
         for(const auto& ind : p.get_inds())
         {
-            assert(ind.get_net() == network{net_arc});
+            assert(ind.get_net() == network{net_par});
         }
 
         assert(are_equal_with_tolerance(p.get_inds().size(), number_of_inds) &

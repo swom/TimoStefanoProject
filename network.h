@@ -19,6 +19,9 @@ public:
                                    m_input_size,
                                    m_network_weights);
 
+    ///Returns the activation function
+    std::function<double(double)> get_activation_function() const noexcept{return m_activation_function;}
+
     ///Returns the const ref to the node biases
     const std::vector<std::vector<double>>& get_biases() const noexcept{return m_nodes_biases;}
 

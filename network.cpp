@@ -157,12 +157,37 @@ void test_network() //!OCLINT
     }
  ///A network can be initialized with a specific activation function
  {
-    network n{{1}, linear};
-    std::vector<double> input{1.123};
+    network n{{1,2,1}, linear};
+    n = change_all_weights(n,1);
+    std::vector<double> input{1};
     auto using_member_function = response(n,{input});
     auto using_given_function = response(n,input, &linear);
+    auto using_different_given_function = response(n, input, &sigmoid);
     assert(using_given_function == using_member_function);
+    assert(using_different_given_function != using_member_function);
   }
+
+#ifdef FIX_ISSUE_46
+/// A network can be initilized with a parameter struct net_param
+{
+        std::vector<int> net_arc{1, 2, 3, 1} ;
+        std::function<double(double)> function = linear;
+        net_param n_p{net_arc, function};
+        network n{n_p};
+        //Check architecture
+        assert(n.get_net_weights().size() == net_arc.size() -1);
+        for(size_t  i = 0; i != n.get_net_weights().size(); i++)
+        {
+            assert (static_cast<int>(n.get_net_weights()[i].size()) == net_arc[i + 1]);
+        }
+        //Check activation func
+        auto using_member_function = response(n,{input});
+        auto using_given_function = response(n,input, &linear);
+        auto using_different_given_function = response(n, input, &sigmoid);
+        assert(using_given_function == using_member_function);
+        assert(using_different_given_function != using_member_function);
+}
+#endif
 
     ///The function resposne returns the output of the network
     {
