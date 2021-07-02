@@ -22,5 +22,6 @@ void parse_ind_param(const std::vector<std::string>& args);
 void parse_env_param(const std::vector<std::string>& args);
 void parse_pop_param(const std::vector<std::string>& args);
 void parse_sim_param(const std::vector<std::string>& args);
+
 void test_parser();
 #endif // PARSER_H
