@@ -47,6 +47,7 @@ void exec(simulation& s , observer& o, int n_generations)
 #ifndef NDEBUG
 void test_observer()
 {
+//#define FIX_ISSUE_47
 #ifdef FIX_ISSUE_47
     ///An observer can store the sim_param of a simulation
     {
@@ -55,9 +56,9 @@ void test_observer()
         simulation s{params};
         assert(o.get_params() != params);
 
-        o.store_sim_par(s);
+        o.store_par(s);
 
-        assert(o.get_sim_par() == sim_par);
+        assert(o.get_params() == params);
     }
 #endif
 }
