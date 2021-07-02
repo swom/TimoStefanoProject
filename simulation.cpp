@@ -14,6 +14,7 @@ simulation::simulation(double targetA, double targetB,
   m_environment{targetA, targetB},
   m_population{init_pop_size},
   m_rng{seed},
+  m_seed{seed},
   m_t_change_env_distr{static_cast<double>(t_change_interval)},
   m_sel_str{sel_str},
   m_change_freq {static_cast<double>(t_change_interval)}
@@ -23,6 +24,22 @@ simulation::simulation(double targetA, double targetB,
       ind.get_net() = net_arch;
     }
 }
+
+
+simulation::simulation(all_params params):
+  m_environment{params.e_p.targetA, params.e_p.targetB},
+  m_population{params.p_p.number_of_inds},
+  m_rng{params.s_p.seed},
+  m_t_change_env_distr{static_cast<double>(params.s_p.change_freq)},
+  m_sel_str{params.s_p.selection_strength},
+  m_change_freq {static_cast<double>(params.s_p.change_freq)}
+{
+  for(auto& ind : m_population.get_inds())
+    {
+      ind.get_net() = params.i_p.net_par.net_arc;
+    }
+}
+
 
 bool operator ==(const simulation& lhs, const simulation& rhs)
 {
@@ -347,7 +364,7 @@ void test_simulation() noexcept//!OCLINT test may be many
 
 
   //#define FIX_ISSUE_38
-#ifdef FIX_ISSUE_38
+
   {
 
     //env_par
@@ -383,8 +400,8 @@ void test_simulation() noexcept//!OCLINT test may be many
     simulation s{params};
 
     //test env
-    assert(are_equal_with_tolerance(e.get_target_valueA(), targetA));
-    assert(are_equal_with_tolerance(e.get_target_valueB(), targetB));
+    assert(are_equal_with_tolerance(e.get_ref_target_values()[0], targetA));
+    assert(are_equal_with_tolerance(e.get_ref_target_values()[1], targetB));
 
     //test pop and ind
     for(const auto& ind : get_inds(s))
@@ -392,16 +409,16 @@ void test_simulation() noexcept//!OCLINT test may be many
         assert(ind.get_net() == network{net_par});
       }
 
-    assert(are_equal_with_tolerance(p.get_inds().size(), number_of_inds) &
-           are_equal_with_tolerance(p.get_mut_rate(), mut_rate) &
-           are_equal_with_tolerance(p.get_mut_step(), mut_step));
+    assert(are_equal_with_tolerance(s.get_pop().get_inds().size(), number_of_inds) &
+           are_equal_with_tolerance(s.get_pop().get_mut_rate(), mut_rate) &
+           are_equal_with_tolerance(s.get_pop().get_mut_step(), mut_step));
 
     //test sim
     assert(are_equal_with_tolerance(s.get_change_freq(), change_freq) &
            are_equal_with_tolerance(s.get_sel_str(), selection_strength) &
            s.get_seed() == seed);
   }
-#endif
+
 
     //#define FIX_ISSUE_39
   {
