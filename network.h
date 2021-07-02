@@ -10,10 +10,18 @@
 double sigmoid(double x);
 double linear(double x);
 
+struct net_param
+{
+    std::vector<int> net_arc;
+    std::function<double(double)> function;
+};
+
+
 class network
 {
 public:
     network(std::vector<int> nodes_per_layer, std::function<double(double)> activation_function = &linear);
+    network (net_param n_p);
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(network,
                                    m_input_size,

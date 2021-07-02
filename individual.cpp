@@ -15,8 +15,8 @@ individual::individual(std::vector<int> net_arch, int age) :
 individual::individual(ind_param i_p) :
   m_age{i_p.age},
   ///!!!!Attention!!!! input values are for now a fixed amount
-  m_input_values(i_p.net_arc[0], 1.0),
-  m_network{i_p.net_arc}
+  m_input_values(i_p.net_par.net_arc[0], 1.0),
+  m_network{i_p.net_par.net_arc}
 {
 
 }
@@ -89,7 +89,7 @@ void test_individual()
     assert( response(i) == response(i.get_net(),i.get_input_values(), &linear));
   }
 //#define FIX_ISSUE_36
- #ifdef FIX_ISSUE_36
+
 
   {
     net_param net_par;
@@ -99,7 +99,7 @@ void test_individual()
     assert(i.get_net() == network{net_par});
     assert(are_equal_with_tolerance(i.get_age(), age));
   }
-#endif
+
 
 
 
