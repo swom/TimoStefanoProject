@@ -19,13 +19,23 @@ public:
     ///Saves the 100 best individuals in the population
     void save_best_n_inds(const simulation& s, int n);
 
+    const all_params& get_params() const noexcept {return m_params;};
+
+    void store_par (const simulation& s) {m_params = s.get_params();}
+
 private:
 
     std::vector<double> m_avg_fitnesses;
     std::vector<double> m_var_fitnesses;
     std::vector<std::vector<individual>> m_top_inds;
     std::vector<double> m_env_values;
+    all_params m_params;
 };
+
+bool operator==(const all_params& lhs, const all_params& rhs);
+
+bool operator!=(const all_params& lhs, const all_params& rhs);
+
 
 ///Executes a simulation for n generations
 void exec(simulation& s , observer& o, int n_generations);

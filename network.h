@@ -12,7 +12,7 @@ double linear(double x);
 
 struct net_param
 {
-    std::vector<int> net_arc;
+    std::vector<int> net_arc {1,2,1};
     std::function<double(double)> function;
 };
 

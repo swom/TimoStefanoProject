@@ -28,11 +28,12 @@ simulation::simulation(double targetA, double targetB,
 
 simulation::simulation(all_params params):
   m_environment{params.e_p.targetA, params.e_p.targetB},
-  m_population{params.p_p.number_of_inds},
+  m_population{params.p_p, params.i_p},
   m_rng{params.s_p.seed},
   m_t_change_env_distr{static_cast<double>(params.s_p.change_freq)},
   m_sel_str{params.s_p.selection_strength},
-  m_change_freq {static_cast<double>(params.s_p.change_freq)}
+  m_change_freq {static_cast<double>(params.s_p.change_freq)},
+  m_params {params}
 {
   for(auto& ind : m_population.get_inds())
     {

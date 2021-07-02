@@ -74,6 +74,8 @@ public:
   ///Returns seed
   int get_seed() const noexcept {return m_seed;}
 
+  const all_params& get_params() const noexcept {return m_params;}
+
   private:
    environment m_environment;
    population m_population;
@@ -83,6 +85,7 @@ public:
    int m_time = 0;
    double m_sel_str;
    double m_change_freq;
+   all_params m_params;
 
 };
 ///Checks if 2 simulations are equal
