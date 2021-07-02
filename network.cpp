@@ -5,6 +5,30 @@
 #include <cmath>
 #include <numeric>
 
+
+network::network(net_param n_p):
+    m_input_size{n_p.net_arc[0]},
+    m_activation_function{n_p.function}
+{
+    for (size_t i = 1; i != n_p.net_arc.size(); i++ )
+    {
+        std::vector<std::vector<double>>temp_layer_vector;
+        size_t n_nodes_prev_layer = n_p.net_arc[i-1];
+        for(int j = 0; j != n_p.net_arc[i]; j++)
+        {
+            std::vector<double> temp_weights(n_nodes_prev_layer, 0);
+            temp_layer_vector.push_back(temp_weights);
+        }
+
+        //A vector of the size of the number of connections is pushed back in the weight matrix
+        m_network_weights.push_back(temp_layer_vector);
+
+        //A vector of the size of the nodes in the layer is pushed back;
+        m_nodes_biases.push_back(std::vector<double>(n_p.net_arc[i],0));
+    }
+}
+
+
 network::network(std::vector<int> nodes_per_layer, std::function<double(double)> activation_function):
     m_input_size{nodes_per_layer[0]},
     m_activation_function{activation_function}
@@ -167,7 +191,7 @@ void test_network() //!OCLINT
     assert(using_different_given_function != using_member_function);
   }
 
-#ifdef FIX_ISSUE_46
+//#ifdef FIX_ISSUE_46
 /// A network can be initilized with a parameter struct net_param
 {
         std::vector<int> net_arc{1, 2, 3, 1} ;
@@ -181,13 +205,14 @@ void test_network() //!OCLINT
             assert (static_cast<int>(n.get_net_weights()[i].size()) == net_arc[i + 1]);
         }
         //Check activation func
+        std::vector<double> input{1};
         auto using_member_function = response(n,{input});
         auto using_given_function = response(n,input, &linear);
         auto using_different_given_function = response(n, input, &sigmoid);
         assert(using_given_function == using_member_function);
         assert(using_different_given_function != using_member_function);
 }
-#endif
+//#endif
 
     ///The function resposne returns the output of the network
     {
