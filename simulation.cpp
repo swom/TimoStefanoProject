@@ -409,13 +409,13 @@ void test_simulation() noexcept//!OCLINT test may be many
         assert(ind.get_net() == network{net_par});
       }
 
-    assert(are_equal_with_tolerance(s.get_pop().get_inds().size(), number_of_inds) &
-           are_equal_with_tolerance(s.get_pop().get_mut_rate(), mut_rate) &
+    assert(are_equal_with_tolerance(s.get_pop().get_inds().size(), number_of_inds) &&
+           are_equal_with_tolerance(s.get_pop().get_mut_rate(), mut_rate) &&
            are_equal_with_tolerance(s.get_pop().get_mut_step(), mut_step));
 
     //test sim
-    assert(are_equal_with_tolerance(s.get_change_freq(), change_freq) &
-           are_equal_with_tolerance(s.get_sel_str(), selection_strength) &
+    assert(are_equal_with_tolerance(s.get_change_freq(), change_freq) &&
+           are_equal_with_tolerance(s.get_sel_str(), selection_strength) &&
            s.get_seed() == seed);
   }
 
