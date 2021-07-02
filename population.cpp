@@ -13,7 +13,25 @@ population::population(int init_nr_indiv,
     m_mut_step{mut_step}
 {
 
+
+
+
 }
+
+
+population::population(pop_param p_p,ind_param i_p):
+    m_vec_indiv(static_cast<unsigned int>(p_p.number_of_inds),individual{i_p.net_par.net_arc}),
+    m_vec_new_indiv(static_cast<unsigned int>(p_p.number_of_inds)),
+    m_mut_rate{p_p.mut_rate},
+    m_mut_step{p_p.mut_step}
+{
+
+
+
+
+}
+
+
 
 bool operator== (const population& lhs, const population& rhs)
 {
@@ -274,7 +292,7 @@ void test_population() noexcept
 #endif
 
     //#define FIX_ISSUE_37
-#ifdef FIX_ISSUE_37
+
     {
         net_param net_par;
         int age = 123456789;
@@ -298,6 +316,6 @@ void test_population() noexcept
                are_equal_with_tolerance(p.get_mut_rate(), mut_rate) &
                are_equal_with_tolerance(p.get_mut_step(), mut_step));
     }
-#endif
+
 }
 #endif
