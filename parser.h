@@ -18,9 +18,5 @@ int parse_sel_str(const std::vector<std::string>& args);
 double parse_targetA(const std::vector<std::string>& args);
 double parse_targetB(const std::vector<std::string>& args);
 
-void parse_ind_param(const std::vector<std::string>& args);
-void parse_env_param(const std::vector<std::string>& args);
-void parse_pop_param(const std::vector<std::string>& args);
-void parse_sim_param(const std::vector<std::string>& args);
 void test_parser();
 #endif // PARSER_H
