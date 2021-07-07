@@ -198,6 +198,8 @@ void test_network() //!OCLINT
         std::function<double(double)> function = linear;
         net_param n_p{net_arc, function};
         network n{n_p};
+        //Set weigths to one
+        n = change_all_weights(n, 1);
         //Check architecture
         assert(n.get_net_weights().size() == net_arc.size() -1);
         for(size_t  i = 0; i != n.get_net_weights().size(); i++)

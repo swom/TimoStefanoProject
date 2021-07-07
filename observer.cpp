@@ -75,7 +75,7 @@ void test_observer()
     ///An observer can store the sim_param of a simulation
     {
         observer o;
-        all_params params;
+        all_params params = {};
         simulation s{params};
         assert(o.get_params() != params);
 
