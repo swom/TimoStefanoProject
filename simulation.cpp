@@ -368,30 +368,6 @@ void test_simulation() noexcept//!OCLINT test may be many
     //#define FIX_ISSUE_38
 
     {
-
-//        //env_par
-//        double targetA = 123456;
-//        double targetB = 46589;
-
-//        env_param e_p{targetA, targetB};
-//        environment e{e_p};
-//        //net_param
-//        std::vector<int> net_arc{1,23,45};
-//        std::function<double(double)> func = linear;
-//        net_param net_par{net_arc, func};
-
-//        //ind_param
-//        int age = 123456789;
-
-//        ind_param i_p{net_par, age};
-
-//        //pop_par
-//        int number_of_inds = 132;
-//        double mut_rate = 0.314;
-//        double mut_step = 0.1414;
-
-//        pop_param p_p{number_of_inds, mut_rate, mut_step};
-
         //sim_par
         int seed = 10126789;
         double change_freq = 123789;
@@ -400,20 +376,6 @@ void test_simulation() noexcept//!OCLINT test may be many
         sim_param  s_p{seed, change_freq, selection_strength};
         all_params params{{}, {}, {}, s_p};
         simulation s{params};
-
-//        //test env
-//        assert(are_equal_with_tolerance(e.get_ref_target_values()[0], targetA));
-//        assert(are_equal_with_tolerance(e.get_ref_target_values()[1], targetB));
-
-//        //test pop and ind
-//        for(const auto& ind : get_inds(s))
-//        {
-//            assert(ind.get_net() == network{net_par});
-//        }
-
-//        assert(are_equal_with_tolerance(s.get_pop().get_inds().size(), number_of_inds) &&
-//               are_equal_with_tolerance(s.get_pop().get_mut_rate(), mut_rate) &&
-//               are_equal_with_tolerance(s.get_pop().get_mut_step(), mut_step));
 
         //test sim
         assert(are_equal_with_tolerance(s.get_change_freq(), change_freq) &&
@@ -445,7 +407,6 @@ void test_simulation() noexcept//!OCLINT test may be many
         auto expected_changes = s.get_change_freq() * repeats;
         assert( number_of_env_change - expected_changes < repeats / 1000 &&
                 number_of_env_change - expected_changes > -repeats / 1000);
-
     }
 #endif
 
