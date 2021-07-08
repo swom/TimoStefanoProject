@@ -10,9 +10,11 @@ simulation::simulation(double targetA, double targetB,
                        int seed,
                        double t_change_interval,
                        std::vector<int> net_arch,
-                       double sel_str):
+                       double sel_str,
+                       int number_of_generations):
     m_environment{targetA, targetB},
     m_population{init_pop_size},
+    m_n_generations{number_of_generations},
     m_rng{seed},
     m_seed{seed},
     m_t_change_env_distr{static_cast<double>(t_change_interval)},
@@ -29,6 +31,7 @@ simulation::simulation(double targetA, double targetB,
 simulation::simulation(all_params params):
     m_environment{params.e_p},
     m_population{params.p_p, params.i_p},
+    m_n_generations{params.s_p.n_generations},
     m_rng{params.s_p.seed},
     m_seed{params.s_p.seed},
     m_t_change_env_distr{static_cast<double>(params.s_p.change_freq)},
@@ -372,15 +375,17 @@ void test_simulation() noexcept//!OCLINT test may be many
         int seed = 10126789;
         double change_freq = 123789;
         double selection_strength = 0.321546;
+        int n_generations = 123465;
 
-        sim_param  s_p{seed, change_freq, selection_strength};
+        sim_param  s_p{seed, change_freq, selection_strength, n_generations};
         all_params params{{}, {}, {}, s_p};
         simulation s{params};
 
         //test sim
         assert(are_equal_with_tolerance(s.get_change_freq(), change_freq) &&
                are_equal_with_tolerance(s.get_sel_str(), selection_strength) &&
-               s.get_seed() == seed);
+               s.get_seed() == seed &&
+               s.get_n_gen() == n_generations);
     }
 
 

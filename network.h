@@ -10,10 +10,27 @@
 double sigmoid(double x);
 double linear(double x);
 
+static std::map<std::string, std::function<double(double)>> string_to_act_func_map
+{
+{"linear", linear},
+{"sigmoid", sigmoid}
+};
+
+//static std::map<std::function<double(double)>, std::string> act_funct_to_string_map
+//{
+//{linear, "linear"},
+//{sigmoid, "sigmoid"}
+//};
+
 struct net_param
 {
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(net_param,
+                                   net_arc
+                                   )
+
     std::vector<int> net_arc {1,2,1};
     std::function<double(double)> function;
+//    std::string str_func = act_funct_to_string_map.find(function)->second;
 };
 
 

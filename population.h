@@ -8,6 +8,10 @@
 
 struct pop_param
 {
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(pop_param,
+                                   number_of_inds,
+                                   mut_rate,
+                                   mut_step)
 int number_of_inds;
 double mut_rate;
 double mut_step;

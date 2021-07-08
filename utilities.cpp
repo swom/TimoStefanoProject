@@ -1,5 +1,4 @@
 #include "utilities.h"
-
 #include<algorithm>
 #include<cmath>
 #include<numeric>
@@ -29,4 +28,16 @@ double calc_stdev(const std::vector<double>& numbers)
       accum += (weight - mean) * (weight - mean);});
 
   return sqrt(accum / (numbers.size()-1));
+}
+
+const std::string convert_arc_to_string(const std::vector<int>& v)
+{
+std::stringstream ss;
+for(size_t i = 0; i < v.size(); ++i)
+{
+  if(i != 0)
+    ss << ",";
+  ss << v[i];
+}
+return ss.str();
 }

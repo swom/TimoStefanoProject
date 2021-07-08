@@ -49,10 +49,11 @@ void save_json(const observer& o, const std::string& filename)
     f << json_out;
 }
 
-void exec(simulation& s , observer& o, int n_generations)
+void exec(simulation& s , observer& o)
 {
     stopwatch::Stopwatch sw;
-    for (int i = 0; i < n_generations; i++)
+    o.store_par(s);
+    for (int i = 0; i < s.get_n_gen(); i++)
     {
         tick (s);
         o.store_avg_fit_and_env(s);
@@ -75,7 +76,10 @@ void test_observer()
     ///An observer can store the sim_param of a simulation
     {
         observer o;
-        all_params params = {};
+        //Give sim some non-default params
+        env_param e_p{132465, 123465};
+        all_params params = {e_p,{},{},{}};
+
         simulation s{params};
         assert(o.get_params() != params);
 

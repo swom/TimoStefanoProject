@@ -11,7 +11,8 @@ public:
                                    m_avg_fitnesses,
                                    m_var_fitnesses,
                                    m_top_inds,
-                                   m_env_values)
+                                   m_env_values,
+                                   m_params)
 
     ///Saves the avg fitness and current environment value
     void store_avg_fit_and_env(const simulation& s);
@@ -29,7 +30,7 @@ private:
     std::vector<double> m_var_fitnesses;
     std::vector<std::vector<individual>> m_top_inds;
     std::vector<double> m_env_values;
-    all_params m_params;
+    all_params m_params = {};
 };
 
 bool operator==(const all_params& lhs, const all_params& rhs);
@@ -38,7 +39,7 @@ bool operator!=(const all_params& lhs, const all_params& rhs);
 
 
 ///Executes a simulation for n generations
-void exec(simulation& s , observer& o, int n_generations);
+void exec(simulation& s , observer& o);
 
 ///Saves the enitre GODDDAM SIMULATIONNNN!!!!!!! WHOO NEEDS MEMORRYYYY
 void save_json(const observer &o, const std::string& filename);

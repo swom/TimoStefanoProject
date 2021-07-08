@@ -7,14 +7,25 @@
 
 struct sim_param
 {
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(sim_param,
+                                   seed,
+                                   change_freq,
+                                   selection_strength,
+                                   n_generations)
  int seed;
  double change_freq;
  double selection_strength;
+ int n_generations;
 
 };
 
 struct all_params
 {
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(all_params,
+                                   e_p,
+                                   i_p,
+                                   p_p,
+                                   s_p)
  env_param e_p;
  ind_param i_p;
  pop_param p_p;
@@ -32,7 +43,8 @@ public:
              int seed = 0,
              double t_change_interval = 0.1,
              std::vector<int> net_arch = {1,2,1},
-             double sel_str = 2
+             double sel_str = 2,
+             int number_of_generations = 1000
           );
   simulation (all_params params);
 
@@ -59,6 +71,9 @@ public:
   ///Returns const ref to env_member
   environment& get_env() noexcept {return m_environment;}
 
+  ///Returns the number of generatiosn for which the simualtion has to run
+  const int& get_n_gen() const noexcept {return m_n_generations;}
+
   ///returns const ref to
   const std::bernoulli_distribution& get_t_change_env_distr() const noexcept {return m_t_change_env_distr;}
   std::bernoulli_distribution& get_t_change_env_distr() noexcept {return m_t_change_env_distr;}
@@ -79,6 +94,7 @@ public:
   private:
    environment m_environment;
    population m_population;
+   int m_n_generations;
    std::mt19937_64 m_rng;
    int m_seed;
    std::bernoulli_distribution m_t_change_env_distr;

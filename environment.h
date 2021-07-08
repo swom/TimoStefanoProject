@@ -5,6 +5,9 @@
 #include "json.hpp"
 struct env_param
 {
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(env_param,
+                                   targetA,
+                                   targetB)
 double targetA;
 double targetB;
 };

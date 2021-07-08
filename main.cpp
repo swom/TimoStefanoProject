@@ -1,4 +1,3 @@
-#include "observer.h"
 #include "parser.h"
 #include <cassert>
 #include <string>
@@ -34,15 +33,20 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
 
 
 
+all_params params{
+    parse_env_param(args),
+            parse_ind_param(args),
+            parse_pop_param(args),
+            parse_sim_param(args)
+};
 
 
 
-
-  simulation s {0.5, 0, 1000, 0, 0.1, {1,10,2,1}, 2};
+  simulation s {params};
   observer o;
-  exec(s, o, 10);
+  exec(s, o);
 
-  save_json(o, "test_observer.json");
+  save_json(o, convert_arc_to_string(params.i_p.net_par.net_arc)+ "_" + std::to_string(params.s_p.seed) + ".json");
 
   return 0;
 }

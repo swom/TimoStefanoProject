@@ -104,6 +104,18 @@ net_param parse_net_param(const std::vector<std::string>& args)
     return n_p;
 }
 
+int parse_n_generations(const std::vector<std::string>& args)
+{
+    auto value = std::find(args.begin(), args.end(),"--n_generations");
+    if(value != args.end())
+    {
+        return std::stod(*(value + 1));
+    }
+    else{
+        return not_parsed;
+    }
+}
+
 pop_param parse_pop_param(const std::vector<std::string>& args)
 {
     pop_param p_p{};
@@ -150,12 +162,13 @@ int parse_sel_str(const std::vector<std::string>& args)
     }
 }
 
-sim_param parse_sim_par(const std::vector<std::string>& args)
+sim_param parse_sim_param(const std::vector<std::string>& args)
 {
     sim_param s_p{};
     s_p.change_freq = parse_change_freq(args);
     s_p.seed = parse_seed(args);
     s_p.selection_strength = parse_sel_str(args);
+    s_p.n_generations = parse_n_generations(args);
     return s_p;
 }
 
@@ -167,6 +180,7 @@ double parse_targetA(const std::vector<std::string>& args)
         return std::stod(*(value + 1));
     }
     else{
+        throw "Target A not found";
         return not_parsed;
     }
 }

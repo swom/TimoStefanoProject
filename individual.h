@@ -5,6 +5,9 @@
 
 struct ind_param
 {
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(ind_param,
+                                   net_par,
+                                   age)
 net_param net_par;
 int age;
 };
