@@ -5,7 +5,7 @@
 
 struct ind_param
 {
-std::vector<int> net_arc;
+net_param net_par;
 int age;
 };
 

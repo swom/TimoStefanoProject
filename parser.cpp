@@ -1,6 +1,9 @@
 #include "parser.h"
 #include <algorithm>
 #include <cassert>
+#include <map>
+
+static const double not_parsed = -123456.3142;
 
 std::vector<int> arch_str_to_arch_vec(std::string net_arc)
 {
@@ -18,6 +21,18 @@ std::vector<int> arch_str_to_arch_vec(std::string net_arc)
     return net_arc_vec;
 }
 
+std::function<double(double)> parse_act_func(const std::vector<std::string>& args)
+{
+    auto value = std::find(args.begin(), args.end(),"--mut_rate");
+    if(value != args.end())
+    {
+        return string_to_act_func_map.find(*(value + 1))->second;
+    }
+    else{
+        return linear;
+    }
+}
+
 double parse_change_freq(const std::vector<std::string>& args)
 {
     auto value = std::find(args.begin(), args.end(),"--change_freq");
@@ -26,7 +41,45 @@ double parse_change_freq(const std::vector<std::string>& args)
         return std::stod(*(value + 1));
     }
     else{
-        return -1156523;
+        return not_parsed;
+    }
+}
+
+env_param parse_env_param(const std::vector<std::string>& args)
+{
+env_param e_p{};
+e_p.targetA = parse_targetA(args);
+e_p.targetB = parse_targetB(args);
+return e_p;
+}
+
+ind_param parse_ind_param(const std::vector<std::string>& args)
+{
+    return ind_param{parse_net_param(args), 0};
+
+}
+
+double parse_mut_rate(const std::vector<std::string>& args)
+{
+    auto value = std::find(args.begin(), args.end(),"--mut_rate");
+    if(value != args.end())
+    {
+        return std::stod(*(value + 1));
+    }
+    else{
+        return not_parsed;
+    }
+}
+
+double parse_mut_step(const std::vector<std::string>& args)
+{
+    auto value = std::find(args.begin(), args.end(),"--mut_step");
+    if(value != args.end())
+    {
+        return std::stod(*(value + 1));
+    }
+    else{
+        return not_parsed;
     }
 }
 
@@ -43,6 +96,23 @@ std::vector<int> parse_net_arc(const std::vector<std::string>& args)
     }
 }
 
+net_param parse_net_param(const std::vector<std::string>& args)
+{
+    net_param n_p;
+    n_p.function = parse_act_func(args);
+    n_p.net_arc = parse_net_arc(args);
+    return n_p;
+}
+
+pop_param parse_pop_param(const std::vector<std::string>& args)
+{
+    pop_param p_p{};
+    p_p.mut_rate = parse_mut_rate(args);
+    p_p.mut_step = parse_mut_step(args);
+    p_p.number_of_inds = parse_pop_size(args);
+    return p_p;
+}
+
 int parse_pop_size(const std::vector<std::string>& args)
 {
     auto value = std::find(args.begin(), args.end(),"--pop_size");
@@ -51,7 +121,7 @@ int parse_pop_size(const std::vector<std::string>& args)
         return std::stoi(*(value + 1));
     }
     else{
-        return -1156523;
+        return not_parsed;
     }
 }
 
@@ -63,7 +133,7 @@ int parse_seed(const std::vector<std::string>& args)
         return std::stoi(*(value + 1));
     }
     else{
-        return -1156523;
+        return not_parsed;
     }
 }
 
@@ -76,8 +146,17 @@ int parse_sel_str(const std::vector<std::string>& args)
         return std::stoi(*(value + 1));
     }
     else{
-        return -1156523;
+        return not_parsed;
     }
+}
+
+sim_param parse_sim_par(const std::vector<std::string>& args)
+{
+    sim_param s_p{};
+    s_p.change_freq = parse_change_freq(args);
+    s_p.seed = parse_seed(args);
+    s_p.selection_strength = parse_sel_str(args);
+    return s_p;
 }
 
 double parse_targetA(const std::vector<std::string>& args)
@@ -88,7 +167,7 @@ double parse_targetA(const std::vector<std::string>& args)
         return std::stod(*(value + 1));
     }
     else{
-        return -1156523;
+        return not_parsed;
     }
 }
 
@@ -100,7 +179,7 @@ double parse_targetB(const std::vector<std::string>& args)
         return std::stod(*(value + 1));
     }
     else{
-        return -1156523;
+        return not_parsed;
     }
 }
 
@@ -282,7 +361,7 @@ void test_parser()
         const std::vector<std::string>& args_incorrect{
             "random",
             "gibber",
-            "seed",
+            "sel_str",
             string_expected_selection_strength
         };
 
@@ -296,5 +375,63 @@ void test_parser()
             string_expected_selection_strength
         };
         assert(parse_sel_str(args_correct) == expected_selection_strength);
+    }
+
+    /// The mutation rate
+    /// can be taken as an argument
+    /// from a commnad line
+    {
+        double mutation_rate{0.001};
+        std::string string_expected_mutation_rate = std::to_string(mutation_rate);
+
+        //will not take it because -- is missing from change_freq
+        const std::vector<std::string>& args_incorrect{
+            "random",
+            "gibber",
+            "mut_rate",
+            string_expected_mutation_rate
+        };
+
+
+        assert(parse_mut_rate(args_incorrect) != mutation_rate);
+
+        const std::vector<std::string>& args_correct{
+            "random",
+            "gibber",
+            "--mut_rate",
+            string_expected_mutation_rate
+        };
+        assert(parse_mut_rate(args_correct) == mutation_rate);
+    }
+
+    /// The activation function
+    /// can be taken as an argument
+    /// from a commnad line
+    {
+        auto activation_function = sigmoid;
+        std::string string_expected_mutation_rate = "sigmoid";
+
+        //will not take it because -- is missing from change_freq
+        const std::vector<std::string>& args_incorrect{
+            "random",
+            "gibber",
+            "activation_function",
+            string_expected_mutation_rate
+        };
+
+
+        std::vector<double> random_values{0.23,564,123};
+        for(const auto& value : random_values)
+        assert(parse_act_func(args_incorrect)(value) == activation_function(value));
+
+        const std::vector<std::string>& args_correct{
+            "random",
+            "gibber",
+            "--activation_function",
+            string_expected_mutation_rate
+        };
+
+        for(const auto& value : random_values)
+        assert(parse_act_func(args_correct)(value) == activation_function(value));
     }
 }

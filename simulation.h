@@ -5,6 +5,23 @@
 #include "population.h"
 #include <vector>
 
+struct sim_param
+{
+ int seed;
+ double change_freq;
+ double selection_strength;
+
+};
+
+struct all_params
+{
+ env_param e_p;
+ ind_param i_p;
+ pop_param p_p;
+ sim_param s_p;
+
+};
+
 class simulation
 {
 public:
@@ -17,13 +34,15 @@ public:
              std::vector<int> net_arch = {1,2,1},
              double sel_str = 2
           );
+  simulation (all_params params);
 
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(simulation,
                                  m_environment,
                                  m_population,
                                  m_time,
                                  m_change_freq,
-                                 m_sel_str)
+                                 m_sel_str,
+                                 m_seed)
 
   ///Returns const ref ot population memeber
   const population& get_pop() const noexcept {return m_population;}
@@ -52,14 +71,21 @@ public:
   ///Returns change frequency
   double get_change_freq() const noexcept {return m_change_freq;}
 
+  ///Returns seed
+  int get_seed() const noexcept {return m_seed;}
+
+  const all_params& get_params() const noexcept {return m_params;}
+
   private:
    environment m_environment;
    population m_population;
    std::mt19937_64 m_rng;
+   int m_seed;
    std::bernoulli_distribution m_t_change_env_distr;
    int m_time = 0;
    double m_sel_str;
    double m_change_freq;
+   all_params m_params;
 
 };
 ///Checks if 2 simulations are equal
