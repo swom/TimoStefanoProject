@@ -15,12 +15,12 @@ simulation::simulation(double targetA, double targetB,
     m_environment{targetA, targetB},
     m_population{init_pop_size},
     m_n_generations{number_of_generations},
-    m_rng{seed},
     m_seed{seed},
     m_t_change_env_distr{static_cast<double>(t_change_interval)},
     m_sel_str{sel_str},
     m_change_freq {static_cast<double>(t_change_interval)}
 {
+    m_rng.seed(m_seed)
     for(auto& ind : m_population.get_inds())
     {
         ind.get_net() = net_arch;
