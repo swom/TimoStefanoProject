@@ -29,7 +29,7 @@ make clean
 qmake mutational_switches.pro
 make 
 
-architectures =("1,2,1","1,5,1","1,5,1,1")
+architectures =("1,2,1" "1,5,1" "1,5,1,1")
 seeds=(seq 0 1)
 for i in "${seeds{@}"
 do
