@@ -20,7 +20,7 @@ simulation::simulation(double targetA, double targetB,
     m_sel_str{sel_str},
     m_change_freq {static_cast<double>(t_change_interval)}
 {
-    m_rng.seed(m_seed)
+    m_rng.seed(m_seed);
     for(auto& ind : m_population.get_inds())
     {
         ind.get_net() = net_arch;
