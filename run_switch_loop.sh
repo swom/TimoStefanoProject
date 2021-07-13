@@ -20,4 +20,4 @@
 
 echo "seed: "$1
 echo "architecture: "$2
-./simulation_logic_only --net_arc $2 --s$1
+./mutational_switches --net_arc $2 --s$1
