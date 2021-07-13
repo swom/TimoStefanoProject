@@ -32,7 +32,7 @@ make
 declare -a architectures=("1,2,1" "1,5,1" "1,5,1,1")
 seeds=(seq 0 1)
 
-for i in "${seeds{@}"
+for i in "${seeds[@]}"
 do
   for j in "${architectures[@]}"
 do
