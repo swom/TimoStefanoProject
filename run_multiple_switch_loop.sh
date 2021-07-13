@@ -29,11 +29,12 @@ make clean
 qmake mutational_switches.pro
 make 
 
-architectures =("1,2,1" "1,5,1" "1,5,1,1")
+declare -a architectures=("1,2,1" "1,5,1" "1,5,1,1")
 seeds=(seq 0 1)
+
 for i in "${seeds{@}"
 do
-  for j in "${change_freqs[@]}"
+  for j in "${architectures[@]}"
 do
   echo $i
   echo $j
