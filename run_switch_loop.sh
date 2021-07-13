@@ -20,4 +20,4 @@
 
 echo "seed: "$1
 echo "architecture: "$2
-./mutational_switches --net_arc $2 --s$1
+./mutational_switches --net_arc $2 --seed$1
