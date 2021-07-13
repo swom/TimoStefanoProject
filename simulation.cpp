@@ -32,13 +32,13 @@ simulation::simulation(all_params params):
     m_environment{params.e_p},
     m_population{params.p_p, params.i_p},
     m_n_generations{params.s_p.n_generations},
-    m_rng{params.s_p.seed},
     m_seed{params.s_p.seed},
     m_t_change_env_distr{static_cast<double>(params.s_p.change_freq)},
     m_sel_str{params.s_p.selection_strength},
     m_change_freq {static_cast<double>(params.s_p.change_freq)},
     m_params {params}
 {
+    m_rng.seed(m_seed);
     for(auto& ind : m_population.get_inds())
     {
         ind.get_net() = params.i_p.net_par.net_arc;

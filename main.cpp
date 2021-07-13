@@ -42,7 +42,7 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
 
 
 
-    simulation s {params};
+    simulation s{params};
     observer o;
     exec(s, o);
 
