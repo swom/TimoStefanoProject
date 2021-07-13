@@ -29,8 +29,8 @@ make clean
 qmake mutational_switches.pro
 make 
 
-declare -a architectures=("1,2,1" "1,5,1" "1,5,1,1")
 seeds=(seq 0 10)
+declare -a architectures=("1,2,1" "1,5,1" "1,5,1,1")
 
 for i in "${seeds[@]}"
 do
