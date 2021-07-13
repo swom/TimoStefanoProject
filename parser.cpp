@@ -21,6 +21,87 @@ std::vector<int> arch_str_to_arch_vec(std::string net_arc)
     return net_arc_vec;
 }
 
+///NOT tested!!!
+env_param convert_env_args(const cxxopts::ParseResult& results)
+{
+    return env_param{
+        results["targetA"].as<double>(),
+                results["targetB"].as<double>()
+    };
+}
+
+///NOT tested!!!
+ind_param convert_ind_args(const cxxopts::ParseResult& results)
+{
+    return ind_param{
+        convert_net_args(results),
+                0
+    };
+}
+
+///NOT tested!!!
+net_param convert_net_args(const cxxopts::ParseResult& results)
+{
+    return net_param{
+        results["net_arc"].as<std::vector<int>>(),
+                string_to_act_func_map.find(results["act_func"].as<std::string>())->second
+    };
+}
+
+///NOT tested!!!
+pop_param convert_pop_args(const cxxopts::ParseResult& results)
+{
+    return pop_param{
+        results["pop_size"].as<int>(),
+                results["mut_rate"].as<double>(),
+                results["mut_step"].as<double>()
+    };
+}
+
+sim_param convert_sim_args(const cxxopts::ParseResult& results)
+{
+    return sim_param{
+        results["seed"].as<int>(),
+                results["change_freq"].as<double>(),
+                results["sel_str"].as<double>(),
+                results["num_gens"].as<int>()
+    };
+}
+///NOT tested!!!
+cxxopts::Options create_parser(){
+
+    cxxopts::Options options("Switch Simulation",
+                             "Insert the parameters for the simualtion and see if you can get a mutational switch to evolve");
+    options.allow_unrecognised_options();
+    options.add_options()
+            ("A,targetA", "the value fo env target A", cxxopts::value<double>()->default_value("0.1"))
+            ("B,targetB", "the value fo env target B", cxxopts::value<double>()->default_value("0.75"))
+            ("N,net_arc", "the network architecture", cxxopts::value<std::vector<int>>()->default_value("1,2,1"))
+            ("F,act_func",
+             "the string representing the name of the activation function of the net",
+             cxxopts::value<std::string>()->default_value("sigmoid"))
+            ("R,mut_rate",
+             "the probability with whihc a mutation can happen",
+             cxxopts::value<double>()->default_value("0.01"))
+            ("M,mut_step",
+             "the variance of the normal distribution from which mutation size is drawn",
+             cxxopts::value<double>()->default_value("0.01"))
+            ("P,pop_size","the numebr of individuals in the simulation",cxxopts::value<int>()->default_value("1000"))
+            ("C,change_freq",
+             "the probability with which the target value will change",
+             cxxopts::value<double>()->default_value("0.01"))
+            ("S,seed",
+             "the seed of the rng",
+             cxxopts::value<int>()->default_value("0"))
+            ("T,sel_str",
+             "the strenght of selection",
+             cxxopts::value<double>()->default_value("2"))
+            ("G,num_gens",
+             "number of generations for which the simulation has to run",
+             cxxopts::value<int>()->default_value("1000000"))
+            ;
+    return options;
+}
 std::function<double(double)> parse_act_func(const std::vector<std::string>& args)
 {
     auto value = std::find(args.begin(), args.end(),"--mut_rate");
@@ -47,10 +128,10 @@ double parse_change_freq(const std::vector<std::string>& args)
 
 env_param parse_env_param(const std::vector<std::string>& args)
 {
-env_param e_p{};
-e_p.targetA = parse_targetA(args);
-e_p.targetB = parse_targetB(args);
-return e_p;
+    env_param e_p{};
+    e_p.targetA = parse_targetA(args);
+    e_p.targetB = parse_targetB(args);
+    return e_p;
 }
 
 ind_param parse_ind_param(const std::vector<std::string>& args)
@@ -197,6 +278,7 @@ double parse_targetB(const std::vector<std::string>& args)
     }
 }
 
+#ifndef NDEBUG
 void test_parser()
 {
     ///The change of frequency of environment in the simualtion
@@ -436,7 +518,7 @@ void test_parser()
 
         std::vector<double> random_values{0.23,564,123};
         for(const auto& value : random_values)
-        assert(parse_act_func(args_incorrect)(value) == activation_function(value));
+            assert(parse_act_func(args_incorrect)(value) == activation_function(value));
 
         const std::vector<std::string>& args_correct{
             "random",
@@ -446,6 +528,7 @@ void test_parser()
         };
 
         for(const auto& value : random_values)
-        assert(parse_act_func(args_correct)(value) == activation_function(value));
+            assert(parse_act_func(args_correct)(value) == activation_function(value));
     }
 }
+#endif
