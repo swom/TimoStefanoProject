@@ -30,6 +30,7 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
     {
         test();
         // We've already tested, so the program is done
+        std::cout << "done testing" << std::endl;
         return 0;
     }
 #else
