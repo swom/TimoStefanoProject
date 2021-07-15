@@ -1,18 +1,28 @@
 # Entry point for user
 
 HEADERS +=  \
+  Stopwatch.hpp \
   environment.h \
   individual.h \
+  network.h \
+  observer.h \
+  parser.h \
   population.h \
-  simulation.h
+  rndutils.hpp \
+  simulation.h \
+  utilities.h
 
 
 SOURCES +=  \
   environment.cpp \
   individual.cpp \
   main.cpp \
+  network.cpp \
+  observer.cpp \
+  parser.cpp \
   population.cpp \
-  simulation.cpp
+  simulation.cpp \
+  utilities.cpp
 
 
 CONFIG += c++17
@@ -38,7 +48,6 @@ QT += core gui
 # SFML, default compiling
 # GNU/Linux
 unix:!macx {
-  LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
   CONFIG(debug, debug|release) {
     # gcov
@@ -48,16 +57,6 @@ unix:!macx {
 }
 
 win32{
-  INCLUDEPATH += C:/Qt/sfml/include
-  INCLUDEPATH += D:/Qt/sfml/include
-  LIBS += -LC:/Qt/sfml/lib
-  LIBS += -LD:/Qt/sfml/lib
-  CONFIG(debug, debug|release) {
-    LIBS += -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-  }
-  CONFIG(release, debug|release) {
-    LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-window-d -lsfml-system-d
-  }
   #LIBS += -lopenal32              #Dependency
   #LIBS += -lfreetype              #Dependency
   LIBS += -lopengl32              #Dependency
