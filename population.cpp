@@ -20,7 +20,8 @@ population::population(int init_nr_indiv,
 
 
 population::population(pop_param p_p,ind_param i_p):
-    m_vec_indiv(static_cast<unsigned int>(p_p.number_of_inds),individual{i_p.net_par.net_arc}),
+    m_vec_indiv(static_cast<unsigned int>(p_p.number_of_inds),
+                individual{i_p}),
     m_vec_new_indiv(static_cast<unsigned int>(p_p.number_of_inds)),
     m_mut_rate{p_p.mut_rate},
     m_mut_step{p_p.mut_step}

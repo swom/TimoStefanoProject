@@ -18,20 +18,6 @@ void test() {
 
 int main(int argc, char ** argv) //!OCLINT tests may be long
 {
-    const std::vector<std::string> args(argv, argv + argc);
-#ifndef NDEBUG
-    if (args.size() > 1 && args[1] == "--test")
-    {
-        test();
-        // We've already tested, so the program is done
-        return 0;
-    }
-#else
-    // In release mode, all asserts are removed from the code
-    assert(1 == 2);
-#endif
-
-
     auto results = create_parser().parse(argc,argv);
     all_params params{
         convert_env_args(results),
@@ -39,8 +25,18 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
                 convert_pop_args(results),
                 convert_sim_args(results)
     };
-
-
+#ifndef NDEBUG
+    if(results["test"].as<bool>())
+    {
+        test();
+        // We've already tested, so the program is done
+        std::cout << "done testing" << std::endl;
+        return 0;
+    }
+#else
+    // In release mode, all asserts are removed from the code
+    assert(1 == 2);
+#endif
 
     simulation s{params};
     observer o;

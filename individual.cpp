@@ -16,7 +16,7 @@ individual::individual(ind_param i_p) :
   m_age{i_p.age},
   ///!!!!Attention!!!! input values are for now a fixed amount
   m_input_values(i_p.net_par.net_arc[0], 1.0),
-  m_network{i_p.net_par.net_arc}
+  m_network{i_p.net_par}
 {
 
 }
