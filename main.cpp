@@ -18,9 +18,15 @@ void test() {
 
 int main(int argc, char ** argv) //!OCLINT tests may be long
 {
-    const std::vector<std::string> args(argv, argv + argc);
+    auto results = create_parser().parse(argc,argv);
+    all_params params{
+        convert_env_args(results),
+                convert_ind_args(results),
+                convert_pop_args(results),
+                convert_sim_args(results)
+    };
 #ifndef NDEBUG
-    if (args.size() > 1 && args[1] == "--test")
+    if(results["test"].as<bool>())
     {
         test();
         // We've already tested, so the program is done
@@ -30,17 +36,6 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
     // In release mode, all asserts are removed from the code
     assert(1 == 2);
 #endif
-
-
-    auto results = create_parser().parse(argc,argv);
-    all_params params{
-        convert_env_args(results),
-                convert_ind_args(results),
-                convert_pop_args(results),
-                convert_sim_args(results)
-    };
-
-
 
     simulation s{params};
     observer o;

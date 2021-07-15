@@ -85,7 +85,7 @@ cxxopts::Options create_parser(){
              cxxopts::value<double>()->default_value("0.01"))
             ("M,mut_step",
              "the variance of the normal distribution from which mutation size is drawn",
-             cxxopts::value<double>()->default_value("0.01"))
+             cxxopts::value<double>()->default_value("0.1"))
             ("P,pop_size","the numebr of individuals in the simulation",cxxopts::value<int>()->default_value("1000"))
             ("C,change_freq",
              "the probability with which the target value will change",
@@ -101,12 +101,14 @@ cxxopts::Options create_parser(){
              cxxopts::value<int>()->default_value("1000000"))
             ("h, help",
              "explains the stuff")
+            ("t, test",
+             "test the stuff")
             ;
     return options;
 }
 std::function<double(double)> parse_act_func(const std::vector<std::string>& args)
 {
-    auto value = std::find(args.begin(), args.end(),"--mut_rate");
+    auto value = std::find(args.begin(), args.end(),"--activation_function");
     if(value != args.end())
     {
         return string_to_act_func_map.find(*(value + 1))->second;
@@ -263,7 +265,6 @@ double parse_targetA(const std::vector<std::string>& args)
         return std::stod(*(value + 1));
     }
     else{
-        throw "Target A not found";
         return not_parsed;
     }
 }
@@ -520,7 +521,7 @@ void test_parser()
 
         std::vector<double> random_values{0.23,564,123};
         for(const auto& value : random_values)
-            assert(parse_act_func(args_incorrect)(value) == activation_function(value));
+            assert(parse_act_func(args_incorrect)(value) != activation_function(value));
 
         const std::vector<std::string>& args_correct{
             "random",
