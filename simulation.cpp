@@ -36,7 +36,7 @@ simulation::simulation(all_params params):
     m_t_change_env_distr{static_cast<double>(params.s_p.change_freq)},
     m_sel_str{params.s_p.selection_strength},
     m_change_freq {static_cast<double>(params.s_p.change_freq)},
-    m_params {params}
+    m_params{params}
 {
     m_rng.seed(m_seed);
     for(auto& ind : m_population.get_inds())
