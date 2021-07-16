@@ -51,6 +51,21 @@ network::network(std::vector<int> nodes_per_layer, std::function<double(double)>
     }
 }
 
+bool is_linear(std::function<double(double)> f)
+{
+    std::minstd_rand rng;
+   bool is_linear = true;
+for(int i = 0 ; i != 5 ; i++)
+{
+    auto n = rng();
+    if(f(n) != linear(n))
+    {
+        is_linear = false;
+        break;
+    }
+}
+return is_linear;
+}
 bool operator==(const network& lhs, const network& rhs)
 {
     std::minstd_rand rng;
@@ -193,12 +208,12 @@ void test_network() //!OCLINT
     }
     ///A network can be initialized with a specific activation function
     {
-        network n{{1,2,1}, linear};
+        network n{{1,2,1}, sigmoid};
         n = change_all_weights(n,1);
         std::vector<double> input{1};
         auto using_member_function = response(n,{input});
-        auto using_given_function = response(n,input, &linear);
-        auto using_different_given_function = response(n, input, &sigmoid);
+        auto using_given_function = response(n,input, &sigmoid);
+        auto using_different_given_function = response(n, input, &linear);
         assert(using_given_function == using_member_function);
         assert(using_different_given_function != using_member_function);
     }

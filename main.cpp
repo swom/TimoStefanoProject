@@ -42,7 +42,11 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
     observer o;
     exec(s, o);
 
-    save_json(o, convert_arc_to_string(params.i_p.net_par.net_arc)+ "_" + std::to_string(params.s_p.seed) + ".json");
+    save_json(o,
+              convert_arc_to_string(params.i_p.net_par.net_arc)+ "_" +
+              std::to_string(params.s_p.seed) + "_" +
+              params.i_p.net_par.str_func +
+              ".json");
 
     return 0;
 }
