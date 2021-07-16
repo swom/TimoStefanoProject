@@ -29,7 +29,7 @@ struct net_param
                                    )
 
     std::vector<int> net_arc {1,2,1};
-    std::function<double(double)> function;
+    std::function<double(double)> function = linear;
 //    std::string str_func = act_funct_to_string_map.find(function)->second;
 };
 

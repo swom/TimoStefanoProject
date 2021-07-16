@@ -28,7 +28,7 @@ simulation::simulation(double targetA, double targetB,
 }
 
 
-simulation::simulation(all_params params):
+simulation::simulation(const all_params& params):
     m_environment{params.e_p},
     m_population{params.p_p, params.i_p},
     m_n_generations{params.s_p.n_generations},
@@ -39,10 +39,6 @@ simulation::simulation(all_params params):
     m_params{params}
 {
     m_rng.seed(m_seed);
-    for(auto& ind : m_population.get_inds())
-    {
-        ind.get_net() = params.i_p.net_par.net_arc;
-    }
 }
 
 
