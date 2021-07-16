@@ -74,7 +74,7 @@ cxxopts::Options create_parser(){
                              "Insert the parameters for the simualtion and see if you can get a mutational switch to evolve");
     options.allow_unrecognised_options();
     options.add_options()
-            ("A,targetA", "the value fo env target A", cxxopts::value<double>()->default_value("0.1"))
+            ("A,targetA", "the value fo env target A", cxxopts::value<double>()->default_value("0.25"))
             ("B,targetB", "the value fo env target B", cxxopts::value<double>()->default_value("0.75"))
             ("N,net_arc", "the network architecture", cxxopts::value<std::vector<int>>()->default_value("1,2,1"))
             ("F,act_func",

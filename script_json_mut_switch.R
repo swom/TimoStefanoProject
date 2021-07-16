@@ -46,6 +46,7 @@ Timetochangecalc = function (threshold, simple_res){
 
 dir = dirname(rstudioapi::getActiveDocumentContext()$path)
 dir = paste(dir,"/data_sim2",sep = "")
+setwd(dir)
 all_simple_res = data.frame()
 pattern = "*json$"
 for (i in  list.files(path = '.', pattern = pattern))
@@ -71,12 +72,12 @@ save(all_simple_res, file = "all_simple_res.R")
 load("all_simple_res.R")
 #### Plot ####
 
-ggplot(data = all_simple_res %>% slice_max(gen,n = 1000))+
-  geom_line(aes(x = gen, y = m_avg_fitnesses)) +
+ggplot(data = all_simple_res %>% slice_max(gen,n = 100000))+
   geom_rect(aes(xmin = gen - 1, xmax = gen,
                 ymin = 0, ymax = 1.5,
                 fill = as.factor(m_env_values),
                 alpha = 0.5))+
+  geom_line(aes(x = gen, y = m_avg_fitnesses)) +
   facet_grid(seed ~ architecture)
 
 
@@ -101,8 +102,11 @@ d = all_simple_res %>%
   select(-time_in)
 
 
-ggplot(d, aes(x = gen, y = time, color = env, fill = env))+
+ggplot(d %>% slice_min(gen, n = 10000),
+       aes(x = gen, y = time, color = env, fill = env)) +
  geom_col() +
-  facet_grid(. ~ architecture )
+  facet_grid(architecture ~ . )
 
+output = Timetochangecalc(0.9,simple_res)
 
+barplot(output$time)
