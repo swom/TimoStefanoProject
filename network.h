@@ -29,7 +29,7 @@ struct net_param
                                    )
 
     std::vector<int> net_arc {1,2,1};
-    std::function<double(double)> function;
+    std::function<double(double)> function = linear;
 //    std::string str_func = act_funct_to_string_map.find(function)->second;
 };
 
@@ -45,7 +45,7 @@ public:
                                    m_network_weights);
 
     ///Returns the activation function
-    std::function<double(double)> get_activation_function() const noexcept{return m_activation_function;}
+    auto get_activation_function() const noexcept{return m_activation_function;}
 
     ///Returns the const ref to the node biases
     const std::vector<std::vector<double>>& get_biases() const noexcept{return m_nodes_biases;}
