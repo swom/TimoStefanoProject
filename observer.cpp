@@ -88,5 +88,31 @@ void test_observer()
         assert(o.get_params() == params);
     }
 #endif
+
+
+    ///Simualtions have one rng for environmetal switches that is always seeded to 0
+        {
+            int generations = 200;
+            double change_f = 0.9;
+
+            all_params params{};
+            params.s_p.change_freq = change_f;
+            params.s_p.n_generations = generations;
+            params.p_p.number_of_inds = 10;
+
+            params.s_p.seed = 1;
+            simulation lhs{params};
+            observer o_lhs;
+            exec(lhs, o_lhs);
+
+            params.s_p.seed = 2;
+            simulation rhs{params};
+            observer o_rhs;
+            exec(rhs, o_rhs);
+
+            assert(o_lhs.get_env_values() == o_rhs.get_env_values());
+
+
+        }
 }
 #endif

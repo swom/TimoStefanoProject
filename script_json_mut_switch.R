@@ -72,7 +72,7 @@ save(all_simple_res, file = "all_simple_res.R")
 load("all_simple_res.R")
 #### Plot ####
 
-ggplot(data = all_simple_res %>% slice_max(gen,n = 100000))+
+ggplot(data = all_simple_res %>% slice_min(gen,n = 100000))+
   geom_rect(aes(xmin = gen - 1, xmax = gen,
                 ymin = 0, ymax = 1.5,
                 fill = as.factor(m_env_values),
@@ -83,7 +83,6 @@ ggplot(data = all_simple_res %>% slice_max(gen,n = 100000))+
 
 
 d = all_simple_res %>%
-  subset( seed == "0") %>% 
   group_by(architecture) %>% 
   mutate(
     change = case_when(

@@ -14,6 +14,9 @@ public:
                                    m_env_values,
                                    m_params)
 
+    ///Returns const ref to m_env_values
+    const std::vector<double>& get_env_values() const noexcept {return m_env_values;}
+
     ///Saves the avg fitness and current environment value
     void store_avg_fit_and_env(const simulation& s);
 

@@ -62,8 +62,11 @@ public:
   ///Returns const ref ot population memeber
   population& get_pop() noexcept {return m_population;}
 
-  ///Returns ref to rng
-  std::mt19937_64& get_rng() noexcept {return m_rng;}
+  ///Returns ref to rng used for mutations
+  std::mt19937_64& get_mut_rng() noexcept {return m_mut_rng;}
+
+  ///Returns ref to rng used for mutations
+  std::mt19937_64& get_env_rng() noexcept {return m_env_rng;}
 
   ///Returns const ref to env_member
   const environment& get_env() const noexcept {return m_environment;}
@@ -76,7 +79,7 @@ public:
 
   ///returns const ref to
   const std::bernoulli_distribution& get_t_change_env_distr() const noexcept {return m_t_change_env_distr;}
-  std::bernoulli_distribution& get_t_change_env_distr() noexcept {return m_t_change_env_distr;}
+
   const int& get_time() const noexcept {return m_time;}
   void increase_time() {++m_time;}
 
@@ -93,14 +96,25 @@ public:
 
   private:
    environment m_environment;
+
    population m_population;
+
    int m_n_generations;
-   std::mt19937_64 m_rng;
+
+   std::mt19937_64 m_mut_rng;
+
+   std::mt19937_64 m_env_rng;
+
    int m_seed;
+
    std::bernoulli_distribution m_t_change_env_distr;
+
    int m_time = 0;
+
    double m_sel_str;
+
    double m_change_freq;
+
    all_params m_params;
 
 };

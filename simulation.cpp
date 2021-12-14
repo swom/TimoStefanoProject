@@ -20,7 +20,7 @@ simulation::simulation(double targetA, double targetB,
     m_sel_str{sel_str},
     m_change_freq {static_cast<double>(t_change_interval)}
 {
-    m_rng.seed(m_seed);
+    m_mut_rng.seed(m_seed);
     for(auto& ind : m_population.get_inds())
     {
         ind.get_net() = net_arch;
@@ -38,7 +38,8 @@ simulation::simulation(const all_params& params):
     m_change_freq {static_cast<double>(params.s_p.change_freq)},
     m_params{params}
 {
-    m_rng.seed(m_seed);
+    m_mut_rng.seed(m_seed);
+    m_env_rng.seed(0);
 }
 
 
@@ -134,7 +135,7 @@ double find_min_fitness(const simulation&s)
 bool is_environment_changing (simulation &s) {
 
     std::bernoulli_distribution distro = s.get_t_change_env_distr();
-    return distro (s.get_rng());
+    return distro (s.get_env_rng());
 
 }
 
@@ -151,7 +152,7 @@ simulation load_json(
 
 void reproduce(simulation& s)
 {
-    reproduce(s.get_pop(), s.get_rng());
+    reproduce(s.get_pop(), s.get_mut_rng());
 }
 
 void tick(simulation &s)
@@ -225,7 +226,7 @@ void test_simulation() noexcept//!OCLINT test may be many
                     pop_size,
                     seed};
         std::mt19937_64 copy_rng(seed);
-        assert ( s.get_rng()() == copy_rng());
+        assert ( s.get_mut_rng()() == copy_rng());
 
     }
 
