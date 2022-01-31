@@ -3,6 +3,7 @@ library(ggplot2)
 library(tibble)
 library(dplyr)
 library(gridExtra)
+setwd("C:/Users/Timo van Eldijk/Desktop/Mutswitchdata/14-12-2021")
 
 Timetochangecalc = function (threshold,lbound, ubound, simple_res){
   curenv=0
@@ -33,14 +34,14 @@ Timetochangecalc = function (threshold,lbound, ubound, simple_res){
 
 ############################################# end of preamble ###############
 
-setwd("C:/Users/Timo van Eldijk/Desktop/Mutswitchdata/14-12-2021")
+
 
 rep=1
-a=list()
+
 filename=c ("1-1_","1-2-1_","1-5-1_", "1-5-5-1_", "1-10-2-1_")
 threshold=0.9
 timeslicefitplot=2000
-timeslicetimetoadapt=100000
+timeslicetimetoadapt=1000000
 timeslicecompare=20000
 maxtime=1000000
 
@@ -48,10 +49,9 @@ storage=data.frame()
 for (nettype in 1:5){
 starttimes=data.frame()
 endtimes=data.frame()
-
+a=list()
 
 for (rep in 1:11){
-
 
 results <- fromJSON(file = paste(filename[nettype],rep-1,"_sigmoid", ".json", sep=""))
 
@@ -81,7 +81,10 @@ geom_hline(yintercept=threshold)
 
 output=Timetochangecalc(threshold, 1, maxtime, simple_res) 
 
+
 a[[paste("p", rep,3,sep="")]]=ggplot(data=output[output$Gen<timeslicetimetoadapt,])+geom_point(aes(x=Gen, y=Time_to_adaptation, colour=Currentenv), show.legend = FALSE )
+
+
 
 starttimes=rbind (starttimes, output[output$Gen<timeslicecompare,])
 endtimes=rbind(endtimes, output[output$Gen>(maxtime-timeslicecompare),])
@@ -120,3 +123,99 @@ ggsave( "Comparing_time_to_adaptation_endzoom.jpg", plot=boxplot, width =10, hei
 
 
 
+
+#####Plotting the weights of 10 best individuals#######
+
+filename=c ("1-1_","1-2-1_","1-5-1_", "1-5-5-1_", "1-10-2-1_")
+nettype=2
+rep=2
+
+for (rep in 1:11){
+
+results <- fromJSON(file = paste(filename[nettype],rep-1,"_sigmoid", ".json", sep=""))
+test=results$m_top_inds
+
+a=list()
+for (indiv in 1:10) {
+  
+stor=data.frame()
+for (time in 1:1000){
+stor=rbind (stor,c(time, unlist(test[[time]][[indiv]]$m_network$m_network_weights)))
+}
+
+colnames(stor) <- c("time", "w1", "w2","w3","w4")
+
+a[[paste("p", rep,indiv,sep="")]]=ggplot(data = stor )+
+  labs (y="Weight", x="time")+
+  geom_point(aes (x=time, y=w1, color="w1"))+
+  geom_point(aes (x=time, y=w2, color="w2"))+
+  geom_point(aes (x=time, y=w3, color="w3"))+
+  geom_point(aes (x=time, y=w4, color="w4"))
+
+}#endindivloop
+AllPlots=grid.arrange(grobs=a, ncol=2)
+ggsave( filename = paste("weighplot ",filename[nettype],"rep", rep ,".jpg"  ,sep=""),
+        plot=AllPlots, width = 10, height = 15, limitsize = FALSE)
+}#end reploop
+
+
+
+#####Plotting the weights of only the best individuals#######
+
+filename=c ("1-1_","1-2-1_","1-5-1_", "1-5-5-1_", "1-10-2-1_")
+nettype=2
+rep=2
+
+a=list()
+indiv=1
+for (rep in 1:11){
+  
+  results <- fromJSON(file = paste(filename[nettype],rep-1,"_sigmoid", ".json", sep=""))
+  test=results$m_top_inds
+  
+ 
+ 
+    
+    stor=data.frame()
+    for (time in 1:100){
+      stor=rbind (stor,c(time, unlist(test[[time]][[indiv]]$m_network$m_network_weights)))
+    }
+    
+    colnames(stor) <- c("time", "w1", "w2","w3","w4")
+    
+    a[[paste("p", rep,sep="")]]=ggplot(data = stor )+
+      labs (y="Weight", x="time")+
+      geom_point(aes (x=time, y=w1, color="w1"))+
+      geom_point(aes (x=time, y=w2, color="w2"))+
+      geom_point(aes (x=time, y=w3, color="w3"))+
+      geom_point(aes (x=time, y=w4, color="w4"))
+    
+
+  
+}#end reploop
+AllPlots=grid.arrange(grobs=a, ncol=2)
+  ggsave( filename = paste("weighplot best only all reps first 100",filename[nettype] ,".jpg"  ,sep=""),
+          plot=AllPlots, width = 10, height = 15, limitsize = FALSE)
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
