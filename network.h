@@ -38,7 +38,8 @@ public:
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(network,
                                    m_input_size,
-                                   m_network_weights);
+                                   m_network_weights,
+                                   m_nodes_biases);
 
     ///Returns the activation function
     auto get_activation_function() const noexcept{return m_activation_function;}
