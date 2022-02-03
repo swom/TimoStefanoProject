@@ -3,7 +3,8 @@ library(ggplot2)
 library(tibble)
 library(dplyr)
 library(gridExtra)
-setwd("C:/Users/Timo van Eldijk/Desktop/Mutswitchdata/14-12-2021")
+library(moments)
+setwd("C:/Users/Timo van Eldijk/Desktop/Mutswitchdata/2-02-2022 (with biases)")
 
 Timetochangecalc = function (threshold,lbound, ubound, simple_res){
   curenv=0
@@ -31,6 +32,20 @@ Timetochangecalc = function (threshold,lbound, ubound, simple_res){
   colnames(stor)=c("Gen", "Time_to_adaptation", "Currentenv")
   return (stor)
 }
+
+
+
+netcalc=function (W1, W2, W3, W4, B1, B2, B3){
+  Input=1
+  Inputnode1=(Input*W1)+B1
+  Inputnode2=(Input*W2)+B2
+  Outputnode1= (Inputnode1)/(1+ abs((Inputnode1)))
+  Outputnode2=(Inputnode2)/(1+ abs((Inputnode2)))
+  Inputfinalnode=(Outputnode1*W3)+(Outputnode2*W4)+B3
+  Finaloutput=(Inputfinalnode)/(1+abs(Inputfinalnode))
+  return(Finaloutput)
+}
+
 
 ############################################# end of preamble ###############
 
@@ -140,17 +155,20 @@ for (indiv in 1:10) {
   
 stor=data.frame()
 for (time in 1:1000){
-stor=rbind (stor,c(time, unlist(test[[time]][[indiv]]$m_network$m_network_weights)))
+  stor=rbind (stor,c(time, unlist(test[[time]][[indiv]]$m_network$m_network_weights), unlist(test[[time]][[indiv]]$m_network$m_nodes_biases)))
 }
 
-colnames(stor) <- c("time", "w1", "w2","w3","w4")
+colnames(stor) <- c("time", "w1", "w2","w3","w4", "B1", "B2", "B3")
 
 a[[paste("p", rep,indiv,sep="")]]=ggplot(data = stor )+
   labs (y="Weight", x="time")+
   geom_point(aes (x=time, y=w1, color="w1"))+
   geom_point(aes (x=time, y=w2, color="w2"))+
   geom_point(aes (x=time, y=w3, color="w3"))+
-  geom_point(aes (x=time, y=w4, color="w4"))
+  geom_point(aes (x=time, y=w4, color="w4"))+
+  geom_point(aes (x=time, y=B1, color="B1"))+
+  geom_point(aes (x=time, y=B2, color="B2"))+
+  geom_point(aes (x=time, y=B3, color="B3"))
 
 }#endindivloop
 AllPlots=grid.arrange(grobs=a, ncol=2)
@@ -164,34 +182,28 @@ ggsave( filename = paste("weighplot ",filename[nettype],"rep", rep ,".jpg"  ,sep
 
 filename=c ("1-1_","1-2-1_","1-5-1_", "1-5-5-1_", "1-10-2-1_")
 nettype=2
-rep=2
-
 a=list()
 indiv=1
 for (rep in 1:11){
-  
   results <- fromJSON(file = paste(filename[nettype],rep-1,"_sigmoid", ".json", sep=""))
   test=results$m_top_inds
-  
- 
- 
-    
     stor=data.frame()
-    for (time in 1:100){
-      stor=rbind (stor,c(time, unlist(test[[time]][[indiv]]$m_network$m_network_weights)))
+    for (time in 1:1000){
+      stor=rbind (stor,c(time, unlist(test[[time]][[indiv]]$m_network$m_network_weights), unlist(test[[time]][[indiv]]$m_network$m_nodes_biases)))
     }
     
-    colnames(stor) <- c("time", "w1", "w2","w3","w4")
+    colnames(stor) <- c("time", "w1", "w2","w3","w4", "B1", "B2", "B3")
     
     a[[paste("p", rep,sep="")]]=ggplot(data = stor )+
       labs (y="Weight", x="time")+
       geom_point(aes (x=time, y=w1, color="w1"))+
       geom_point(aes (x=time, y=w2, color="w2"))+
       geom_point(aes (x=time, y=w3, color="w3"))+
-      geom_point(aes (x=time, y=w4, color="w4"))
+      geom_point(aes (x=time, y=w4, color="w4"))+
+      geom_point(aes (x=time, y=B1, color="B1"))+
+      geom_point(aes (x=time, y=B2, color="B2"))+
+      geom_point(aes (x=time, y=B3, color="B3"))
     
-
-  
 }#end reploop
 AllPlots=grid.arrange(grobs=a, ncol=2)
   ggsave( filename = paste("weighplot best only all reps first 100",filename[nettype] ,".jpg"  ,sep=""),
@@ -202,20 +214,72 @@ AllPlots=grid.arrange(grobs=a, ncol=2)
   
   
   
+  #######Weight and mutspec examination#######
+
+  
+  for (rep in 1:11){
+  
+  filename=c ("1-1_","1-2-1_","1-5-1_", "1-5-5-1_", "1-10-2-1_")
+  nettype=2
+  a=list()
+  indiv=1
+  results <- fromJSON(file = paste(filename[nettype],rep-1,"_sigmoid", ".json", sep=""))
+  test=results$m_top_inds
+  
+    stor=data.frame()
+  for (time in 1:1000){
+    stor=rbind (stor,c(time, unlist(test[[time]][[indiv]]$m_network$m_network_weights), unlist(test[[time]][[indiv]]$m_network$m_nodes_biases)))
+    
+  }
+    colnames(stor) <- c("time", "w1", "w2","w3","w4", "B1", "B2", "B3")
+ 
+ 
+  jpeg(file=paste("1-2-1_",rep-1 , " mutspec_552.jpg"),  width = 1000, height = 800, res=100 ) 
+  par(mfrow = c(2, 4)) 
+  
+  Input=1
+  time=1:1000
+  W1=stor$w1[time]
+  W2=stor$w2[time]
+  W3=stor$w3[time]
+  W4=stor$w4[time]
+  B1=stor$B1[time]
+  B2=stor$B2[time]
+  B3=stor$B3[time]
+
+  Finaloutput=netcalc(W1, W2, W3, W4, B1, B2, B3)
+  
+  plot (Finaloutput~time, main="output through time")
+
+  
+ 
+  time=552
+ 
+  W1=stor$w1[time]
+  W2=stor$w2[time]
+  W3=stor$w3[time]
+  W4=stor$w4[time]
+  B1=stor$B1[time]
+  B2=stor$B2[time]
+  B3=stor$B3[time]
+ weightnames=c('W1', 'W2', 'W3', 'W4', 'B1', 'B2', 'B3')
+ 
+ 
+  for(i in 1:7){
+  old=get(weightnames[i])
+  assign(weightnames[i], old+rnorm( 100000 ,0, 0.1))
+  result=netcalc(W1, W2, W3, W4, B1, B2, B3)
+  hist(result,breaks=100,  xlim=c(-1,1), main=paste("mutspec",weightnames[i]))
+  print(weightnames[i])
+  assign(weightnames[i], old)
+  abline(v=netcalc(W1, W2, W3, W4, B1, B2, B3), col="Red")
+  }
+
+ dev.off() 
+ 
+ }#end reploop
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ 
   
   
