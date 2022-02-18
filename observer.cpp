@@ -53,17 +53,18 @@ void exec(simulation& s , observer& o)
 {
     stopwatch::Stopwatch sw;
     o.store_par(s);
-    for (int i = 0; i < s.get_n_gen(); i++)
-    {
-        tick (s);
+
+while(s.get_time() < s.get_n_gen())
+{
+        tick(s);
         o.store_avg_fit_and_env(s);
-        if(i % 1000 == 0)
+        if(s.get_time() % 1  == 0)
         {
-            o.save_best_n_inds(s,10);
+            o.save_best_n_inds(s,1);
         }
-        if(i % 1000 == 0)
+        if(s.get_time() % 1  == 0)
         {
-            std::cout << "Cycle " << i << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
+            std::cout << "Cycle " << s.get_time() << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
         }
     }
 }
