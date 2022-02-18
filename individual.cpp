@@ -48,19 +48,17 @@ std::vector<double> response(const individual& ind)
     return response(ind.get_net(),ind.get_input_values());
 }
 
-std::vector<int> calculate_mutational_spectrum(const individual& ind,
+std::vector<double> calculate_mutational_spectrum(const individual& ind,
                                                double mut_rate,
                                                double mut_step,
-                                               int n_mutations,
-                                               int bins)
+                                               int n_mutations)
 {
     //Stub
     assert(response(ind).size());
     assert(mut_rate);
     assert(mut_step);
     assert(n_mutations);
-    assert(bins);
-    return std::vector<int>{};
+    return std::vector<double>{};
     //
 }
 
@@ -124,7 +122,6 @@ void test_individual()
         assert(first_output_always_returns_target_value(i.get_net(), 0));
 
 
-        int n_output_bins = 3;
         int n_mutations_per_locus = 1000;
         double mut_rate = 1;
         double mut_step = 0.1;
@@ -133,8 +130,7 @@ void test_individual()
         std::vector<double> output_values = calculate_mutational_spectrum(i,
                                                                  mut_rate,
                                                                  mut_step,
-                                                                 n_mutations_per_locus,
-                                                                 n_output_bins);
+                                                                 n_mutations_per_locus);
 
         ///to make sure individual is not modified throughout the process
         assert(i_before == i);
@@ -148,7 +144,7 @@ void test_individual()
         int bin_number = 3;
         std::vector<double> values;
         std::vector<observation_count> binned_values = bin_values(values, bin_number);
-        assert(binned_values.size() == )
+        assert(binned_values.size() == bin_number);
     }
 }
 #endif
