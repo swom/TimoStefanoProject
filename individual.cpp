@@ -142,9 +142,20 @@ void test_individual()
     /// to obtain a vector of <value_ranges, observation_count> pairs
     {
         int bin_number = 3;
-        std::vector<double> values;
+        rndutils::xorshift128 rng;
+        rndutils::uniform_signed_distribution dist(-1,1);
+        size_t size = 1000;
+        std::vector<double> values(size);
+
+        for(auto& value : values)
+        {
+            value = dist(rng);
+        }
+
         std::vector<observation_count> binned_values = bin_values(values, bin_number);
+
         assert(binned_values.size() == bin_number);
+        assert(all_bins_have_same_n_obs_with_tolerance(binned_values));
     }
 }
 #endif
