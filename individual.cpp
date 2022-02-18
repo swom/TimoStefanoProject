@@ -101,7 +101,7 @@ void test_individual()
     ///When an individual responds to environment it uses its input values as input
     {
         individual i;
-        assert( response(i) == response(i.get_net(),i.get_input_values(), &linear));
+        assert( response(i) == response(i.get_net(),i.get_input_values(), &idenity));
     }
     //#define FIX_ISSUE_36
 
@@ -116,11 +116,12 @@ void test_individual()
     ///It is possible to calculate the mutational spectrum of an individual
     {
         net_param n_p;
-        n_p.function = linear;
+        n_p.function = idenity;
         n_p.net_arc = {1,1};
         individual i{{n_p}};
+
         auto ind_output = response(i);
-        assert(behaves_like_identity_function(i.get_net()));
+        assert(first_output_always_returns_target_value(i.get_net(), 0));
 
 
         int n_output_bins = 3;
@@ -129,14 +130,25 @@ void test_individual()
         double mut_step = 0.1;
 
         auto i_before = i;
-        auto output_distribution = calculate_mutational_spectrum(i,
+        std::vector<double> output_values = calculate_mutational_spectrum(i,
                                                                  mut_rate,
                                                                  mut_step,
                                                                  n_mutations_per_locus,
                                                                  n_output_bins);
+
+        ///to make sure individual is not modified throughout the process
         assert(i_before == i);
-        assert(behaves_like_normal_distribution(*ind_output.begin(), mut_step, output_distribution));
+
+        assert(behaves_like_normal_distribution(output_values, *ind_output.begin(), mut_step));
     }
 
+    ///It is possible to "bin" the values of a vector of doubles
+    /// to obtain a vector of <value_ranges, observation_count> pairs
+    {
+        int bin_number = 3;
+        std::vector<double> values;
+        std::vector<observation_count> binned_values = bin_values(values, bin_number);
+        assert(binned_values.size() == )
+    }
 }
 #endif

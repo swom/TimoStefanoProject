@@ -113,7 +113,7 @@ std::function<double(double)> parse_act_func(const std::vector<std::string>& arg
         return string_to_act_func_map.find(*(value + 1))->second;
     }
     else{
-        return linear;
+        return idenity;
     }
 }
 

@@ -42,11 +42,13 @@ const std::string convert_arc_to_string(const std::vector<int>& v)
     return ss.str();
 }
 
-bool behaves_like_normal_distribution(double mean,
-                                      double var,
-                                      std::vector<int> bins_from_distribution)
+bool behaves_like_normal_distribution(std::vector<double> values,
+                                      double mean,
+                                      double var
+                                      )
 {
     //stub
-    return mean && var && bins_from_distribution.size();
+    std::normal_distribution<double> dist(mean, var);
+    return mean && var && values.size();
     //
 }

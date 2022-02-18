@@ -8,12 +8,13 @@
 
 
 double sigmoid(double x);
-double linear(double x);
+double idenity(double x);
+double linear(double x, double slope, double intercept);
 bool is_linear(std::function<double(double)> f);
 
 static std::map<std::string, std::function<double(double)>> string_to_act_func_map
 {
-{"linear", linear},
+{"linear", idenity},
 {"sigmoid", sigmoid}
 };
 
@@ -25,7 +26,7 @@ struct net_param
                                    )
 
     std::vector<int> net_arc {1,2,1};
-    std::function<double(double)> function = linear;
+    std::function<double(double)> function = idenity;
     std::string str_func = is_linear(function) ? "linear" : "sigmoid";
 };
 
@@ -33,7 +34,7 @@ struct net_param
 class network
 {
 public:
-    network(std::vector<int> nodes_per_layer, std::function<double(double)> activation_function = &linear);
+    network(std::vector<int> nodes_per_layer, std::function<double(double)> activation_function = &idenity);
     network (net_param n_p);
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(network,
@@ -87,7 +88,7 @@ network change_all_weights(network n, double new_weight);
 std::vector<double> register_n_mutations(network n, double mut_rate, double mut_step, std::mt19937_64 &rng, int repeats);
 
 template <typename Fun>
-inline std::vector<double> response(const network& n, std::vector<double> input, Fun fun = &linear)
+inline std::vector<double> response(const network& n, std::vector<double> input, Fun fun = &idenity)
 {
     assert(input.size() == n.get_input_size());
 
@@ -116,7 +117,8 @@ std::vector<double> response(const network& n, std::vector<double> input);
 
 ///Checks if a network behaves like an identity function
 /// f(x) = x
-bool behaves_like_identity_function (const network& n);
+bool first_output_behaves_like_identity_function (const network& n);
+bool first_output_always_returns_target_value (const network& n, double target );
 
 void test_network();
 
