@@ -11,7 +11,6 @@ bool operator==(const all_params& lhs, const all_params& rhs)
 {
     return lhs.e_p.targetA == rhs.e_p.targetA &&
            lhs.e_p.targetB == rhs.e_p.targetB &&
-           lhs.i_p.age == rhs.i_p.age &&
            lhs.i_p.net_par.net_arc ==  rhs.i_p.net_par.net_arc &&
            lhs.p_p.mut_rate == rhs.p_p.mut_rate &&
            lhs.p_p.mut_step == rhs.p_p.mut_step &&
@@ -115,25 +114,6 @@ void test_observer()
 
 
         }
-    ///It is possible to calculate the mutational spectrum of an individual
-    {
-        net_param n_p;
-        n_p.function = linear;
-        n_p.net_arc = {1,1};
-        individual i{{n_p}};
-        assert(behaves_like_identity_function(i.get_net()));
 
-        int n_output_bins;
-        int n_mutations_per_locus;
-        double mut_rate;
-        double mut_step;
-
-        auto i_before = i;
-        auto output_distribution = calculate_mutational_spectrum(i,
-                                      n_mutations_per_locus,
-                                      n_output_bins);
-        assert(i_before == i);
-        assert(behaves_like_normal_distribution(0, mut_step, output_distribution));
-    }
 }
 #endif

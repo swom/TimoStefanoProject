@@ -178,7 +178,13 @@ std::vector<double> response(const network& n, std::vector<double> input)
     return input;
 }
 
-
+bool behaves_like_identity_function (const network& n)
+{
+    //Stub
+    assert(n.get_biases().size());
+    return true;
+    //
+}
 
 #ifndef NDEBUG
 void test_network() //!OCLINT

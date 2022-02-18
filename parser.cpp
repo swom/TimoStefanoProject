@@ -34,8 +34,7 @@ env_param convert_env_args(const cxxopts::ParseResult& results)
 ind_param convert_ind_args(const cxxopts::ParseResult& results)
 {
     return ind_param{
-        convert_net_args(results),
-                0
+        convert_net_args(results)
     };
 }
 
@@ -140,7 +139,7 @@ env_param parse_env_param(const std::vector<std::string>& args)
 
 ind_param parse_ind_param(const std::vector<std::string>& args)
 {
-    return ind_param{parse_net_param(args), 0};
+    return ind_param{parse_net_param(args)};
 
 }
 

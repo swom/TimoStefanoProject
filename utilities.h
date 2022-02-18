@@ -16,4 +16,8 @@ double calc_stdev(const std::vector<double>& numbers);
 ///Converts a net_arc vec of int to a string
 const std::string convert_arc_to_string(const std::vector<int>& v);
 
+///Checks if a vector of integers behaves like a nirmal distribution of given mean and variance
+bool behaves_like_normal_distribution(double mean,
+                                      double var,
+                                      std::vector<int> bins_from_distribution);
 #endif // UTILITIES_H

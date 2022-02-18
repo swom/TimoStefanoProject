@@ -111,8 +111,12 @@ inline std::vector<double> response(const network& n, std::vector<double> input,
     return input;
 }
 
+///The response of a network to a given input
 std::vector<double> response(const network& n, std::vector<double> input);
 
+///Checks if a network behaves like an identity function
+/// f(x) = x
+bool behaves_like_identity_function (const network& n);
 
 void test_network();
 
