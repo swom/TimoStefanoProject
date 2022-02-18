@@ -115,5 +115,25 @@ void test_observer()
 
 
         }
+    ///It is possible to calculate the mutational spectrum of an individual
+    {
+        net_param n_p;
+        n_p.function = linear;
+        n_p.net_arc = {1,1};
+        individual i{{n_p}};
+        assert(behaves_like_identity_function(i.get_net()));
+
+        int n_output_bins;
+        int n_mutations_per_locus;
+        double mut_rate;
+        double mut_step;
+
+        auto i_before = i;
+        auto output_distribution = calculate_mutational_spectrum(i,
+                                      n_mutations_per_locus,
+                                      n_output_bins);
+        assert(i_before == i);
+        assert(behaves_like_normal_distribution(0, mut_step, output_distribution));
+    }
 }
 #endif
