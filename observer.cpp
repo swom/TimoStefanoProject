@@ -56,7 +56,7 @@ void exec(simulation& s , observer& o)
 
 while(s.get_time() < s.get_n_gen())
 {
-        tick (s);
+        tick(s);
         o.store_avg_fit_and_env(s);
         if(s.get_time() % 1  == 0)
         {
