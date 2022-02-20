@@ -19,7 +19,7 @@ double calc_stdev(const std::vector<double>& numbers);
 const std::string convert_arc_to_string(const std::vector<int>& v);
 
 ///Checks if a vector of integers behaves like a nirmal distribution of given mean and variance
-bool behaves_like_normal_distribution(std::vector<double> bins_from_distribution,
+bool behaves_like_normal_distribution(const std::vector<double> &bins_from_distribution,
                                       double mean,
                                       double var
                                       );

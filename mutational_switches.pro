@@ -4,6 +4,7 @@ HEADERS +=  \
   Stopwatch.hpp \
   environment.h \
   individual.h \
+  input_output.h \
   network.h \
   observer.h \
   parser.h \
@@ -16,6 +17,7 @@ HEADERS +=  \
 SOURCES +=  \
   environment.cpp \
   individual.cpp \
+  input_output.cpp \
   main.cpp \
   network.cpp \
   observer.cpp \

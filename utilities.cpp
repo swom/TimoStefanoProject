@@ -42,7 +42,7 @@ const std::string convert_arc_to_string(const std::vector<int>& v)
     return ss.str();
 }
 
-bool behaves_like_normal_distribution(std::vector<double> values,
+bool behaves_like_normal_distribution(const std::vector<double>& values,
                                       double mean,
                                       double var
                                       )

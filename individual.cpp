@@ -48,18 +48,24 @@ std::vector<double> response(const individual& ind)
     return response(ind.get_net(),ind.get_input_values());
 }
 
-std::vector<double> calculate_mutational_spectrum(const individual& ind,
-                                               double mut_rate,
-                                               double mut_step,
-                                               int n_mutations)
+std::vector<input_output> calculate_mutational_spectrum( const individual& ind,
+                                                         double mut_step,
+                                                         int n_mutations,
+                                                         std::mt19937_64& rng)
 {
-    //Stub
     assert(response(ind).size());
-    assert(mut_rate);
     assert(mut_step);
     assert(n_mutations);
-    return std::vector<double>{};
-    //
+    auto mutable_ind = ind;
+    std::vector<input_output> inp_outps(n_mutations);
+    for(auto i = inp_outps.begin(); i !=  inp_outps.end(); i++)
+    {
+        mutable_ind.mutate(1, mut_step, rng);
+        *i = input_output{mutable_ind.get_input_values(), response(mutable_ind)};
+        mutable_ind = ind;
+    }
+    return inp_outps;
+
 }
 
 #ifndef NDEBUG
@@ -113,6 +119,7 @@ void test_individual()
 
     ///It is possible to calculate the mutational spectrum of an individual
     {
+        std::mt19937_64 rng;
         net_param n_p;
         n_p.function = idenity;
         n_p.net_arc = {1,1};
@@ -123,21 +130,24 @@ void test_individual()
 
 
         int n_mutations_per_locus = 1000;
-        double mut_rate = 1;
         double mut_step = 0.1;
 
         auto i_before = i;
-        std::vector<double> output_values = calculate_mutational_spectrum(i,
-                                                                 mut_rate,
-                                                                 mut_step,
-                                                                 n_mutations_per_locus);
+        std::vector<input_output> input_outputs_values = calculate_mutational_spectrum(i,
+                                                                                       mut_step,
+                                                                                       n_mutations_per_locus,
+                                                                                       rng);
 
         ///to make sure individual is not modified throughout the process
         assert(i_before == i);
 
-        assert(behaves_like_normal_distribution(output_values, *ind_output.begin(), mut_step));
+        auto extracted_output =  extract_first_outputs(input_outputs_values);
+
+        assert(behaves_like_normal_distribution(extracted_output, *ind_output.begin(), mut_step));
     }
 
+    //#define FIX_BINS
+#ifdef FIX_BINS
     ///It is possible to "bin" the values of a vector of doubles
     /// to obtain a vector of <value_ranges, observation_count> pairs
     {
@@ -157,5 +167,7 @@ void test_individual()
         assert(binned_values.size() == bin_number);
         assert(all_bins_have_same_n_obs_with_tolerance(binned_values));
     }
+#endif
+
 }
 #endif
