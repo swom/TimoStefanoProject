@@ -48,23 +48,91 @@ std::vector<double> response(const individual& ind)
     return response(ind.get_net(),ind.get_input_values());
 }
 
-std::vector<input_output> calculate_mutational_spectrum( const individual& ind,
-                                                         double mut_step,
-                                                         int n_mutations,
-                                                         std::mt19937_64& rng)
+
+std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>> calc_mutational_spectrum_weights(const individual& ind,
+                                                                                                         double mut_step,
+                                                                                                         int n_mutations,
+                                                                                                         std::mt19937_64& rng)
+{
+    auto mutable_net = ind.get_net();
+    std::normal_distribution<double> mut_dist(0,mut_step);
+    std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>> network_weights_spectrum(mutable_net.get_net_weights().size());
+    std::vector<std::vector<std::vector<std::vector<double>>>> layer_spectrum;
+    std::vector<std::vector<std::vector<double>>> node_spectrum;
+    std::vector<std::vector<double>> weight_spectrum(n_mutations);
+    for(auto layer = mutable_net.get_net_weights().begin(); layer != mutable_net.get_net_weights().end(); layer++)
+    {
+        layer_spectrum.resize(layer->size());
+        for(auto  node = layer->begin(); node != layer->end(); node++)
+        {
+            node_spectrum.resize(node->size());
+            for(auto  weight = node->begin(); weight != node->end(); weight++)
+            {
+                auto original_weight = *weight;
+                for(int i = 0; i != n_mutations; i++)
+                {
+                    *weight +=  mut_dist(rng);
+                    weight_spectrum[i] = response(mutable_net, ind.get_input_values());
+                    *weight = original_weight;
+                }
+                node_spectrum[std::distance(weight, node->begin())] = weight_spectrum;
+            }
+            layer_spectrum[std::distance(node, layer->begin())] = node_spectrum;
+        }
+        network_weights_spectrum[std::distance(layer, mutable_net.get_net_weights().begin())] = layer_spectrum;
+    }
+    return network_weights_spectrum;
+}
+
+std::vector<std::vector<std::vector<std::vector<double>>>> calc_mutational_spectrum_biases(const individual& ind,
+                                                                                           double mut_step,
+                                                                                           int n_mutations,
+                                                                                           std::mt19937_64& rng)
+{
+    auto mutable_net = ind.get_net();
+    std::normal_distribution<double> mut_dist(0,mut_step);
+    std::vector<std::vector<std::vector<std::vector<double>>>> network_bias_spectrum(mutable_net.get_biases().size());
+    std::vector<std::vector<std::vector<double>>> layer_spectrum;
+    std::vector<std::vector<double>> node_bias_spectrum(n_mutations);
+
+    for(auto layer = mutable_net.get_reference_to_biases().begin(); layer != mutable_net.get_reference_to_biases().end(); layer++)
+    {
+        layer_spectrum.resize(layer->size());
+        for(auto  node_bias = layer->begin(); node_bias != layer->end(); node_bias++)
+        {
+            auto original_bias = *node_bias;
+            for(int i = 0; i != n_mutations; i++)
+            {
+                *node_bias +=  mut_dist(rng);
+                node_bias_spectrum[i] = response(mutable_net, ind.get_input_values());
+                *node_bias = original_bias;
+            }
+            layer_spectrum[std::distance(node_bias, layer->begin())] = node_bias_spectrum;
+        }
+        network_bias_spectrum[std::distance(layer, mutable_net.get_reference_to_biases().begin())] = layer_spectrum;
+    }
+    return network_bias_spectrum;
+}
+
+network_spectrum calculate_mutational_spectrum( const individual& ind,
+                                                double mut_step,
+                                                int n_mutations,
+                                                std::mt19937_64& rng)
 {
     assert(response(ind).size());
     assert(mut_step);
     assert(n_mutations);
-    auto mutable_ind = ind;
-    std::vector<input_output> inp_outps(n_mutations);
-    for(auto i = inp_outps.begin(); i !=  inp_outps.end(); i++)
-    {
-        mutable_ind.mutate(1, mut_step, rng);
-        *i = input_output{mutable_ind.get_input_values(), response(mutable_ind)};
-        mutable_ind = ind;
-    }
-    return inp_outps;
+
+    auto spectrum_weights = calc_mutational_spectrum_weights(ind,
+                                                             mut_step,
+                                                             n_mutations,
+                                                             rng);
+    auto spectrum_biases = calc_mutational_spectrum_biases(ind,
+                                                           mut_step,
+                                                           n_mutations,
+                                                           rng);
+
+    return network_spectrum{spectrum_weights, spectrum_biases};
 
 }
 
@@ -133,27 +201,33 @@ void test_individual()
         double mut_step = 0.1;
 
         auto i_before = i;
-        std::vector<input_output> input_outputs_values = calculate_mutational_spectrum(i,
-                                                                                       mut_step,
-                                                                                       n_mutations_per_locus,
-                                                                                       rng);
+        network_spectrum network_spectrum = calculate_mutational_spectrum(i,
+                                                                          mut_step,
+                                                                          n_mutations_per_locus,
+                                                                          rng);
 
         ///to make sure individual is not modified throughout the process
         assert(i_before == i);
 
-        auto extracted_output =  extract_first_outputs(input_outputs_values);
+        auto extracted_output_weights =  extract_first_outputs_weights(network_spectrum);
 
-        assert(behaves_like_normal_distribution(extracted_output, *ind_output.begin(), mut_step));
+        assert(has_same_stdev_and_mean(extracted_output_weights, *ind_output.begin(), mut_step));
+
+        auto extracted_output_biases =  extract_first_outputs_biases(network_spectrum);
+
+        assert(has_same_stdev_and_mean(extracted_output_biases, *ind_output.begin(), mut_step));
     }
 
-    //#define FIX_BINS
+    #define FIX_BINS
 #ifdef FIX_BINS
     ///It is possible to "bin" the values of a vector of doubles
     /// to obtain a vector of <value_ranges, observation_count> pairs
     {
         int bin_number = 3;
         rndutils::xorshift128 rng;
-        rndutils::uniform_signed_distribution dist(-1,1);
+        double min = - 1;
+        double max = 1;
+        std::uniform_real_distribution dist(min,max);
         size_t size = 1000;
         std::vector<double> values(size);
 
@@ -162,9 +236,9 @@ void test_individual()
             value = dist(rng);
         }
 
-        std::vector<observation_count> binned_values = bin_values(values, bin_number);
+        histogram binned_values(values, bin_number, value_range{min, max});
 
-        assert(binned_values.size() == bin_number);
+        assert(static_cast<int>(binned_values.hist().size()) == bin_number);
         assert(all_bins_have_same_n_obs_with_tolerance(binned_values));
     }
 #endif

@@ -332,7 +332,7 @@ void test_simulation() noexcept//!OCLINT test may be many
 
         ///ind 0 response should match exactly the target value therefore it will have fitness 1 (max)
         auto first_ind_fit =  get_nth_ind_fitness(s,0) ;
-        assert(are_equal_with_tolerance( first_ind_fit, 1));
+        assert(are_equal_with_tolerance( first_ind_fit, 1.0));
 
         ///ind 1 response is 0, therefore its fitness would be the lowest in all the population
         auto first_response = response(get_nth_ind(s, 0))[0];

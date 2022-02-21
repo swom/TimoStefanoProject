@@ -48,6 +48,9 @@ public:
     ///Returns the const ref to the node biases
     const std::vector<std::vector<double>>& get_biases() const noexcept{return m_nodes_biases;}
 
+    ///Returns the const ref to the node biases
+    std::vector<std::vector<double>>& get_reference_to_biases() noexcept{return m_nodes_biases;}
+
     ///Returns const ref to vector of weights
     const std::vector<std::vector<std::vector<double>>>& get_net_weights() const noexcept{return m_network_weights;}
 

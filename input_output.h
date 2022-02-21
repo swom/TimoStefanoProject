@@ -4,7 +4,7 @@
 
 struct input_output
 {
-    input_output(){};
+    input_output(){}
     input_output(std::vector<double> input,
                  std::vector<double> output);
 

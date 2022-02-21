@@ -3,12 +3,15 @@
 HEADERS +=  \
   Stopwatch.hpp \
   environment.h \
+  histogram.h \
   individual.h \
   input_output.h \
   network.h \
+  network_mutational_spectrum.h \
   observer.h \
   parser.h \
   population.h \
+  range.h \
   rndutils.hpp \
   simulation.h \
   utilities.h
@@ -16,13 +19,16 @@ HEADERS +=  \
 
 SOURCES +=  \
   environment.cpp \
+  histogram.cpp \
   individual.cpp \
   input_output.cpp \
   main.cpp \
   network.cpp \
+  network_mutational_spectrum.cpp \
   observer.cpp \
   parser.cpp \
   population.cpp \
+  range.cpp \
   simulation.cpp \
   utilities.cpp
 

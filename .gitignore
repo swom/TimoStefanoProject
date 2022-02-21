@@ -43,6 +43,7 @@ simulation.pro.user
 #Saved files
 *.json
 *.csv
+*.png
 
 #Data folder
 data_sim/

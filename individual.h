@@ -1,7 +1,7 @@
 #ifndef INDIVIDUAL_H
 #define INDIVIDUAL_H
 
-#include "network.h"
+#include "network_mutational_spectrum.h"
 
 struct ind_param
 {
