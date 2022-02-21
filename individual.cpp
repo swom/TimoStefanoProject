@@ -84,7 +84,7 @@ std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>> calc_mut
     return network_weights_spectrum;
 }
 
-
+namespace spectrum{
 using node = std::vector<histogram>;
 using layer = std::vector<node>;
 using net = std::vector<layer>;
@@ -194,6 +194,7 @@ net_biases calc_mutational_spectrum_biases_bins(const individual& ind,
     }
     return network_bias_spectrum;
 }
+}
 
 network_spectrum calculate_mutational_spectrum( const individual& ind,
                                                 double mut_step,
@@ -202,6 +203,7 @@ network_spectrum calculate_mutational_spectrum( const individual& ind,
                                                 int n_bins,
                                                 const value_range& range)
 {
+    using namespace::spectrum;
     assert(response(ind).size());
     assert(mut_step);
     assert(n_mutations);
@@ -275,6 +277,7 @@ void test_individual()
     ///It is possible to calculate the mutational spectrum
     ///  of an individual's weights and biases
     {
+        using namespace::spectrum;
         std::mt19937_64 rng;
         net_param n_p;
         n_p.function = idenity;
@@ -341,20 +344,37 @@ void test_individual()
         individual i{{n_p}};
         int n_mutations_per_locus = 1000;
         double mut_step = 0.1;
-        int n_bins = 3;
-        value_range range{-3,3};
 
-        auto ind_output = response(i);
-        assert(first_output_always_returns_target_value(i.get_net(), 0));
+        auto ind_output = *response(i).begin();
+        assert(first_output_always_returns_target_value(i.get_net(), ind_output));
+
+        ///Bin for a range that is triple the normal range of ouputs for a network
+        /// centered around the starting individual of the individual
+        int n_bins = 3;
+        double very_high_value = 1000000;
+        auto range_upper_bound = ind_output + i.get_net().get_activation_function()(very_high_value) * (n_bins - 1);
+        auto range_lower_bound = ind_output - range_upper_bound;
+        value_range range{range_lower_bound,range_upper_bound};
+
 
         auto net_spectrum = calculate_mutational_spectrum(i,
-                                      mut_step,
-                                      n_mutations_per_locus,
-                                      rng,
-                                      n_bins,
-                                      range);
-        ass
+                                                          mut_step,
+                                                          n_mutations_per_locus,
+                                                          rng,
+                                                          n_bins,
+                                                          range);
 
+        for(const auto& layer : net_spectrum.m_outputs_of_mutated_weights)
+            for(const auto& node :layer)
+                for(const auto& histogram : node)
+                {
+                    assert(all_counts_are_in_middle_bin(histogram));
+                }
+        for(const auto& layer : net_spectrum.m_outputs_of_mutated_biases)
+            for(const auto& histogram :layer)
+                {
+                    assert(all_counts_are_in_middle_bin(histogram));
+                }
     }
 
 }

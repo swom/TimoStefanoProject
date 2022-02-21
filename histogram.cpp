@@ -43,8 +43,18 @@ bool all_bins_have_same_n_obs_with_tolerance(const histogram &h)
     {
         throw std::invalid_argument{"When comparing bins of an histogram there are no bins"};
     }
-        auto val = h.hist().begin()->second;
-        return std::all_of(std::next(h.hist().begin()), h.hist().end(),
-                             [val](typename std::map<double, int>::const_reference t){ return are_equal_with_more_tolerance(t.second, val); });
+    auto val = h.hist().begin()->second;
+    return std::all_of(std::next(h.hist().begin()), h.hist().end(),
+                       [val](typename std::map<double, int>::const_reference t){ return are_equal_with_more_tolerance(t.second, val); });
 
+}
+
+bool all_counts_are_in_middle_bin(const histogram &h)
+{
+    auto map = h.hist();
+    auto middle_it = map.begin();
+    std::advance(middle_it, map.size()/2);
+    map.erase(middle_it);
+    return std::all_of(map.begin(), map.end(), []
+                       (const auto& map_pair){return map_pair.second == 0;});
 }
