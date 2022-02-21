@@ -31,7 +31,7 @@ private:
 
     std::vector<double> m_avg_fitnesses;
     std::vector<double> m_var_fitnesses;
-    std::vector<std::vector<individual>> m_top_inds;
+    std::vector<std::vector<ind_data>> m_top_inds;
     std::vector<double> m_env_values;
     all_params m_params = {};
 };

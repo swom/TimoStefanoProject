@@ -85,9 +85,7 @@ std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>> calc_mut
 }
 
 namespace spectrum{
-using node = std::vector<histogram>;
-using layer = std::vector<node>;
-using net = std::vector<layer>;
+
 net calc_mutational_spectrum_weights_in_bins(const individual& ind,
                                              double mut_step,
                                              int n_mutations,
@@ -161,8 +159,6 @@ std::vector<std::vector<std::vector<std::vector<double>>>> calc_mutational_spect
 }
 
 
-using layer_biases = std::vector<histogram>;
-using net_biases = std::vector<layer_biases>;
 net_biases calc_mutational_spectrum_biases_bins(const individual& ind,
                                                 double mut_step,
                                                 int n_mutations,
@@ -194,7 +190,6 @@ net_biases calc_mutational_spectrum_biases_bins(const individual& ind,
     }
     return network_bias_spectrum;
 }
-}
 
 network_spectrum calculate_mutational_spectrum( const individual& ind,
                                                 double mut_step,
@@ -223,6 +218,7 @@ network_spectrum calculate_mutational_spectrum( const individual& ind,
 
     return network_spectrum{spectrum_weights, spectrum_biases};
 
+}
 }
 
 #ifndef NDEBUG
@@ -278,6 +274,7 @@ void test_individual()
     ///  of an individual's weights and biases
     {
         using namespace::spectrum;
+
         std::mt19937_64 rng;
         net_param n_p;
         n_p.function = idenity;
@@ -337,6 +334,8 @@ void test_individual()
     ///It is possible to record the mutational spectrum of a networks's weight and biases
     ///in the form of histograms (ouput_range - count) for each weight and bias
     {
+        using namespace::spectrum;
+
         std::mt19937_64 rng;
         net_param n_p;
         n_p.function = idenity;

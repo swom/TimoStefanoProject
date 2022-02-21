@@ -12,6 +12,8 @@ public:
                int bin_number,
                value_range range_values);
 
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(histogram,
+                                   m_binned_values_count);
     ///returns a constant reference to the range_count map
     const std::map<double,int>& hist() const noexcept {return m_binned_values_count;}
 

@@ -10,14 +10,14 @@ observer::observer()
 bool operator==(const all_params& lhs, const all_params& rhs)
 {
     return lhs.e_p.targetA == rhs.e_p.targetA &&
-           lhs.e_p.targetB == rhs.e_p.targetB &&
-           lhs.i_p.net_par.net_arc ==  rhs.i_p.net_par.net_arc &&
-           lhs.p_p.mut_rate == rhs.p_p.mut_rate &&
-           lhs.p_p.mut_step == rhs.p_p.mut_step &&
-           lhs.p_p.number_of_inds == rhs.p_p.number_of_inds &&
-           lhs.s_p.change_freq == rhs.s_p.change_freq &&
-           lhs.s_p.seed == rhs.s_p.seed &&
-           lhs.s_p.selection_strength == rhs.s_p.selection_strength;
+            lhs.e_p.targetB == rhs.e_p.targetB &&
+            lhs.i_p.net_par.net_arc ==  rhs.i_p.net_par.net_arc &&
+            lhs.p_p.mut_rate == rhs.p_p.mut_rate &&
+            lhs.p_p.mut_step == rhs.p_p.mut_step &&
+            lhs.p_p.number_of_inds == rhs.p_p.number_of_inds &&
+            lhs.s_p.change_freq == rhs.s_p.change_freq &&
+            lhs.s_p.seed == rhs.s_p.seed &&
+            lhs.s_p.selection_strength == rhs.s_p.selection_strength;
 
 }
 
@@ -37,7 +37,21 @@ void observer::store_avg_fit_and_env(const simulation& s)
 
 void observer::save_best_n_inds(const simulation &s, int n)
 {
-    m_top_inds.push_back(get_best_n_inds(s, n));
+    auto best_inds = get_best_n_inds(s, n);
+    std::mt19937_64 rng;
+    std::vector<ind_data> ind_data_v(best_inds.size());
+    std::transform(best_inds.begin(), best_inds.end(), ind_data_v.begin(),
+                   [&s, &rng](const auto& ind)
+    {return ind_data{ind,
+                    spectrum::calculate_mutational_spectrum(ind,
+                                                            s.get_params().p_p.mut_step,
+                                                            100000,
+                                                            rng,
+                                                            100,
+                                                            {-1,1}
+                                                            ),
+        s.get_time()};
+    });
 }
 
 void save_json(const observer& o, const std::string& filename)
@@ -53,8 +67,8 @@ void exec(simulation& s , observer& o)
     stopwatch::Stopwatch sw;
     o.store_par(s);
 
-while(s.get_time() < s.get_n_gen())
-{
+    while(s.get_time() < s.get_n_gen())
+    {
         tick(s);
         o.store_avg_fit_and_env(s);
         if(s.get_time() % 1  == 0)
@@ -91,29 +105,29 @@ void test_observer()
 
 
     ///Simualtions have one rng for environmetal switches that is always seeded to 0
-        {
-            int generations = 200;
-            double change_f = 0.9;
+    {
+        int generations = 200;
+        double change_f = 0.9;
 
-            all_params params{};
-            params.s_p.change_freq = change_f;
-            params.s_p.n_generations = generations;
-            params.p_p.number_of_inds = 10;
+        all_params params{};
+        params.s_p.change_freq = change_f;
+        params.s_p.n_generations = generations;
+        params.p_p.number_of_inds = 10;
 
-            params.s_p.seed = 1;
-            simulation lhs{params};
-            observer o_lhs;
-            exec(lhs, o_lhs);
+        params.s_p.seed = 1;
+        simulation lhs{params};
+        observer o_lhs;
+        exec(lhs, o_lhs);
 
-            params.s_p.seed = 2;
-            simulation rhs{params};
-            observer o_rhs;
-            exec(rhs, o_rhs);
+        params.s_p.seed = 2;
+        simulation rhs{params};
+        observer o_rhs;
+        exec(rhs, o_rhs);
 
-            assert(o_lhs.get_env_values() == o_rhs.get_env_values());
+        assert(o_lhs.get_env_values() == o_rhs.get_env_values());
 
 
-        }
+    }
 
 }
 #endif

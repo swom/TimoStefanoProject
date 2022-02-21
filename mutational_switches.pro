@@ -4,6 +4,7 @@ HEADERS +=  \
   Stopwatch.hpp \
   environment.h \
   histogram.h \
+  ind_data.h \
   individual.h \
   input_output.h \
   network.h \
@@ -20,6 +21,7 @@ HEADERS +=  \
 SOURCES +=  \
   environment.cpp \
   histogram.cpp \
+  ind_data.cpp \
   individual.cpp \
   input_output.cpp \
   main.cpp \

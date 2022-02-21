@@ -71,5 +71,17 @@ double calc_sqr_distance(const individual& i, double env_value);
 ///!!!!Attention!!! for now no input is provided
 std::vector<double> response(const individual& ind);
 
+
+namespace spectrum {
+///Calculates the mutational spectrum
+///of each weight and bias of the network
+///and stores them as structures of histograms
+network_spectrum calculate_mutational_spectrum( const individual& ind,
+                                                double mut_step,
+                                                int n_mutations,
+                                                std::mt19937_64& rng,
+                                                int n_bins,
+                                                const value_range& range);
+}
 void test_individual();
 #endif // INDIVIDUAL_H

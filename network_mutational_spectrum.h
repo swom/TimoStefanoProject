@@ -5,14 +5,25 @@
 #include <algorithm>
 #include"network.h"
 #include "histogram.h"
+namespace spectrum {
+
+using node = std::vector<histogram>;
+using layer = std::vector<node>;
+using net = std::vector<layer>;
+
+using layer_biases = std::vector<histogram>;
+using net_biases = std::vector<layer_biases>;
 
 struct network_spectrum{
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(network_spectrum,
+                                   m_outputs_of_mutated_weights,
+                                   m_outputs_of_mutated_biases);
 
     ///The ouput of the netwrok for each mutatation on each weight
-    std::vector<std::vector<std::vector<histogram>>> m_outputs_of_mutated_weights;
+    net m_outputs_of_mutated_weights;
 
     ///The ouput of the netwrok for each mutatation on each bias
-    std::vector<std::vector<histogram>> m_outputs_of_mutated_biases;
+    net_biases m_outputs_of_mutated_biases;
 };
 
 
@@ -42,4 +53,5 @@ template <template<typename...> class R=std::vector,
    std::vector<double> extract_first_outputs_biases(const std::vector<std::vector<std::vector<std::vector<double>>>> &spectrum_biases);
 
 
+}
 #endif // NETWORK_MUTATIONAL_SPECTRUM_H
