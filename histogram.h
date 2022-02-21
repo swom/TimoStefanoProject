@@ -7,6 +7,7 @@
 class histogram
 {
 public:
+    histogram(){};
     histogram( const std::vector<double>& values,
                int bin_number,
                value_range range_values);

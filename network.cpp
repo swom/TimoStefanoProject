@@ -201,7 +201,6 @@ bool first_output_behaves_like_identity_function (const network& n)
 
 bool first_output_always_returns_target_value (const network& n, double target )
 {
-    //Stub
     assert(n.get_biases().size());
     int n_trials = 1000;
     std::vector<bool> trials(n_trials);
@@ -211,7 +210,6 @@ bool first_output_always_returns_target_value (const network& n, double target )
         trials.at(i) = success;
     }
     return std::all_of(trials.begin(), trials.end(), [](bool v) { return v; });
-    //
 }
 
 #ifndef NDEBUG

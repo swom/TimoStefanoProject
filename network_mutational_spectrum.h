@@ -9,10 +9,10 @@
 struct network_spectrum{
 
     ///The ouput of the netwrok for each mutatation on each weight
-    std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>> m_outputs_of_mutated_weights;
+    std::vector<std::vector<std::vector<histogram>>> m_outputs_of_mutated_weights;
 
     ///The ouput of the netwrok for each mutatation on each bias
-    std::vector<std::vector<std::vector<std::vector<double>>>> m_outputs_of_mutated_biases;
+    std::vector<std::vector<histogram>> m_outputs_of_mutated_biases;
 };
 
 
@@ -37,9 +37,9 @@ template <template<typename...> class R=std::vector,
     return accum;
 }
 
-std::vector<double> extract_first_outputs_weights(const network_spectrum &v);
+   std::vector<double> extract_first_outputs_weights(const std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>> &spectrum_weights);
 
-std::vector<double> extract_first_outputs_biases(const network_spectrum &v);
+   std::vector<double> extract_first_outputs_biases(const std::vector<std::vector<std::vector<std::vector<double>>>> &spectrum_biases);
 
 
 #endif // NETWORK_MUTATIONAL_SPECTRUM_H
