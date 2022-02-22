@@ -1,3 +1,5 @@
+#ifndef STOPWATCH_H
+#define STOPWATCH_H
 // Copyright Ingo Proff 2017.
 // https://github.com/CrikeeIP/Stopwatch
 // Distributed under the MIT Software License (X11 license).
@@ -6,6 +8,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <chrono>
 
 
@@ -111,3 +114,4 @@ std::string show_times( const std::vector<std::uint64_t>& times ){
 }
 
 } //namespace stopwatch
+#endif // STOPWATCH_H

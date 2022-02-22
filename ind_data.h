@@ -7,10 +7,18 @@ struct ind_data
 {
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(ind_data,
                                    ind,
-                                   mutationl_spectrum,
                                    gen);
 individual ind;
-network_spectrum mutationl_spectrum;
+int gen;
+};
+struct ind_spectrum
+{
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(ind_spectrum,
+                                   ind,
+                                   mutational_spectrum,
+                                   gen);
+individual ind;
+network_spectrum mutational_spectrum;
 int gen;
 };
 

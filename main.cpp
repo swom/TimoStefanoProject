@@ -1,8 +1,8 @@
-#include "parser.h"
 #include <cassert>
 #include <string>
 #include <vector>
 
+#include "parser.h"
 
 #ifndef NDEBUG
 void test() {
@@ -42,8 +42,6 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
     observer o{convert_obs_args(results)};
     exec(s, o);
 
-    stopwatch::Stopwatch sw;
-
     std::cout << "Saving" << std::endl;
     save_json(o,
               convert_arc_to_string(params.i_p.net_par.net_arc)+ "_" +
@@ -51,6 +49,5 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
               params.i_p.net_par.str_func +
               ".json");
 
-    std::cout << "Saving done" << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
     return 0;
 }

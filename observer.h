@@ -1,7 +1,6 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
 #include "simulation.h"
-#include "Stopwatch.hpp"
 
 struct obs_param
 {
@@ -33,8 +32,11 @@ public:
     ///Saves the avg fitness and current environment value
     void store_avg_fit_and_env(const simulation& s);
 
-    ///Saves the 100 best individuals in the population
+    ///Saves the n best individuals in the population where n is a parameter of sim
     void save_best_n_inds(const simulation& s);
+    ///Saves the mutational spectrum of the best n individuals in population
+    /// where n is a parameter of simulation
+    void save_best_n_inds_mut_spectrum(const simulation& s);
 
     const all_params& get_params() const noexcept {return m_params;};
 
@@ -45,6 +47,7 @@ private:
     std::vector<double> m_avg_fitnesses;
     std::vector<double> m_var_fitnesses;
     std::vector<std::vector<ind_data>> m_top_inds;
+    std::vector<std::vector<ind_spectrum>> m_top_inds_spectrum;
     std::vector<double> m_env_values;
     all_params m_params = {};
     int m_n_inds = 0;
