@@ -10,12 +10,6 @@ histogram::histogram(const std::vector<double>& values,
 {
     try
     {
-        if(*std::max(values.begin(), values.end()) > range_values.m_end ||
-                *std::min(values.begin(), values.end()) < range_values.m_start)
-        {
-            throw std::invalid_argument{"The range provided does not encompass all values"};
-        }
-
         //Create map intervals
         auto step = range_values.calculate_extension() / bin_number;
         auto start_bin_value = range_values.m_start + step;
@@ -24,11 +18,19 @@ histogram::histogram(const std::vector<double>& values,
             m_binned_values_count.insert({start_bin_value + step * i, 0});
         }
 
-        //Count observations
-        for(const auto& value : values)
+        if(values.size())
         {
-            auto it = m_binned_values_count.lower_bound(value)++;
-            it->second ++;
+            if(*std::max(values.begin(), values.end()) > range_values.m_end ||
+                    *std::min(values.begin(), values.end()) < range_values.m_start)
+            {
+                throw std::invalid_argument{"The range provided does not encompass all values"};
+            }
+
+            //Count observations
+            for(const auto& value : values)
+            {
+                m_binned_values_count.lower_bound(value)->second ++;
+            }
         }
     }
     catch (const std::exception& e)

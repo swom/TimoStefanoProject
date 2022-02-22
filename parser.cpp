@@ -31,6 +31,16 @@ env_param convert_env_args(const cxxopts::ParseResult& results)
 }
 
 ///NOT tested!!!
+obs_param convert_obs_args(const cxxopts::ParseResult& results)
+{
+    return obs_param{
+        results["n_ind"].as<int>(),
+                results["n_mutations"].as<int>(),
+                results["n_bins"].as<int>()
+    };
+}
+
+///NOT tested!!!
 ind_param convert_ind_args(const cxxopts::ParseResult& results)
 {
     return ind_param{
@@ -98,6 +108,15 @@ cxxopts::Options create_parser(){
             ("G,num_gens",
              "number of generations for which the simulation has to run",
              cxxopts::value<int>()->default_value("1000000"))
+            ("i,n_inds",
+             "number of individuals to register everytime in depth data on individuals is saved",
+             cxxopts::value<int>()->default_value("1"))
+            ("b,n_bins",
+             "number of bins in whihc outputs of mutational spectrums of network need to be subdivided",
+             cxxopts::value<int>()->default_value("100"))
+            ("m,n_mutations",
+             "number of mutation each weight and bias undergoes  to calculate the mutational spectrums of a network",
+             cxxopts::value<int>()->default_value("100000"))
             ("h,help",
              "explains the stuff")
             ("t,test",

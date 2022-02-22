@@ -24,6 +24,8 @@ pop_param convert_pop_args(const cxxopts::ParseResult& results);
 
 sim_param convert_sim_args(const cxxopts::ParseResult& results);
 
+obs_param convert_obs_args(const cxxopts::ParseResult& results);
+
 ///---------------------
 
 std::function<double(double)> parse_act_func(const std::vector<std::string>& args);

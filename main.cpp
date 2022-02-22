@@ -39,7 +39,7 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
 #endif
 
     simulation s{params};
-    observer o;
+    observer o{convert_obs_args(results)};
     exec(s, o);
 
     save_json(o,

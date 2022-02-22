@@ -1,11 +1,22 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
 #include "simulation.h"
+struct obs_param
+{
+    int m_n_inds;
+    int m_n_mutations;
+    int m_n_bins;
+};
 
 class observer
 {
 public:
     observer();
+    observer(const obs_param& o_p):
+        m_n_inds{o_p.m_n_inds},
+        m_n_mutations(o_p.m_n_mutations),
+        m_n_bins(o_p.m_n_bins)
+    {}
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(observer,
                                    m_avg_fitnesses,
@@ -21,7 +32,7 @@ public:
     void store_avg_fit_and_env(const simulation& s);
 
     ///Saves the 100 best individuals in the population
-    void save_best_n_inds(const simulation& s, int n);
+    void save_best_n_inds(const simulation& s);
 
     const all_params& get_params() const noexcept {return m_params;};
 
@@ -34,6 +45,9 @@ private:
     std::vector<std::vector<ind_data>> m_top_inds;
     std::vector<double> m_env_values;
     all_params m_params = {};
+    int m_n_inds = 0;
+    int m_n_mutations;
+    int m_n_bins;
 };
 
 bool operator==(const all_params& lhs, const all_params& rhs);
