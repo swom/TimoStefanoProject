@@ -7,6 +7,8 @@ struct obs_param
     int m_n_inds;
     int m_n_mutations;
     int m_n_bins;
+    int best_ind_saving_freq;
+    int best_ind_spectrum_saving_freq;
 };
 
 class observer
@@ -14,6 +16,8 @@ class observer
 public:
     observer();
     observer(const obs_param& o_p):
+        m_best_ind_saving_freq(o_p.best_ind_saving_freq),
+        m_best_ind_spectrum_saving_freq(o_p.best_ind_spectrum_saving_freq),
         m_n_inds{o_p.m_n_inds},
         m_n_mutations(o_p.m_n_mutations),
         m_n_bins(o_p.m_n_bins)
@@ -43,6 +47,8 @@ public:
 
     void store_par (const simulation& s) {m_params = s.get_params();}
 
+    const int m_best_ind_saving_freq;
+    const int m_best_ind_spectrum_saving_freq;
 private:
 
     std::vector<double> m_avg_fitnesses;
@@ -52,8 +58,8 @@ private:
     std::vector<double> m_env_values;
     all_params m_params = {};
     int m_n_inds = 0;
-    int m_n_mutations;
-    int m_n_bins;
+    const int m_n_mutations;
+    const int m_n_bins;
 };
 
 bool operator==(const all_params& lhs, const all_params& rhs);

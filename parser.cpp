@@ -36,7 +36,10 @@ obs_param convert_obs_args(const cxxopts::ParseResult& results)
     return obs_param{
         results["n_inds"].as<int>(),
                 results["n_mutations"].as<int>(),
-                results["n_bins"].as<int>()
+                results["n_bins"].as<int>(),
+                results["best_inds_saving_freq"].as<int>(),
+                results["best_inds_spectrum_saving_freq"].as<int>()
+
     };
 }
 
@@ -111,6 +114,12 @@ cxxopts::Options create_parser(){
             ("i,n_inds",
              "number of individuals to register everytime in depth data on individuals is saved",
              cxxopts::value<int>()->default_value("1"))
+            ("s,best_inds_saving_freq",
+             "the number of generations after which the best n individuals are saved",
+             cxxopts::value<int>()->default_value("1"))
+            ("z,best_inds_spectrum_saving_freq",
+             "the number of generations after which the best n individuals' mutational spectrumsa are saved",
+             cxxopts::value<int>()->default_value("1000"))
             ("b,n_bins",
              "number of bins in whihc outputs of mutational spectrums of network need to be subdivided",
              cxxopts::value<int>()->default_value("100"))

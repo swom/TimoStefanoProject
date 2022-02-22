@@ -92,11 +92,11 @@ void exec(simulation& s , observer& o)
     {
         tick(s);
         o.store_avg_fit_and_env(s);
-        if(s.get_time() % 1  == 0)
+        if(s.get_time() % o.m_best_ind_saving_freq  == 0)
         {
             o.save_best_n_inds(s);
         }
-        if(s.get_time() % 1000 == 0)
+        if(s.get_time() % o.m_best_ind_spectrum_saving_freq == 0)
         {
             o.save_best_n_inds_mut_spectrum(s);
             std::cout << "Cycle " << s.get_time() << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
