@@ -23,6 +23,7 @@ public:
                                    m_avg_fitnesses,
                                    m_var_fitnesses,
                                    m_top_inds,
+                                   m_top_inds_spectrum,
                                    m_env_values,
                                    m_params)
 
