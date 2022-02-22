@@ -15,7 +15,7 @@ histogram::histogram(const std::vector<double>& values,
         auto start_bin_value = range_values.m_start + step;
         for(int i = 0; i != bin_number; i ++)
         {
-            m_binned_values_count.insert({start_bin_value + step * i, 0});
+            m_histogram.insert({start_bin_value + step * i, 0});
         }
 
         if(values.size())
@@ -29,7 +29,7 @@ histogram::histogram(const std::vector<double>& values,
             //Count observations
             for(const auto& value : values)
             {
-                m_binned_values_count.lower_bound(value)->second ++;
+                m_histogram.lower_bound(value)->second ++;
             }
         }
     }

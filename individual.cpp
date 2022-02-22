@@ -86,22 +86,18 @@ std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>> calc_mut
 
 namespace spectrum{
 
-net calc_mutational_spectrum_weights_in_bins(const individual& ind,
+net_w_spectrum calc_mutational_spectrum_weights_in_bins(const individual& ind,
                                              double mut_step,
                                              int n_mutations,
                                              std::mt19937_64& rng,
-                                             int n_bins,
-                                             const value_range& range)
+                                             net_w_spectrum& network_weights_spectrum,
+                                             layer_w_spectrum& layer_spectrum,
+                                             node_w_spectrum& node_spectrum,
+                                             histogram& h)
 {
     auto mutable_net = ind.get_net();
     std::normal_distribution<double> mut_dist(0,mut_step);
-
-
-
-    net network_weights_spectrum(mutable_net.get_net_weights().size());
-    layer layer_spectrum;
-    node node_spectrum;
-    histogram h{{},n_bins, range};
+    network_weights_spectrum.resize(mutable_net.get_net_weights().size());
 
     for(auto layer_it = mutable_net.get_net_weights().begin(); layer_it != mutable_net.get_net_weights().end(); layer_it++)
     {
@@ -162,18 +158,18 @@ std::vector<std::vector<std::vector<std::vector<double>>>> calc_mutational_spect
 }
 
 
-net_biases calc_mutational_spectrum_biases_bins(const individual& ind,
+net_b_spectrum calc_mutational_spectrum_biases_bins(const individual& ind,
                                                 double mut_step,
                                                 int n_mutations,
                                                 std::mt19937_64& rng,
-                                                int n_bins,
-                                                const value_range& range)
+                                                net_b_spectrum& network_bias_spectrum,
+                                                layer_b_spectrum& layer_spectrum,
+                                                histogram& h)
 {
     auto mutable_net = ind.get_net();
     std::normal_distribution<double> mut_dist(0,mut_step);
-    net_biases network_bias_spectrum(mutable_net.get_biases().size());
-    layer_biases layer_spectrum;
-    histogram h{{},n_bins, range};
+    network_bias_spectrum.resize(mutable_net.get_biases().size());
+
 
     for(auto layer_it = mutable_net.get_reference_to_biases().begin(); layer_it != mutable_net.get_reference_to_biases().end(); layer_it++)
     {
@@ -195,26 +191,32 @@ net_biases calc_mutational_spectrum_biases_bins(const individual& ind,
     return network_bias_spectrum;
 }
 
-network_spectrum calculate_mutational_spectrum( const individual& ind,
+network_spectrum calculate_mutational_spectrum(const individual& ind,
                                                 double mut_step,
                                                 int n_mutations,
                                                 std::mt19937_64& rng,
-                                                int n_bins,
-                                                const value_range& range)
+                                                net_w_spectrum network_weights_spectrum,
+                                                layer_w_spectrum layer_spectrum,
+                                                node_w_spectrum node_spectrum,
+                                                net_b_spectrum network_bias_spectrum,
+                                                layer_b_spectrum layer_bias_spectrum,
+                                                histogram h)
 {
-    using namespace::spectrum;
     auto spectrum_weights = calc_mutational_spectrum_weights_in_bins(ind,
                                                                      mut_step,
                                                                      n_mutations,
                                                                      rng,
-                                                                     n_bins,
-                                                                     range);
+                                                                     network_weights_spectrum,
+                                                                     layer_spectrum,
+                                                                     node_spectrum,
+                                                                     h);
     auto spectrum_biases = calc_mutational_spectrum_biases_bins(ind,
                                                                 mut_step,
                                                                 n_mutations,
                                                                 rng,
-                                                                n_bins,
-                                                                range);
+                                                                network_bias_spectrum,
+                                                                layer_bias_spectrum,
+                                                                h);
 
     return network_spectrum{spectrum_weights, spectrum_biases};
 
@@ -359,13 +361,23 @@ void test_individual()
         auto range_lower_bound = ind_output - range_upper_bound;
         value_range range{range_lower_bound,range_upper_bound};
 
+        net_w_spectrum network_weights_spectrum;
+        layer_w_spectrum layer_spectrum;
+        node_w_spectrum node_spectrum;
+        net_b_spectrum network_bias_spectrum;
+        layer_b_spectrum layer_bias_spectrum;
+        histogram h{{},n_bins, range};
 
         auto net_spectrum = calculate_mutational_spectrum(i,
                                                           mut_step,
                                                           n_mutations_per_locus,
                                                           rng,
-                                                          n_bins,
-                                                          range);
+                                                          network_weights_spectrum,
+                                                          layer_spectrum,
+                                                          node_spectrum,
+                                                          network_bias_spectrum,
+                                                          layer_bias_spectrum,
+                                                          h);
 
         for(const auto& layer : net_spectrum.m_outputs_of_mutated_weights)
             for(const auto& node :layer)
@@ -375,9 +387,9 @@ void test_individual()
                 }
         for(const auto& layer : net_spectrum.m_outputs_of_mutated_biases)
             for(const auto& histogram :layer)
-                {
-                    assert(all_counts_are_in_middle_bin(histogram));
-                }
+            {
+                assert(all_counts_are_in_middle_bin(histogram));
+            }
     }
 
 }

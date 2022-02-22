@@ -13,21 +13,21 @@ public:
                value_range range_values);
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(histogram,
-                                   m_binned_values_count);
+                                   m_histogram);
     ///returns a constant reference to the range_count map
-    const std::map<double,int>& hist() const noexcept {return m_binned_values_count;}
+    const std::map<double,int>& hist() const noexcept {return m_histogram;}
     ///Add one observation in the correct key using lower_bound
-    void add_observation(double value){m_binned_values_count.lower_bound(value)->second++;}
+    void add_observation(double value){m_histogram.lower_bound(value)->second++;}
     ///Reset all observations count to 0
-    void reset_count() noexcept{std::for_each(m_binned_values_count.begin(),
-                                                     m_binned_values_count.end(),
+    void reset_count() noexcept{std::for_each(m_histogram.begin(),
+                                                     m_histogram.end(),
                                                      [](auto& key_value){return key_value.second = 0;});}
 
 
 private:
     ///The count of observations that fall in a given number of bins
     /// that divide homogeneously a range of values
-    std::map<double,int> m_binned_values_count;
+    std::map<double,int> m_histogram;
 };
 
 bool all_bins_have_same_n_obs_with_tolerance(const histogram &h);

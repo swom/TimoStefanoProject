@@ -34,7 +34,7 @@ env_param convert_env_args(const cxxopts::ParseResult& results)
 obs_param convert_obs_args(const cxxopts::ParseResult& results)
 {
     return obs_param{
-        results["n_ind"].as<int>(),
+        results["n_inds"].as<int>(),
                 results["n_mutations"].as<int>(),
                 results["n_bins"].as<int>()
     };
@@ -116,7 +116,7 @@ cxxopts::Options create_parser(){
              cxxopts::value<int>()->default_value("100"))
             ("m,n_mutations",
              "number of mutation each weight and bias undergoes  to calculate the mutational spectrums of a network",
-             cxxopts::value<int>()->default_value("100000"))
+             cxxopts::value<int>()->default_value("10000"))
             ("h,help",
              "explains the stuff")
             ("t,test",

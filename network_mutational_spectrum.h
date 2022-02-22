@@ -7,12 +7,12 @@
 #include "histogram.h"
 namespace spectrum {
 
-using node = std::vector<histogram>;
-using layer = std::vector<node>;
-using net = std::vector<layer>;
+using node_w_spectrum = std::vector<histogram>;
+using layer_w_spectrum = std::vector<node_w_spectrum>;
+using net_w_spectrum = std::vector<layer_w_spectrum>;
 
-using layer_biases = std::vector<histogram>;
-using net_biases = std::vector<layer_biases>;
+using layer_b_spectrum = std::vector<histogram>;
+using net_b_spectrum = std::vector<layer_b_spectrum>;
 
 struct network_spectrum{
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(network_spectrum,
@@ -20,10 +20,10 @@ struct network_spectrum{
                                    m_outputs_of_mutated_biases);
 
     ///The ouput of the netwrok for each mutatation on each weight
-    net m_outputs_of_mutated_weights;
+    net_w_spectrum m_outputs_of_mutated_weights;
 
     ///The ouput of the netwrok for each mutatation on each bias
-    net_biases m_outputs_of_mutated_biases;
+    net_b_spectrum m_outputs_of_mutated_biases;
 };
 
 
