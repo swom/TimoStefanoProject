@@ -1,6 +1,8 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
 #include "simulation.h"
+#include "Stopwatch.hpp"
+
 struct obs_param
 {
     int m_n_inds;

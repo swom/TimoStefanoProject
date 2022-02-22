@@ -76,16 +76,13 @@ namespace spectrum {
 ///Calculates the mutational spectrum
 ///of each weight and bias of the network
 ///and stores them as structures of histograms
-network_spectrum calculate_mutational_spectrum(const individual& ind,
+
+network_spectrum calculate_mutational_spectrum( const individual& ind,
                                                 double mut_step,
                                                 int n_mutations,
                                                 std::mt19937_64& rng,
-                                               net_w_spectrum network_weights_spectrum,
-                                               layer_w_spectrum layer_spectrum,
-                                               node_w_spectrum node_spectrum,
-                                               net_b_spectrum network_bias_spectrum,
-                                               layer_b_spectrum layer_bias_spectrum,
-                                               histogram h);
+                                                int n_bins,
+                                                const value_range& range);
 }
 void test_individual();
 #endif // INDIVIDUAL_H

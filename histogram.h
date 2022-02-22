@@ -32,4 +32,5 @@ private:
 
 bool all_bins_have_same_n_obs_with_tolerance(const histogram &h);
 bool all_counts_are_in_middle_bin(const histogram &h);
+bool all_observations_counted(const histogram &h, int n_mutations);
 #endif // HISTOGRAM_H

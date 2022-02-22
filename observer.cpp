@@ -1,5 +1,6 @@
 #include "observer.h"
 #include <fstream>
+#include <iostream>
 #include "Stopwatch.hpp"
 
 observer::observer()
@@ -39,23 +40,23 @@ void observer::save_best_n_inds(const simulation &s)
 {
     auto best_inds = get_best_n_inds(s, m_n_inds);
     std::mt19937_64 rng;
+
     std::vector<ind_data> ind_data_v(best_inds.size());
 
-    std::transform(best_inds.begin(), best_inds.end(), ind_data_v.begin(),
-                   [&s, &rng, this](const auto& ind)
-    {return ind_data{ind,
-                    spectrum::calculate_mutational_spectrum(ind,
-                                                            s.get_params().p_p.mut_step,
-                                                            m_n_mutations,
-                                                            rng,
-                                                            net_w_spectrum{},
-                                                            layer_w_spectrum{},
-                                                            node_w_spectrum{},
-                                                            net_b_spectrum{},
-                                                            layer_b_spectrum{},
-                                                            histogram{{},m_n_bins, {-1,1}}),
-        s.get_time()};
-    });
+    for(auto i = best_inds.begin(); i != best_inds.end(); i++)
+    {
+        ind_data_v[std::distance(best_inds.begin(), i)] = ind_data{*i,
+                calculate_mutational_spectrum(*i,
+                                              s.get_params().p_p.mut_step,
+                                              m_n_mutations,
+                                              rng,
+                                              m_n_bins,
+                                              {-1,1}),
+                s.get_time()
+    };
+
+    }
+
     m_top_inds.push_back(ind_data_v);
 }
 
@@ -80,7 +81,7 @@ void exec(simulation& s , observer& o)
         {
             o.save_best_n_inds(s);
         }
-        if(s.get_time() % 1000  == 0)
+        if(s.get_time() % 1000 == 0)
         {
             std::cout << "Cycle " << s.get_time() << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
         }

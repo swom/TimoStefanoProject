@@ -60,3 +60,10 @@ bool all_counts_are_in_middle_bin(const histogram &h)
     return std::all_of(map.begin(), map.end(), []
                        (const auto& map_pair){return map_pair.second == 0;});
 }
+
+bool all_observations_counted(const histogram &h, int n_mutations)
+{
+  auto n_observations_registered = std::accumulate(h.hist().begin(), h.hist().end(), 0,
+                                                   [](int count, const auto& key_value){return count + key_value.second;});
+  return n_mutations == n_observations_registered;
+}
