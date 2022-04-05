@@ -58,12 +58,13 @@ bool is_linear(std::function<double(double)> f)
 for(int i = 0 ; i != 5 ; i++)
 {
     auto n = rng();
-    if(f(n) != linear(n))
+    if(f(n) != idenity(n))
     {
         is_linear = false;
         break;
     }
 }
+
 return is_linear;
 }
 bool operator==(const network& lhs, const network& rhs)
@@ -125,9 +126,14 @@ double sigmoid(double x)
     return x / (1 + std::abs(x));
 }
 
-double linear(double x)
+double idenity(double x)
 {
     return x;
+}
+
+double linear(double x, double slope, double intercept)
+{
+    return x * slope + intercept;
 }
 
 void network::mutate(const double& mut_rate,
@@ -178,7 +184,33 @@ std::vector<double> response(const network& n, std::vector<double> input)
     return input;
 }
 
+bool first_output_behaves_like_identity_function (const network& n)
+{
+    //Stub
+    assert(n.get_biases().size());
+    int n_trials = 1000;
+    std::vector<bool> trials(n_trials);
+    for(int i = 0; i != n_trials; i++)
+    {
+        auto success = response(n, {double(i)}).at(0) == idenity(i);
+        trials.at(i) = success;
+    }
+    return std::all_of(trials.begin(), trials.end(), [](bool v) { return v; });
+    //
+}
 
+bool first_output_always_returns_target_value (const network& n, double target )
+{
+    assert(n.get_biases().size());
+    int n_trials = 1000;
+    std::vector<bool> trials(n_trials);
+    for(int i = 0; i != n_trials; i++)
+    {
+        auto success = response(n, {double(i)}).at(0) == target;
+        trials.at(i) = success;
+    }
+    return std::all_of(trials.begin(), trials.end(), [](bool v) { return v; });
+}
 
 #ifndef NDEBUG
 void test_network() //!OCLINT
@@ -213,7 +245,7 @@ void test_network() //!OCLINT
         std::vector<double> input{1};
         auto using_member_function = response(n,{input});
         auto using_given_function = response(n,input, &sigmoid);
-        auto using_different_given_function = response(n, input, &linear);
+        auto using_different_given_function = response(n, input, &idenity);
         assert(using_given_function == using_member_function);
         assert(using_different_given_function != using_member_function);
     }
@@ -237,7 +269,7 @@ void test_network() //!OCLINT
         std::vector<double> input{1};
         auto using_member_function = response(n,{input});
         auto using_given_function = response(n,input, &sigmoid);
-        auto using_different_given_function = response(n, input, &linear);
+        auto using_different_given_function = response(n, input, &idenity);
         assert(using_given_function == using_member_function);
         assert(using_different_given_function != using_member_function);
     }
@@ -251,14 +283,14 @@ void test_network() //!OCLINT
         //For simple net with weights == 0
         auto expected_output = std::vector<double>{0};
         network n{very_simple_nodes};
-        auto output = response(n, input, &linear);
+        auto output = response(n, input, &idenity);
         assert(output == expected_output);
 
         //Let's change the weights of the network to something else than 0(e.g 1)
         double new_weight_value = 1.0;
         n = change_all_weights(n,new_weight_value);
         expected_output = std::vector<double>{2};
-        output = response(n,input, &linear);
+        output = response(n,input, &idenity);
         assert(output == expected_output);
 
         //Testing a more complex arhitecture
@@ -266,7 +298,7 @@ void test_network() //!OCLINT
         network not_too_simple{not_too_simple_nodes};
         not_too_simple = change_all_weights(not_too_simple, new_weight_value);
         expected_output = {1 * 3 * 3};
-        output = response(not_too_simple, input, &linear);
+        output = response(not_too_simple, input, &idenity);
         assert(output == expected_output);
 
     }

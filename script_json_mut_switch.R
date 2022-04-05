@@ -5,7 +5,6 @@ library(dplyr)
 library(tidyr)
 
 
-
 ####Function declaration and definition ####
 Timetochangecalc = function (threshold, simple_res){
   curenv=0

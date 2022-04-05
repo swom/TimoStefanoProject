@@ -1,17 +1,17 @@
 library(rjson)
 library(data.table)
-library(tidyr)
 library(tidyverse)
 library(ggplot2)
 library(stringi)
 library(rlist)
 library(igraph)
 library(ggraph)
+library(tidygraph)
 library(ggnetwork)
 library(networkD3)
 library(magick)
 
-dir = "X:/TimoStefanoProject"
+dir = dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(dir)
 
 results=list()
@@ -60,7 +60,8 @@ for (i in  list.files(path = '.', pattern = pattern)){
     as.integer()
   
   
-  ###Keeping only network architecture, expanding to have each connection as a row
+  ###Keeping only network architecture,
+  #  expanding to have each connection as a row
   
   top_inds_net = unnest_wider(get(name1), col = "network")%>%
         mutate(m_input_size = NULL, fitness = NULL)%>%
@@ -110,18 +111,21 @@ for (i in  list.files(path = '.', pattern = pattern)){
   }
   id = seq(1:length(layer))
   
-  node_tibble = as_tibble(cbind(id, layer, node))
+  node_tibble = as_tibble(cbind(id, layer, node)) %>% 
+    mutate(id = as.factor(id))
   
   #Make the list of edges
   
   from = vector()
   to = vector()
   for(j in 1:nrow(node_tibble)){
-    from = c(from, rep(node_tibble$id[j], nrow(filter(node_tibble, layer == (node_tibble$layer[j]+1)))))
+    from = c(from, rep(node_tibble$id[j],
+                       nrow(filter(node_tibble, layer == (node_tibble$layer[j]+1)))))
     to = c(to, filter(node_tibble, layer == (node_tibble$layer[j]+1))$id)
   }
   edge_tibble = as_tibble(cbind(from, to))
   
+
   #####Now let's loop through generations####
   # for(j in levels(get(name2)$gen)){
   for(j in levels(get(name2)$ind_ID)){
@@ -134,7 +138,7 @@ for (i in  list.files(path = '.', pattern = pattern)){
     edge_tibble_ind = cbind(edge_tibble, ind$value, ind$w_sign)
   
   node_tibble = as_tibble(cbind(id, layer, node))
-  
+
   # ###plot network####
   ##create igraph or ggraph object
   network_d <- igraph::graph_from_data_frame(d = edge_tibble_ind,
@@ -143,7 +147,7 @@ for (i in  list.files(path = '.', pattern = pattern)){
   
   E(network_d)$color = as.factor(edge_tibble_ind$`ind$w_sign`)
   E(network_d)$value = edge_tibble_ind$`ind$value`
-  network_d = network_d - E(network_d)[E(network_d)$weight == 0]
+  # network_d = network_d - E(network_d)[E(network_d)$weight == 0]
 
 
   jpeg(paste("Plot",
@@ -157,7 +161,7 @@ for (i in  list.files(path = '.', pattern = pattern)){
        height = 700)
   
   title = paste("Generation ", ind$ind_ID[1])
-  
+
   plot(network_d, layout = l,
        size = abs(V(network_d)$value/max(V(network_d)$value) * 10), 
        edge.arrow.size = 0.5,                           # Arrow size, defaults to 1
@@ -171,7 +175,7 @@ for (i in  list.files(path = '.', pattern = pattern)){
   dev.off()
   
   }  
-
+ 
 }
 #####Create gif #####
   ###list file names and read in
@@ -183,11 +187,12 @@ for (i in  list.files(path = '.', pattern = pattern)){
   
   ## join the images together
   img_joined <- image_join(img_list)
-  
+  img_sub = head(img_joined, length(imgs) / 10)
   ## animate at 2 frames per second
-  img_animated <- image_animate(img_joined, fps = 2)
+  img_animated <- image_animate(img_sub, fps = 2)
   
   ## save to disk
+
   path = paste("Gif",get(name1)$seed[1], get(name1)$mut_rate_dup[1], get(name1)$change_freq[1], get(name1)$architecture[1], ".gif", sep = "_")
   image_write(image = img_animated,
               path = path)
