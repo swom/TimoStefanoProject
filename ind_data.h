@@ -11,13 +11,16 @@ struct ind_data
 individual ind;
 int gen;
 };
+
 struct ind_spectrum
 {
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(ind_spectrum,
                                    ind,
+                                   ind_output,
                                    mutational_spectrum,
                                    gen);
 individual ind;
+std::vector<double> ind_output;
 network_spectrum mutational_spectrum;
 int gen;
 };

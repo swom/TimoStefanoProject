@@ -47,8 +47,8 @@ public:
 
     void store_par (const simulation& s) {m_params = s.get_params();}
 
-    const int m_best_ind_saving_freq;
-    const int m_best_ind_spectrum_saving_freq;
+    const int m_best_ind_saving_freq = 1;
+    const int m_best_ind_spectrum_saving_freq = 1;
 private:
 
     std::vector<double> m_avg_fitnesses;
@@ -58,8 +58,8 @@ private:
     std::vector<double> m_env_values;
     all_params m_params = {};
     int m_n_inds = 0;
-    const int m_n_mutations;
-    const int m_n_bins;
+    const int m_n_mutations = 0;
+    const int m_n_bins = 0;
 };
 
 bool operator==(const all_params& lhs, const all_params& rhs);

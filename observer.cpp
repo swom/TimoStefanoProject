@@ -56,11 +56,14 @@ void observer::save_best_n_inds_mut_spectrum(const simulation &s)
     auto best_inds = get_best_n_inds(s, m_n_inds);
     std::mt19937_64 rng;
 
-    std::vector<ind_spectrum> ind_data_v(best_inds.size());
+    std::vector<ind_spectrum> ind_spectrum_v(best_inds.size());
 
     for(auto i = best_inds.begin(); i != best_inds.end(); i++)
     {
-        ind_data_v[std::distance(best_inds.begin(), i)] = ind_spectrum{*i,
+        auto index = std::distance(best_inds.begin(), i);
+
+        ind_spectrum_v[index] = ind_spectrum{*i,
+                response(*i),
                 calculate_mutational_spectrum(*i,
                                               s.get_params().p_p.mut_step,
                                               m_n_mutations,
@@ -72,7 +75,7 @@ void observer::save_best_n_inds_mut_spectrum(const simulation &s)
 
     }
 
-    m_top_inds_spectrum.push_back(ind_data_v);
+    m_top_inds_spectrum.push_back(ind_spectrum_v);
 }
 
 void save_json(const observer& o, const std::string& filename)
