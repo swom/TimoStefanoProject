@@ -29,7 +29,7 @@ make clean
 qmake mutational_switches.pro
 make 
 
-declare -a architectures=("1,2,1" "1,5,1" "1,5,1,1")
+declare -a architectures=("1,2,1" "1,5,1" "1,5,5,1" "1,10,2,1")
 
 for i in $(seq 1 10)
 do
