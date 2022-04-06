@@ -14,7 +14,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --ntasks=1
-#SBATCH --mem=1G
+#SBATCH --mem=3G
 #SBATCH --job-name=single_switch_sim
 #SBATCH --output=switch_%j.log
 
