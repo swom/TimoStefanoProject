@@ -12,6 +12,13 @@
 // Hanno Hildenbrandt 2015-2017
 
 
+#if defined (__GNUC__) | defined (__clang__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Weffc++"
+# pragma GCC diagnostic ignored "-Wshadow"
+# pragma GCC diagnostic ignored "-Wpedantic"
+#endif
+
 #include <type_traits>
 #include <stdexcept>
 #include <cassert>
@@ -1198,5 +1205,8 @@ namespace std {
 }
 #endif
 
+#if defined (__GNUC__) | defined (__clang__)
+# pragma GCC diagnostic pop
+#endif
 
 #endif
