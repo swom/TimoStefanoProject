@@ -39,6 +39,7 @@ Makefile
 Makefile.*
 release/
 simulation.pro.user
+.Rhistory
 
 #Saved files
 *.json
