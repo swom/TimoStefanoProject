@@ -102,6 +102,9 @@ void exec(simulation& s , observer& o)
         if(s.get_time() > (s.get_n_gen() - 1000))
         {
             o.save_best_n_inds_mut_spectrum(s);
+        }
+        if(s.get_time() % 1000 == 0)
+        {
             std::cout << "Cycle " << s.get_time() << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
         }
     }
