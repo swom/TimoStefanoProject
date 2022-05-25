@@ -118,7 +118,7 @@ net_w_spectrum calc_mutational_spectrum_weights_in_bins(const individual& ind,
                 }
                 if(!all_observations_counted(h, n_mutations))
                 {
-                    throw std::runtime_error{"not all observation counted"};
+                    std::cerr << "not all observation counted";
                 }
 
                 auto index_weight = std::distance(node_it->begin(), weight);

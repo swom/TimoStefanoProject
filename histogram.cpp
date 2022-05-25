@@ -12,8 +12,8 @@ histogram::histogram(const std::vector<double>& values,
     {
         //Create map intervals
         auto step = range_values.calculate_extension() / bin_number;
-        auto start_bin_value = range_values.m_start + step;
-        for(int i = 0; i != bin_number; i ++)
+        auto start_bin_value = range_values.m_start;
+        for(int i = 0; i != bin_number + 1; i ++)
         {
             m_histogram.insert({start_bin_value + step * i, 0});
         }

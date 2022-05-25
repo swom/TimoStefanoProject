@@ -17,7 +17,9 @@ public:
     ///returns a constant reference to the range_count map
     const std::map<double,int>& hist() const noexcept {return m_histogram;}
     ///Add one observation in the correct key using lower_bound
-    void add_observation(double value){m_histogram.lower_bound(value)->second++;}
+    void add_observation(double value){
+        m_histogram.lower_bound(value)->second++;
+    }
     ///Reset all observations count to 0
     void reset_count() noexcept{std::for_each(m_histogram.begin(),
                                                      m_histogram.end(),

@@ -62,6 +62,7 @@ void observer::save_best_n_inds_mut_spectrum(const simulation &s)
     {
         auto index = std::distance(best_inds.begin(), i);
 
+        value_range range = {-1,1};
         ind_spectrum_v[index] = ind_spectrum{*i,
                 response(*i),
                 calculate_mutational_spectrum(*i,
@@ -69,7 +70,7 @@ void observer::save_best_n_inds_mut_spectrum(const simulation &s)
                                               m_n_mutations,
                                               rng,
                                               m_n_bins,
-                                              {-1,1}),
+                                              range),
                 s.get_time()
     };
 
