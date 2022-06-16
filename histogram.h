@@ -18,7 +18,16 @@ public:
     const std::map<double,int>& hist() const noexcept {return m_histogram;}
     ///Add one observation in the correct key using lower_bound
     void add_observation(double value){
-        m_histogram.lower_bound(value)->second++;
+        auto lower_bound = m_histogram.lower_bound(value);
+
+        if( lower_bound == m_histogram.end())
+        {
+            m_histogram.begin()->second++;
+        }
+        else
+        {
+            lower_bound->second++;
+        }
     }
     ///Reset all observations count to 0
     void reset_count() noexcept{std::for_each(m_histogram.begin(),

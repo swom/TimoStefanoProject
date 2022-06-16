@@ -113,7 +113,8 @@ net_w_spectrum calc_mutational_spectrum_weights_in_bins(const individual& ind,
                 for(int i = 0; i != n_mutations; i++)
                 {
                     *weight +=  mut_dist(rng);
-                    h.add_observation(response(mutable_net, ind.get_input_values())[0]);
+                    auto response_value = response(mutable_net, ind.get_input_values())[0];
+                    h.add_observation(response_value); // if observation exceeds range of histogram it is counted in first bin of histogram"
                     *weight = original_weight;
                 }
                 if(!all_observations_counted(h, n_mutations))
