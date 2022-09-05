@@ -167,5 +167,25 @@ void test_observer()
         assert(o.get_all_inds_nets().back().m_nets.size() == s.get_pop().get_inds().size());
     }
 
+    ///It is possible to save all individuals' networks every n generations
+    {
+        int generations = 200;
+        int all_inds_rec_freq = 2;
+
+        all_params params{};
+        params.s_p.n_generations = generations;
+        params.p_p.number_of_inds = 10;
+
+        obs_param o_p;
+        o_p.all_inds_rec_freq = all_inds_rec_freq;
+
+        simulation s{params};
+        observer o{o_p};
+        exec(s, o);
+
+        unsigned int expected_number_of_records = generations / all_inds_rec_freq;
+        assert(o.get_all_inds_nets().size() == expected_number_of_records);
+    }
+
 }
 #endif

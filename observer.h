@@ -10,17 +10,35 @@ struct Ind_Nets
 
 struct obs_param
 {
+    obs_param(int n_inds = 1,
+    int n_mutations = 1000,
+    int n_bins = 100,
+    int best_ind_sav_freq = 1,
+    int best_ind_spec_sav_freq = 1,
+    int all_inds_record_freq = 1):
+        m_n_inds{n_inds},
+         m_n_mutations{n_mutations},
+         m_n_bins{n_bins},
+         best_ind_saving_freq{best_ind_sav_freq},
+         best_ind_spectrum_saving_freq{best_ind_spec_sav_freq},
+         all_inds_rec_freq{all_inds_record_freq}
+    {
+
+    }
+
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(obs_param,
                                     m_n_inds,
                                     m_n_mutations,
                                     m_n_bins,
                                     best_ind_saving_freq,
-                                    best_ind_spectrum_saving_freq)
+                                    best_ind_spectrum_saving_freq,
+                                   all_inds_rec_freq)
     int m_n_inds;
     int m_n_mutations;
     int m_n_bins;
     int best_ind_saving_freq;
     int best_ind_spectrum_saving_freq;
+    int all_inds_rec_freq;
 };
 
 class observer

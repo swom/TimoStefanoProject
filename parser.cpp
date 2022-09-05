@@ -38,7 +38,8 @@ obs_param convert_obs_args(const cxxopts::ParseResult& results)
                 results["n_mutations"].as<int>(),
                 results["n_bins"].as<int>(),
                 results["best_inds_saving_freq"].as<int>(),
-                results["best_inds_spectrum_saving_freq"].as<int>()
+                results["best_inds_spectrum_saving_freq"].as<int>(),
+                results["all_inds_rec_freq"].as<int>()
 
     };
 }
@@ -86,46 +87,57 @@ cxxopts::Options create_parser(){
                              "Insert the parameters for the simualtion and see if you can get a mutational switch to evolve");
     options.allow_unrecognised_options();
     options.add_options()
-            ("A,targetA", "the value fo env target A", cxxopts::value<double>()->default_value("-0.5"))
-            ("B,targetB", "the value fo env target B", cxxopts::value<double>()->default_value("0.5"))
-            ("N,net_arc", "the network architecture", cxxopts::value<std::vector<int>>()->default_value("1,2,1"))
-            ("F,act_func",
-             "the string representing the name of the activation function of the net",
-             cxxopts::value<std::string>()->default_value("sigmoid"))
-            ("R,mut_rate",
-             "the probability with whihc a mutation can happen",
-             cxxopts::value<double>()->default_value("0.01"))
-            ("M,mut_step",
-             "the variance of the normal distribution from which mutation size is drawn",
-             cxxopts::value<double>()->default_value("0.1"))
-            ("P,pop_size","the numebr of individuals in the simulation",cxxopts::value<int>()->default_value("1000"))
+            ("A,targetA",
+             "the value fo env target A",
+             cxxopts::value<double>()->default_value("-0.5"))
+            ("a, all_inds_rec_freq",
+             "the number of generations after which all individuals' networks are recorded",
+             cxxopts::value<int>()->default_value("1"))
+            ("B,targetB",
+             "the value fo env target B",
+             cxxopts::value<double>()->default_value("0.5"))
+            ("b,n_bins",
+             "number of bins in whihc outputs of mutational spectrums of network need to be subdivided",
+             cxxopts::value<int>()->default_value("100"))
             ("C,change_freq",
              "the probability with which the target value will change",
              cxxopts::value<double>()->default_value("0.01"))
-            ("S,seed",
-             "the seed of the rng",
-             cxxopts::value<int>()->default_value("0"))
-            ("T,sel_str",
-             "the strenght of selection",
-             cxxopts::value<double>()->default_value("2"))
+            ("F,act_func",
+             "the string representing the name of the activation function of the net",
+             cxxopts::value<std::string>()->default_value("sigmoid"))
             ("G,num_gens",
              "number of generations for which the simulation has to run",
              cxxopts::value<int>()->default_value("1000000"))
             ("i,n_inds",
              "number of individuals to register everytime in depth data on individuals is saved",
              cxxopts::value<int>()->default_value("1"))
-            ("s,best_inds_saving_freq",
-             "the number of generations after which the best n individuals are saved",
-             cxxopts::value<int>()->default_value("1"))
-            ("z,best_inds_spectrum_saving_freq",
-             "the number of generations after which the best n individuals' mutational spectrumsa are saved",
-             cxxopts::value<int>()->default_value("1000"))
-            ("b,n_bins",
-             "number of bins in whihc outputs of mutational spectrums of network need to be subdivided",
-             cxxopts::value<int>()->default_value("100"))
+            ("M,mut_step",
+             "the variance of the normal distribution from which mutation size is drawn",
+             cxxopts::value<double>()->default_value("0.1"))
             ("m,n_mutations",
              "number of mutation each weight and bias undergoes  to calculate the mutational spectrums of a network",
              cxxopts::value<int>()->default_value("10000"))
+            ("N,net_arc",
+             "the network architecture",
+             cxxopts::value<std::vector<int>>()->default_value("1,2,1"))
+            ("P,pop_size",
+             "the numebr of individuals in the simulation",
+             cxxopts::value<int>()->default_value("1000"))
+            ("R,mut_rate",
+             "the probability with whihc a mutation can happen",
+             cxxopts::value<double>()->default_value("0.01"))
+            ("S,seed",
+             "the seed of the rng",
+             cxxopts::value<int>()->default_value("0"))
+            ("s,best_inds_saving_freq",
+             "the number of generations after which the best n individuals are saved",
+             cxxopts::value<int>()->default_value("1"))
+            ("T,sel_str",
+             "the strenght of selection",
+             cxxopts::value<double>()->default_value("2"))
+            ("z,best_inds_spectrum_saving_freq",
+             "the number of generations after which the best n individuals' mutational spectrumsa are saved",
+             cxxopts::value<int>()->default_value("1000"))
             ("h,help",
              "explains the stuff")
             ("t,test",
