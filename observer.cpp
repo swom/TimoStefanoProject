@@ -79,6 +79,28 @@ void observer::save_best_n_inds_mut_spectrum(const simulation &s)
     m_top_inds_spectrum.push_back(ind_spectrum_v);
 }
 
+void observer::store_data_about_inds(simulation &s)
+{
+    ///after tick new population is in place,
+    /// old populaiton is still stored in new_inds vector
+    /// to save data from individuals that just went through the
+    /// generation it is necessary to swap back old pop to ind vec
+    s.get_pop().get_inds().swap(s.get_pop().get_new_inds());
+
+    if(s.get_time() %m_best_ind_saving_freq  == 0)
+    {
+        save_best_n_inds(s);
+    }
+    if(s.get_time() > (s.get_n_gen() - 1000))
+    {
+        save_best_n_inds_mut_spectrum(s);
+        if(is_time_to_record_all_inds_nets(s)) store_all_inds_nets(s);
+    }
+
+    ///Swap back
+    s.get_pop().get_inds().swap(s.get_pop().get_new_inds());
+}
+
 void save_json(const observer& o, const std::string& filename)
 {
     std::ofstream  f(filename);
@@ -96,15 +118,7 @@ void exec(simulation& s , observer& o)
     {
         tick(s);
         o.store_avg_fit_and_env(s);
-        if(s.get_time() % o.m_best_ind_saving_freq  == 0)
-        {
-            o.save_best_n_inds(s);
-        }
-        if(s.get_time() > (s.get_n_gen() - 1000))
-        {
-            o.save_best_n_inds_mut_spectrum(s);
-            o.store_all_inds_nets(s);
-        }
+        o.store_data_about_inds(s);
         if(s.get_time() % 1000 == 0)
         {
             std::cout << "Cycle " << s.get_time() << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
@@ -181,7 +195,7 @@ void test_observer()
         o_p.all_inds_rec_freq = all_inds_rec_freq;
 
         simulation s{params};
-        observer o{o_p};
+        observer o{o_p, params};
         exec(s, o);
 
         unsigned int expected_number_of_records = generations / all_inds_rec_freq;

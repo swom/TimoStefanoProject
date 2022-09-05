@@ -45,9 +45,11 @@ class observer
 {
 public:
     observer();
-    observer(const obs_param& o_p):
+    observer(const obs_param& o_p, const all_params& a_p = {}):
         m_best_ind_saving_freq(o_p.best_ind_saving_freq),
         m_best_ind_spectrum_saving_freq(o_p.best_ind_spectrum_saving_freq),
+        m_params{a_p},
+        m_o_params{o_p},
         m_n_inds{o_p.m_n_inds},
         m_n_mutations(o_p.m_n_mutations),
         m_n_bins(o_p.m_n_bins)
@@ -67,6 +69,9 @@ public:
     ///Returns const ref to m_env_values
     const std::vector<double>& get_env_values() const noexcept {return m_env_values;}
 
+    ///Checks if it is time to record all the individuals
+    bool is_time_to_record_all_inds_nets(const simulation& s) const noexcept{return s.get_time() % m_o_params.all_inds_rec_freq == 0;}
+
     ///Saves the avg fitness and current environment value
     void store_avg_fit_and_env(const simulation& s);
 
@@ -78,6 +83,9 @@ public:
 
     ///Returns the parameters used to run the simualtion
     const all_params& get_params() const noexcept {return m_params;};
+
+    ///Stores all data about individuals
+    void store_data_about_inds(simulation& s);
 
     ///Stores the parameters used to run the simulation
     void store_par (const simulation& s) {m_params = s.get_params();}
@@ -96,6 +104,7 @@ private:
     std::vector<std::vector<ind_spectrum>> m_top_inds_spectrum;
     std::vector<double> m_env_values;
     all_params m_params = {};
+    obs_param m_o_params;
     std::vector<Ind_Nets> m_all_inds_nets;
     int m_n_inds = 0;
     const int m_n_mutations = 0;
