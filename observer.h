@@ -65,7 +65,7 @@ public:
     void store_par (const simulation& s) {m_params = s.get_params();}
 
     ///Stores a vector containing the networks of all individuals
-    void store_all_inds_nets(const simulation& ) {;}
+    void store_all_inds_nets(const simulation& s) {m_all_inds_nets.push_back({s.get_time(), extract_all_inds_nets(s)});}
 
 
     const int m_best_ind_saving_freq = 1;

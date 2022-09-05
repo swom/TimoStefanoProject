@@ -133,6 +133,9 @@ void change_all_weights_nth_ind(simulation& s, size_t ind_index, double new_weig
 ///Changes the network of the nth individual for a given network
 void change_nth_ind_net(simulation& s, size_t ind_index, const network& n);
 
+///Returns a vector of networks of all the individuals in the population
+const std::vector<network> extract_all_inds_nets(const simulation &s);
+
 ///Gets the best n individuals in a pop
 std::vector<individual> get_best_n_inds(const simulation& s, int n);
 

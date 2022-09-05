@@ -3,6 +3,7 @@
 #include <cassert>
 #include <vector>
 #include <fstream>
+#include<ranges>
 
 
 simulation::simulation(double targetA, double targetB,
@@ -73,6 +74,16 @@ void change_all_weights_nth_ind(simulation& s, size_t ind_index, double new_weig
 void change_current_target_value(simulation& s, double new_target_value)
 {
     s.get_env().set_current_target_value(new_target_value);
+}
+
+const std::vector<network> extract_all_inds_nets(const simulation &s)
+{
+    std::vector<network> nets(s.get_pop().get_inds().size(), s.get_pop().get_inds().at(0).get_net());
+    std::transform( s.get_pop().get_inds().begin(),
+                    s.get_pop().get_inds().end(),
+                    nets.begin(),[](auto& ind){return ind.get_net();});
+    return nets;
+//    return s.get_pop().get_inds() | std::views::transform([](auto& ind){return ind.get_net();});
 }
 
 void change_nth_ind_net(simulation& s, size_t ind_index, const network& n)
@@ -252,7 +263,7 @@ void test_simulation() noexcept//!OCLINT test may be many
     //A simulation has an absolute counter and you can access it
     {
         simulation s;
-        assert((s.get_time() > 0) | (s.get_time() <= 0));
+        assert((s.get_time() > 0) || (s.get_time() <= 0));
     }
 
 
@@ -426,3 +437,5 @@ void test_simulation() noexcept//!OCLINT test may be many
 
 }
 #endif
+
+

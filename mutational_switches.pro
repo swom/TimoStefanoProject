@@ -35,8 +35,8 @@ SOURCES +=  \
   utilities.cpp
 
 
-CONFIG += c++17
-QMAKE_CXXFLAGS += -std=c++17
+CONFIG += c++20
+QMAKE_CXXFLAGS += -std=c++20
 CONFIG += resources_big
 
 # High warning levels
