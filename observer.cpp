@@ -91,7 +91,8 @@ void observer::store_data_about_inds(simulation &s)
     {
         save_best_n_inds(s);
     }
-    if(s.get_time() > (s.get_n_gen() - 1000))
+    if(s.get_time() < (400) ||
+            s.get_time() > (s.get_n_gen() - 200))
     {
         save_best_n_inds_mut_spectrum(s);
         if(is_time_to_record_all_inds_nets(s)) store_all_inds_nets(s);
