@@ -158,5 +158,14 @@ void test_observer()
 
     }
 
+    ///It is possible to save all_inds networks
+    {
+        observer o;
+        simulation s;
+
+        o.store_all_inds_nets(s);
+        assert(o.get_all_inds_nets().back().m_nets.size() == s.get_pop().get_inds().size());
+    }
+
 }
 #endif

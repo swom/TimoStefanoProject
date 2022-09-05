@@ -14,7 +14,7 @@ individual::individual(std::vector<int> net_arch, int age) :
 
 individual::individual(ind_param i_p) :
     ///!!!!Attention!!!! input values are for now a fixed amount
-    m_input_values(i_p.net_par.net_arc[0], 0),
+    m_input_values(i_p.net_par.net_arc[0], 1),
     m_network{i_p.net_par}
 {
 
@@ -338,7 +338,7 @@ void test_individual()
 
         histogram binned_values(values, bin_number, value_range{min, max});
 
-        assert(static_cast<int>(binned_values.hist().size()) == bin_number);
+        assert(static_cast<int>(binned_values.hist().size()) == bin_number + 1);
         assert(all_bins_have_same_n_obs_with_tolerance(binned_values));
     }
 #endif

@@ -6,13 +6,27 @@
 
 #ifndef NDEBUG
 void test() {
+    std::cout << "testing environment:";
     test_environment();
+    std::cout << " environment tested" << std::endl;
+    std::cout << "testing individual:";
     test_individual();
+    std::cout << " individual tested" << std::endl;
+    std::cout << "testing network:";
     test_network();
+    std::cout << " network tested" << std::endl;
+    std::cout << "testing observer:";
     test_observer();
+    std::cout << " observer tested" << std::endl;
+    std::cout << "testing parser:";
     test_parser();
+    std::cout << " parser tested" << std::endl;
+    std::cout << "testing population:";
     test_population();
+    std::cout << " population tested" << std::endl;
+    std::cout << "testing simulation:";
     test_simulation();
+    std::cout << " simulation tested" << std::endl;
 }
 #endif
 

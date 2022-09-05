@@ -15,7 +15,7 @@ histogram::histogram(const std::vector<double>& values,
         auto start_bin_value = range_values.m_start;
         for(int i = 0; i != bin_number + 1; i ++)
         {
-            m_histogram.insert({start_bin_value + step * i, 0});
+            m_histogram.insert({start_bin_value + i * step, 0});
         }
 
         if(values.size())
@@ -45,7 +45,7 @@ bool all_bins_have_same_n_obs_with_tolerance(const histogram &h)
     {
         throw std::invalid_argument{"When comparing bins of an histogram there are no bins"};
     }
-    auto val = h.hist().begin()->second;
+    auto val = std::next(h.hist().begin())->second; //The first bin is ignored, since no values would be lower than the start of the range
     return std::all_of(std::next(h.hist().begin()), h.hist().end(),
                        [val](typename std::map<double, int>::const_reference t){ return are_equal_with_more_tolerance(t.second, val); });
 

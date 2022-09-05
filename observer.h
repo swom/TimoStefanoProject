@@ -2,8 +2,20 @@
 #define OBSERVER_H
 #include "simulation.h"
 
+struct Ind_Nets
+{
+    int m_generation;
+    std::vector<network> m_nets;
+};
+
 struct obs_param
 {
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(obs_param,
+                                    m_n_inds,
+                                    m_n_mutations,
+                                    m_n_bins,
+                                    best_ind_saving_freq,
+                                    best_ind_spectrum_saving_freq)
     int m_n_inds;
     int m_n_mutations;
     int m_n_bins;
@@ -31,6 +43,9 @@ public:
                                    m_env_values,
                                    m_params)
 
+    ///returns the vector where the networks of all individuals of specific generations are stored
+    const std::vector<Ind_Nets>& get_all_inds_nets() const noexcept {return m_all_inds_nets;}
+
     ///Returns const ref to m_env_values
     const std::vector<double>& get_env_values() const noexcept {return m_env_values;}
 
@@ -43,9 +58,15 @@ public:
     /// where n is a parameter of simulation
     void save_best_n_inds_mut_spectrum(const simulation& s);
 
+    ///Returns the parameters used to run the simualtion
     const all_params& get_params() const noexcept {return m_params;};
 
+    ///Stores the parameters used to run the simulation
     void store_par (const simulation& s) {m_params = s.get_params();}
+
+    ///Stores a vector containing the networks of all individuals
+    void store_all_inds_nets(const simulation& ) {;}
+
 
     const int m_best_ind_saving_freq = 1;
     const int m_best_ind_spectrum_saving_freq = 1;
@@ -57,6 +78,7 @@ private:
     std::vector<std::vector<ind_spectrum>> m_top_inds_spectrum;
     std::vector<double> m_env_values;
     all_params m_params = {};
+    std::vector<Ind_Nets> m_all_inds_nets;
     int m_n_inds = 0;
     const int m_n_mutations = 0;
     const int m_n_bins = 0;
