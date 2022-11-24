@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cassert>
+static double fixed_input_value = 1;
 
 individual::individual(std::vector<int> net_arch, int age) :
     m_age{age},
@@ -14,7 +15,7 @@ individual::individual(std::vector<int> net_arch, int age) :
 
 individual::individual(ind_param i_p) :
     ///!!!!Attention!!!! input values are for now a fixed amount
-    m_input_values(i_p.net_par.net_arc[0], 0),
+    m_input_values(i_p.net_par.net_arc[0], fixed_input_value),
     m_network{i_p.net_par}
 {
 
