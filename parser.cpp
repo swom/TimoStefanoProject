@@ -106,7 +106,7 @@ cxxopts::Options create_parser(){
             ("F,act_func",
              "the string representing the name of the activation function of the net",
              cxxopts::value<std::string>()->default_value("sigmoid"))
-            ("f,fixed_input_value",
+            ("f,fixed_input",
              "the fixed input value that will be given to all networks, usually 0 as netwroks do not have inputs in this simulation",
              cxxopts::value<std::vector<double>>()->default_value("0"))
             ("G,num_gens",
