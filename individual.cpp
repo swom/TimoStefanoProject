@@ -277,7 +277,7 @@ void test_individual()
 
     {
         net_param net_par;
-        ind_param i_p{net_par, {}};
+        ind_param i_p{net_par, {0}};
         individual i{i_p};
         assert(i.get_net() == network{net_par});
     }
@@ -291,7 +291,7 @@ void test_individual()
         net_param n_p;
         n_p.function = idenity;
         n_p.net_arc = {1,1};
-        individual i{{n_p, {}}};
+        individual i{{n_p, {0}}};
         int n_mutations_per_locus = 1000;
         double mut_step = 0.1;
 
@@ -352,7 +352,7 @@ void test_individual()
         net_param n_p;
         n_p.function = idenity;
         n_p.net_arc = {1,1};
-        individual i{{n_p, {}}};
+        individual i{{n_p, {0}}};
         int n_mutations_per_locus = 1000;
         double mut_step = 0.1;
 
