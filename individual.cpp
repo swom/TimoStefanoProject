@@ -291,7 +291,7 @@ void test_individual()
         net_param n_p;
         n_p.function = idenity;
         n_p.net_arc = {1,1};
-        individual i{{n_p, {0}}};
+        individual i{{n_p, {1}}};
         int n_mutations_per_locus = 1000;
         double mut_step = 0.1;
 

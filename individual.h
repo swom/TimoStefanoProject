@@ -10,7 +10,7 @@ struct ind_param
                                    m_inputs_values
                                    )
 net_param net_par;
-std::vector<double> m_inputs_values;
+    std::vector<double> m_inputs_values{0};
 };
 
 
