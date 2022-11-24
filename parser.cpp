@@ -48,7 +48,8 @@ obs_param convert_obs_args(const cxxopts::ParseResult& results)
 ind_param convert_ind_args(const cxxopts::ParseResult& results)
 {
     return ind_param{
-        convert_net_args(results)
+        .net_par = convert_net_args(results),
+                .m_inputs_values = results["fixed_input"].as<std::vector<double>>()
     };
 }
 
@@ -105,6 +106,9 @@ cxxopts::Options create_parser(){
             ("F,act_func",
              "the string representing the name of the activation function of the net",
              cxxopts::value<std::string>()->default_value("sigmoid"))
+            ("f,fixed_input_value",
+             "the fixed input value that will be given to all networks, usually 0 as netwroks do not have inputs in this simulation",
+             cxxopts::value<std::vector<double>>()->default_value("0"))
             ("G,num_gens",
              "number of generations for which the simulation has to run",
              cxxopts::value<int>()->default_value("1000000"))
@@ -179,7 +183,7 @@ env_param parse_env_param(const std::vector<std::string>& args)
 
 ind_param parse_ind_param(const std::vector<std::string>& args)
 {
-    return ind_param{parse_net_param(args)};
+    return ind_param{parse_net_param(args), {}};
 
 }
 

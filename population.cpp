@@ -297,7 +297,7 @@ void test_population() noexcept
     {
         net_param net_par;
 
-        ind_param i_p{net_par};
+        ind_param i_p{net_par,{}};
 
         int number_of_inds = 132;
         double mut_rate = 0.314;
@@ -312,8 +312,8 @@ void test_population() noexcept
             assert(ind.get_net() == network{net_par});
         }
 
-        assert(are_equal_with_tolerance(p.get_inds().size(), number_of_inds) &
-               are_equal_with_tolerance(p.get_mut_rate(), mut_rate) &
+        assert(are_equal_with_tolerance(p.get_inds().size(), number_of_inds) &&
+               are_equal_with_tolerance(p.get_mut_rate(), mut_rate) &&
                are_equal_with_tolerance(p.get_mut_step(), mut_step));
     }
 

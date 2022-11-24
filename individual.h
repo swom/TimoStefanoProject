@@ -6,9 +6,11 @@
 struct ind_param
 {
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(ind_param,
-                                   net_par
+                                   net_par,
+                                   m_inputs_values
                                    )
 net_param net_par;
+std::vector<double> m_inputs_values;
 };
 
 

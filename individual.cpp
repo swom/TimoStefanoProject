@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <cassert>
-static double fixed_input_value = 1;
 
 individual::individual(std::vector<int> net_arch, int age) :
     m_age{age},
@@ -15,7 +14,7 @@ individual::individual(std::vector<int> net_arch, int age) :
 
 individual::individual(ind_param i_p) :
     ///!!!!Attention!!!! input values are for now a fixed amount
-    m_input_values(i_p.net_par.net_arc[0], fixed_input_value),
+    m_input_values(i_p.net_par.net_arc[0], i_p.m_inputs_values[0]),
     m_network{i_p.net_par}
 {
 
@@ -278,7 +277,7 @@ void test_individual()
 
     {
         net_param net_par;
-        ind_param i_p{net_par};
+        ind_param i_p{net_par, {}};
         individual i{i_p};
         assert(i.get_net() == network{net_par});
     }
@@ -292,7 +291,7 @@ void test_individual()
         net_param n_p;
         n_p.function = idenity;
         n_p.net_arc = {1,1};
-        individual i{{n_p}};
+        individual i{{n_p, {}}};
         int n_mutations_per_locus = 1000;
         double mut_step = 0.1;
 
@@ -353,7 +352,7 @@ void test_individual()
         net_param n_p;
         n_p.function = idenity;
         n_p.net_arc = {1,1};
-        individual i{{n_p}};
+        individual i{{n_p, {}}};
         int n_mutations_per_locus = 1000;
         double mut_step = 0.1;
 
@@ -388,5 +387,12 @@ void test_individual()
                 }
     }
 
+    ///Indivdual can be initialized with a specific input value through the ind_params
+    {
+        std::vector<double>  inputs{1.234};
+        ind_param i_p{.net_par = net_param{},.m_inputs_values = inputs};
+        individual ind{i_p};
+        assert(ind.get_input_values() == inputs);
+    }
 }
 #endif
