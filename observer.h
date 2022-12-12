@@ -1,5 +1,6 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
+#include "Stopwatch.hpp"
 #include "simulation.h"
 
 struct Ind_Nets
@@ -41,10 +42,10 @@ struct obs_param
     int all_inds_rec_freq;
 };
 
+template<class S = simulation<>>
 class observer
 {
 public:
-    observer();
     observer(const obs_param& o_p, const all_params& a_p = {}):
         m_best_ind_saving_freq(o_p.best_ind_saving_freq),
         m_best_ind_spectrum_saving_freq(o_p.best_ind_spectrum_saving_freq),
@@ -70,32 +71,106 @@ public:
     const std::vector<double>& get_env_values() const noexcept {return m_env_values;}
 
     ///Checks if it is time to record all the individuals
-    bool is_time_to_record_all_inds_nets(const simulation& s) const noexcept{return s.get_time() % m_o_params.all_inds_rec_freq == 0;}
+    bool is_time_to_record_all_inds_nets(const S& s) const noexcept
+    {return s.get_time() % m_o_params.all_inds_rec_freq == 0;}
 
     ///Saves the avg fitness and current environment value
-    void store_avg_fit_and_env(const simulation& s);
+    void store_avg_fit_and_env(const S& s)
+    {
+        m_avg_fitnesses.push_back(avg_fitness(s));
+        m_var_fitnesses.push_back(var_fitness(s));
+        m_env_values.push_back(get_current_env_value(s));
+    }
 
     ///Saves the n best individuals in the population where n is a parameter of sim
-    void save_best_n_inds(const simulation& s);
+    void save_best_n_inds(const S &s)
+    {
+        auto best_inds = get_best_n_inds(s, m_n_inds);
+        std::mt19937_64 rng;
+
+        std::vector<ind_data> ind_data_v(best_inds.size());
+
+        for(auto i = best_inds.begin(); i != best_inds.end(); i++)
+        {
+            ind_data_v[std::distance(best_inds.begin(), i)] = ind_data{*i, s.get_time()};
+        }
+
+        m_top_inds.push_back(ind_data_v);
+    }
+
     ///Saves the mutational spectrum of the best n individuals in population
     /// where n is a parameter of simulation
-    void save_best_n_inds_mut_spectrum(const simulation& s);
+    void save_best_n_inds_mut_spectrum(const S &s)
+    {
+        auto best_inds = get_best_n_inds(s, m_n_inds);
+        std::mt19937_64 rng;
+
+        std::vector<ind_spectrum> ind_spectrum_v(best_inds.size());
+
+        for(auto i = best_inds.begin(); i != best_inds.end(); i++)
+        {
+            auto index = std::distance(best_inds.begin(), i);
+
+            value_range range = {-1,1};
+            ind_spectrum_v[index] = ind_spectrum{*i,
+                    response(*i),
+                    calculate_mutational_spectrum(*i,
+                                                  s.get_params().p_p.mut_step,
+                                                  m_n_mutations,
+                                                  rng,
+                                                  m_n_bins,
+                                                  range),
+                    s.get_time()
+        };
+
+        }
+
+        m_top_inds_spectrum.push_back(ind_spectrum_v);
+    }
 
     ///Returns the parameters used to run the simualtion
     const all_params& get_params() const noexcept {return m_params;};
 
     ///Stores all data about individuals
-    void store_data_about_inds(simulation& s);
+    void store_data_about_inds(S &s)
+    {
+        ///after tick new population is in place,
+        /// old populaiton is still stored in new_inds vector
+        /// to save data from individuals that just went through the
+        /// generation it is necessary to swap back old pop to ind vec
+        s.get_pop().get_inds().swap(s.get_pop().get_new_inds());
+
+        if(s.get_time() %m_best_ind_saving_freq  == 0)
+        {
+            save_best_n_inds(s);
+        }
+        if(s.get_time() < (400) ||
+                s.get_time() > (s.get_n_gen() - 200))
+        {
+            save_best_n_inds_mut_spectrum(s);
+            if(is_time_to_record_all_inds_nets(s))
+            {
+                store_all_inds_nets(s);
+                //store all phenotypes
+            }
+        }
+
+        ///Swap back
+        s.get_pop().get_inds().swap(s.get_pop().get_new_inds());
+    }
 
     ///Stores the parameters used to run the simulation
-    void store_par (const simulation& s) {m_params = s.get_params();}
+    void store_par (const S& s) {m_params = s.get_params();}
 
     ///Stores a vector containing the networks of all individuals
-    void store_all_inds_nets(const simulation& s) {m_all_inds_nets.push_back({s.get_time(), extract_all_inds_nets(s)});}
-
+    void store_all_inds_nets(const S& s)
+    {
+        m_all_inds_nets.push_back({s.get_time(), extract_all_inds_nets(s)});
+    }
 
     const int m_best_ind_saving_freq = 1;
     const int m_best_ind_spectrum_saving_freq = 1;
+
 private:
 
     std::vector<double> m_avg_fitnesses;
@@ -117,10 +192,33 @@ bool operator!=(const all_params& lhs, const all_params& rhs);
 
 
 ///Executes a simulation for n generations
-void exec(simulation& s , observer& o);
+template<class S, class O>
+void exec(S &s , O &o)
+{
+    stopwatch::Stopwatch sw;
+    o.store_par(s);
+
+    while(s.get_time() < s.get_n_gen())
+    {
+        tick(s);
+        o.store_avg_fit_and_env(s);
+        o.store_data_about_inds(s);
+        if(s.get_time() % 1000 == 0)
+        {
+            std::cout << "Cycle " << s.get_time() << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
+        }
+    }
+}
 
 ///Saves the enitre GODDDAM SIMULATIONNNN!!!!!!! WHOO NEEDS MEMORRYYYY
-void save_json(const observer &o, const std::string& filename);
+template<class O>
+void save_json(const O &o, const std::string& filename)
+{
+    std::ofstream  f(filename);
+    nlohmann::json json_out;
+    json_out = o;
+    f << json_out;
+}
 
 void test_observer();
 

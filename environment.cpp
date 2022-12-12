@@ -1,65 +1,5 @@
-#include "environment.h"
-#include "utilities.h"
 #include <cassert>
-
-
-environment::environment(double target_valueA, double target_valueB):
-  m_ref_target_values{target_valueA,target_valueB},
-  m_current_target_value {target_valueA}
-{
-
-
-
-
-}
-
-environment::environment(env_param e_p):
-  m_ref_target_values{e_p.targetA,e_p.targetB},
-  m_current_target_value {e_p.targetA}
-{
-
-
-
-
-}
-
-
-
-bool operator== (const environment& lhs, const environment& rhs)
-{
-  bool ref_t_values = lhs.get_ref_target_values() == rhs.get_ref_target_values();
-  bool current_t_value = are_equal_with_tolerance(lhs.get_current_target_value(), rhs.get_current_target_value());
-
-  return ref_t_values && current_t_value;
-}
-
-double get_target_valueA(const environment& e)
-{
-  return e.get_ref_target_values()[0];
-}
-
-double get_target_valueB(const environment& e)
-{
-  return e.get_ref_target_values()[1];
-}
-
-void switch_target(environment &e){
-  //Check which target value is the current one and switch it over to the other
-
-  if (are_equal_with_tolerance(e.get_current_target_value(),
-                               get_target_valueA(e))
-      )
-    {
-      e.set_current_target_value(get_target_valueB(e));
-    }
-  else
-    {
-      e.set_current_target_value(get_target_valueA(e));
-    }
-}
-
-
-
+#include "environment.h"
 
 #ifndef NDEBUG
 void test_environment() noexcept
@@ -134,6 +74,12 @@ void test_environment() noexcept
 
   }
 
+    ///An environment cna have different types of change:
+    /// 1. an environment by default can change between 2 optima
+    {
+        env_param ep;
+        environment<env_change_type::two_optima> e(ep);
+    }
 
 }
 #endif

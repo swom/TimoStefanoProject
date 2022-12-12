@@ -2,6 +2,7 @@
 
 HEADERS +=  \
   Stopwatch.hpp \
+  env_change_type.h \
   environment.h \
   histogram.h \
   ind_data.h \
@@ -19,6 +20,7 @@ HEADERS +=  \
 
 
 SOURCES +=  \
+  env_change_type.cpp \
   environment.cpp \
   histogram.cpp \
   ind_data.cpp \

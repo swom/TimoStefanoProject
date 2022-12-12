@@ -67,11 +67,12 @@ bool all_nets_equals_to(const population& p, const network& n)
 
 std::vector<double> calc_dist_from_target(const std::vector<individual>& inds, double env_value)
 {
-    std::vector<double> distance_from_target;
+    std::vector<double> distance_from_target(inds.size());
 
-    for(auto& ind : inds)
+    //#pragma omp parallel for
+    for(size_t i = 0; i < inds.size(); i++)
     {
-        distance_from_target.push_back(calc_sqr_distance(ind, env_value));
+        distance_from_target[i] = calc_sqr_distance(inds[i], env_value);
     }
 
     return distance_from_target;

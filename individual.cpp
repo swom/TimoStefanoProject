@@ -48,7 +48,6 @@ std::vector<double> response(const individual& ind)
     return response(ind.get_net(),ind.get_input_values());
 }
 
-
 std::vector<std::vector<std::vector<std::vector<std::vector<double>>>>> calc_mutational_spectrum_weights(const individual& ind,
                                                                                                          double mut_step,
                                                                                                          int n_mutations,
