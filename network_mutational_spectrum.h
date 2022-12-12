@@ -1,8 +1,10 @@
 #ifndef NETWORK_MUTATIONAL_SPECTRUM_H
 #define NETWORK_MUTATIONAL_SPECTRUM_H
-#include<vector>
-#include <iterator>
 #include <algorithm>
+#include <iterator>
+#include <utility>
+#include<vector>
+
 #include"network.h"
 #include "histogram.h"
 namespace spectrum {
@@ -27,9 +29,6 @@ struct network_spectrum{
 };
 
 
-#include <vector>
-#include <utility>
-#include <iterator>
 
 ///From: https://stackoverflow.com/questions/17294629/merging-flattening-sub-vectors-into-a-single-vector-c-converting-2d-to-1d?noredirect=1&lq=1
 template <template<typename...> class R=std::vector,

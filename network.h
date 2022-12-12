@@ -1,11 +1,11 @@
 #ifndef NETWORK_H
 #define NETWORK_H
-#include "utilities.h"
+
 #include <iostream>
-#include <vector>
-#include <random>
-#include "json.hpp"
+
 #include "input_output.h"
+#include "json.hpp"
+#include "utilities.h"
 
 double sigmoid(double x);
 double idenity(double x);

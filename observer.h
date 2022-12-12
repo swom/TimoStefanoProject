@@ -1,6 +1,7 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
 #include "Stopwatch.hpp"
+
 #include "simulation.h"
 
 struct Ind_Nets
@@ -195,7 +196,7 @@ bool operator!=(const all_params& lhs, const all_params& rhs);
 template<class S, class O>
 void exec(S &s , O &o)
 {
-    stopwatch::Stopwatch sw;
+//    stopwatch::Stopwatch sw;
     o.store_par(s);
 
     while(s.get_time() < s.get_n_gen())
@@ -205,7 +206,7 @@ void exec(S &s , O &o)
         o.store_data_about_inds(s);
         if(s.get_time() % 1000 == 0)
         {
-            std::cout << "Cycle " << s.get_time() << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
+//            std::cout << "Cycle " << s.get_time() << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
         }
     }
 }

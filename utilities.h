@@ -2,8 +2,9 @@
 #define UTILITIES_H
 #include<vector>
 #include<sstream>
-#include"rndutils.hpp"
 #include<random>
+
+#include"rndutils.hpp"
 
 bool are_equal_with_tolerance(double lhs, double rhs);
 

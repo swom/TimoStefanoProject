@@ -1,7 +1,7 @@
 #ifndef ENVIRONMENT_H
 #define ENVIRONMENT_H
-
 #include <vector>
+
 #include "env_change_type.h"
 #include "json.hpp"
 #include "utilities.h"
