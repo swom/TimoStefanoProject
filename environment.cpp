@@ -94,6 +94,11 @@ void test_environment() noexcept
     }
 
     ///An environment cna have different types of change:
-    /// 1. an environment by default can change between 2 optima
+    /// 2. an environment can change by drifting with a fixed step size
+    /// a.
+    {
+        env_param ep;
+        assert(ep.step_size == 0 );
+    }
 }
 #endif

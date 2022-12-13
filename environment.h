@@ -10,9 +10,11 @@ struct env_param
 {
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(env_param,
                                    targetA,
-                                   targetB)
+                                   targetB,
+                                   step_size)
 double targetA;
 double targetB;
+double step_size = 0;
 };
 
 template<env_change_type T = env_change_type::two_optima>
