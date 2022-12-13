@@ -73,21 +73,21 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
     assert(1 == 2);
 #endif
 
-    if(params.e_p.env_change_type == env_change_type::two_optima)
+    if(params.e_p.env_change_t == env_change_type::two_optima)
     {
         using env_t = environment<env_change_type::two_optima>;
         using sim_t = simulation<env_t>;
         using obs_t = observer<sim_t>;
         run_simulation<sim_t, obs_t>(params, obs_pars);
     }
-    else if(params.e_p.env_change_type == env_change_type::drift)
+    else if(params.e_p.env_change_t == env_change_type::drift)
     {
         using env_t = environment<env_change_type::drift>;
         using sim_t = simulation<env_t>;
         using obs_t = observer<sim_t>;
         run_simulation<sim_t, obs_t>(params, obs_pars);
     }
-    else if(params.e_p.env_change_type == env_change_type::noise)
+    else if(params.e_p.env_change_t == env_change_type::noise)
     {
         using env_t = environment<env_change_type::noise>;
         using sim_t = simulation<env_t>;
