@@ -18,6 +18,7 @@ void run_simulation(all_params params, obs_param obs_pars)
               params.i_p.net_par.str_func +
               "_A_" + std::to_string(params.e_p.targetA) +
               "_B_" + std::to_string(params.e_p.targetB) +
+              "_sz_" + std::to_string(params.e_p.step_size) +
               "_e_ch_" + params.e_p.env_change_type_string +
               ".json");
 }
