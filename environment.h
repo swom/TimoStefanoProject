@@ -12,12 +12,12 @@ struct env_param
                                    targetA,
                                    targetB,
                                    step_size,
-                                   env_change_type)
+                                   env_change_t)
 double targetA;
 double targetB;
 double step_size = 0;
-env_change_type env_change_type = env_change_type::None;
-std::string env_change_type_string = convert_env_change_type_to_string(env_change_type);
+env_change_type env_change_t = env_change_type::None;
+std::string env_change_type_string = convert_env_change_type_to_string(env_change_t);
 };
 
 template<env_change_type T = env_change_type::two_optima>
