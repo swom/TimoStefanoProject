@@ -25,8 +25,10 @@ std::vector<int> arch_str_to_arch_vec(std::string net_arc)
 env_param convert_env_args(const cxxopts::ParseResult& results)
 {
     return env_param{
-        results["targetA"].as<double>(),
-                results["targetB"].as<double>()
+        .targetA = results["targetA"].as<double>(),
+         .targetB = results["targetB"].as<double>(),
+           .step_size = results["step_size"].as<double>(),
+                .env_change_type = string_to_env_change_map.find(results["env_change_type"].as<std::string>())->second
     };
 }
 
@@ -103,6 +105,9 @@ cxxopts::Options create_parser(){
             ("C,change_freq",
              "the probability with which the target value will change",
              cxxopts::value<double>()->default_value("0.01"))
+            ("E,env_change_type",
+             "the string representing the type of environmental change",
+             cxxopts::value<std::string>()->default_value("two_optima"))
             ("F,act_func",
              "the string representing the name of the activation function of the net",
              cxxopts::value<std::string>()->default_value("sigmoid"))
@@ -139,6 +144,9 @@ cxxopts::Options create_parser(){
             ("T,sel_str",
              "the strenght of selection",
              cxxopts::value<double>()->default_value("2"))
+            ("Z,step_size",
+             "the step size of optimal change, when change happens through drift",
+             cxxopts::value<double>()->default_value("1"))
             ("z,best_inds_spectrum_saving_freq",
              "the number of generations after which the best n individuals' mutational spectrumsa are saved",
              cxxopts::value<int>()->default_value("1000"))

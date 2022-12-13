@@ -74,7 +74,6 @@ public:
       m_params{params}
   {
       m_mut_rng.seed(m_seed);
-      m_env_rng.seed(0);
   }
 
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(simulation,
@@ -95,7 +94,7 @@ public:
   std::mt19937_64& get_mut_rng() noexcept {return m_mut_rng;}
 
   ///Returns ref to rng used for mutations
-  std::mt19937_64& get_env_rng() noexcept {return m_env_rng;}
+  std::mt19937_64& get_env_rng() noexcept {return m_environment.get_rng();}
 
   ///Returns const ref to env_member
   const Env& get_env() const noexcept {return m_environment;}
@@ -132,8 +131,6 @@ public:
    int m_n_generations;
 
    std::mt19937_64 m_mut_rng;
-
-   std::mt19937_64 m_env_rng;
 
    int m_seed;
 

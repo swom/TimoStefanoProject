@@ -4,28 +4,23 @@
 
 #include "parser.h"
 
-#include "Stopwatch.hpp"
-
-///Executes a simulation for n generations
 template<class S, class O>
-void exec(S &s , O &o)
+void run_simulation(all_params params, obs_param obs_pars)
 {
-    using namespace stopwatch;
-    Stopwatch sw;
-    o.store_par(s);
+    S s{params};
+    O o{obs_pars};
+    exec(s, o);
 
-    while(s.get_time() < s.get_n_gen())
-    {
-        tick(s);
-        o.store_avg_fit_and_env(s);
-        o.store_data_about_inds(s);
-        if(s.get_time() % 1000 == 0)
-        {
-            std::cout << "Cycle " << s.get_time() << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
-        }
-    }
+    std::cout << "Saving" << std::endl;
+    save_json(o,
+              convert_arc_to_string(params.i_p.net_par.net_arc)+ "_" +
+              std::to_string(params.s_p.seed) + "_" +
+              params.i_p.net_par.str_func +
+              "_A_" + std::to_string(params.e_p.targetA) +
+              "_B_" + std::to_string(params.e_p.targetB) +
+              "_e_ch_" + params.e_p.env_change_type_string +
+              ".json");
 }
-
 
 #ifndef NDEBUG
 void test() {
@@ -62,6 +57,8 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
                 convert_pop_args(results),
                 convert_sim_args(results)
     };
+    obs_param obs_pars = convert_obs_args(results);
+
 #ifndef NDEBUG
     if(results["test"].as<bool>())
     {
@@ -75,18 +72,20 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
     assert(1 == 2);
 #endif
 
-    simulation s{params};
-    observer o{convert_obs_args(results)};
-    exec(s, o);
-
-    std::cout << "Saving" << std::endl;
-    save_json(o,
-              convert_arc_to_string(params.i_p.net_par.net_arc)+ "_" +
-              std::to_string(params.s_p.seed) + "_" +
-              params.i_p.net_par.str_func +
-              "_A_" + std::to_string(params.e_p.targetA) +
-              "_B_" + std::to_string(params.e_p.targetB) +
-              ".json");
+    if(params.e_p.env_change_type == env_change_type::two_optima)
+    {
+        using env_t = environment<env_change_type::two_optima>;
+        using sim_t = simulation<env_t>;
+        using obs_t = observer<sim_t>;
+        run_simulation<sim_t, obs_t>(params, obs_pars);
+    }
+    else if(params.e_p.env_change_type == env_change_type::drift)
+    {
+        using env_t = environment<env_change_type::drift>;
+        using sim_t = simulation<env_t>;
+        using obs_t = observer<sim_t>;
+        run_simulation<sim_t, obs_t>(params, obs_pars);
+    }
 
     return 0;
 }

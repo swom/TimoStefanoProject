@@ -97,8 +97,27 @@ void test_environment() noexcept
     /// 2. an environment can change by drifting with a fixed step size
     /// a.
     {
-        env_param ep;
-        assert(ep.step_size == 0 );
+        double step_size = 0.5;
+        env_param ep{.targetA = 0, .targetB = 0, .step_size= step_size};
+        assert(ep.step_size == step_size );
+    }
+    /// b.
+    {
+        double step_size = 0.5;
+        env_param ep{.targetA = 0, .targetB = 0, .step_size= step_size};
+        environment<env_change_type::drift> e{ep};
+        double first_optimum = e.get_current_optimum();
+        e.switch_target();
+        double second_optimum = e.get_current_optimum();
+        e.switch_target();
+        double third_optimum = e.get_current_optimum();
+        assert(std::abs(first_optimum - second_optimum) == step_size);
+        assert(std::abs(second_optimum - third_optimum) == step_size);
+    }
+    ///An environment cna have different types of change:
+    /// 2. an environment can change by drifting with a fixed step size
+    {
+
     }
 }
 #endif

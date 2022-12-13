@@ -11,10 +11,13 @@ struct env_param
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(env_param,
                                    targetA,
                                    targetB,
-                                   step_size)
+                                   step_size,
+                                   env_change_type)
 double targetA;
 double targetB;
 double step_size = 0;
+env_change_type env_change_type = env_change_type::None;
+std::string env_change_type_string = convert_env_change_type_to_string(env_change_type);
 };
 
 template<env_change_type T = env_change_type::two_optima>
@@ -24,17 +27,23 @@ public:
 
     environment(double target_valueA, double target_valueB):
       m_ref_target_values{target_valueA,target_valueB},
-      m_current_target_value {target_valueA}
+      m_current_target_value {target_valueA},
+      m_step_size{0},
+      m_env_rng{0}
     {}
 
     environment(env_param e_p):
       m_ref_target_values{e_p.targetA,e_p.targetB},
-      m_current_target_value {e_p.targetA}
+      m_current_target_value {e_p.targetA},
+      m_step_size{e_p.step_size},
+      m_env_rng{0}
     {}
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(environment,
                                    m_ref_target_values,
-                                   m_current_target_value);
+                                   m_current_target_value,
+                                   m_step_size);
+
     ///Returns the target value of the environment
     double get_current_optimum() const noexcept {return m_current_target_value;}
 
@@ -48,15 +57,26 @@ public:
     void switch_target(){
         //Check which target value is the current one and switch it over to the other
 
-        if (m_current_target_value ==  m_ref_target_values.first)
-          {
-           m_current_target_value = m_ref_target_values.second;
-          }
-        else
-          {
-            m_current_target_value = m_ref_target_values.first;
-          }
+        if constexpr (T == env_change_type::two_optima)
+        {
+            if (m_current_target_value ==  m_ref_target_values.first)
+            {
+             m_current_target_value = m_ref_target_values.second;
+            }
+          else
+            {
+              m_current_target_value = m_ref_target_values.first;
+            }
+        }
+        else if constexpr (T == env_change_type::drift)
+        {
+            m_current_target_value += m_step_size * (std::bernoulli_distribution(0.5)(m_env_rng) ? 1 : -1);
+        }
+
       }
+
+    ///Returns the rng
+    auto& get_rng() noexcept {return m_env_rng;}
 
 private:
 
@@ -64,6 +84,10 @@ private:
     std::pair<double, double> m_ref_target_values;
 
     double m_current_target_value;
+
+    double m_step_size;
+
+    std::mt19937_64 m_env_rng;
 };
 
 ///checks if 2 environments are equal
