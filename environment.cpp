@@ -10,7 +10,7 @@ void test_environment() noexcept
     double target_valueA = 0.123456;
     double target_valueB = 0.654321;
     environment e{target_valueA, target_valueB};
-    assert(e.get_current_target_value() < 0 || e.get_current_target_value() > 0);
+    assert(e.get_current_optimum() < 0 || e.get_current_optimum() > 0);
   }
 
 
@@ -19,7 +19,8 @@ void test_environment() noexcept
     double target_valueA = 0.123456;
     double target_valueB = 0.654321;
     environment e{target_valueA, target_valueB};
-    assert(e.get_ref_target_values().size() == 2);
+    assert(e.get_ref_target_values().first == target_valueA);
+    assert(e.get_ref_target_values().second == target_valueB);
   }
 
   //an env can be initialized with 2 reference target values
@@ -42,8 +43,8 @@ void test_environment() noexcept
     double targetA = 0.123456;
     double targetB = 0.654321;
     environment e{targetA,targetB};
-    assert(are_equal_with_tolerance(e.get_current_target_value(), targetA));
-    assert(are_not_equal_with_tolerance(e.get_current_target_value(), targetB));
+    assert(are_equal_with_tolerance(e.get_current_optimum(), targetA));
+    assert(are_not_equal_with_tolerance(e.get_current_optimum(), targetB));
   }
 
 
@@ -53,11 +54,11 @@ void test_environment() noexcept
     double targetA = 0.123456;
     double targetB = 0.654321;
     environment e{targetA,targetB};
-    assert(are_equal_with_tolerance(e.get_current_target_value(), targetA));
-    switch_target(e);
-    assert(are_equal_with_tolerance(e.get_current_target_value(), targetB));
-    switch_target(e);
-    assert(are_equal_with_tolerance(e.get_current_target_value(), targetA));
+    assert(are_equal_with_tolerance(e.get_current_optimum(), targetA));
+    e.switch_target();
+    assert(are_equal_with_tolerance(e.get_current_optimum(), targetB));
+    e.switch_target();
+    assert(are_equal_with_tolerance(e.get_current_optimum(), targetA));
   }
 
 
@@ -79,7 +80,20 @@ void test_environment() noexcept
     {
         env_param ep;
         environment<env_change_type::two_optima> e(ep);
+        auto first_optimum = e.get_current_optimum();
+        e.switch_target();
+        auto second_optimum = e.get_current_optimum();
+        e.switch_target();
+        auto third_optimum = e.get_current_optimum();
+        e.switch_target();
+        auto fourth_optimum = e.get_current_optimum();
+
+        assert(first_optimum == third_optimum);
+        assert(second_optimum == fourth_optimum);
+
     }
 
+    ///An environment cna have different types of change:
+    /// 1. an environment by default can change between 2 optima
 }
 #endif

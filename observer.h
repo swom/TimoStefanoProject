@@ -1,6 +1,6 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
-#include "Stopwatch.hpp"
+//#include "Stopwatch.hpp"
 
 #include "simulation.h"
 

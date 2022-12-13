@@ -61,6 +61,8 @@ int main(int argc, char ** argv) //!OCLINT tests may be long
               convert_arc_to_string(params.i_p.net_par.net_arc)+ "_" +
               std::to_string(params.s_p.seed) + "_" +
               params.i_p.net_par.str_func +
+              "_A_" + std::to_string(params.e_p.targetA) +
+              "_B_" + std::to_string(params.e_p.targetB) +
               ".json");
 
     return 0;

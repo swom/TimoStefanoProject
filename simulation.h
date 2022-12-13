@@ -186,9 +186,9 @@ void change_all_weights_nth_ind(simulation<E> &s, size_t ind_index, double new_w
 
 ///Changes the curent environmental optimum
 template<class E>
-void change_current_target_value(simulation<E>& s, double new_target_value)
+void for_test_change_current_target_value(simulation<E>& s, double new_target_value)
 {
-    s.get_env().set_current_target_value(new_target_value);
+    s.get_env().for_test_set_arbitrary_target(new_target_value);
 }
 
 ///Gets the minimum fitness among the inds present in the simulation
@@ -241,14 +241,14 @@ std::vector<individual> get_best_n_inds(const simulation<E> &s, int n)
 template <class E>
 double get_current_env_value(const simulation<E> &s)
 {
-    return s.get_env().get_current_target_value();
+    return s.get_env().get_current_optimum();
 }
 
 ///Returns the current target value of the environment in the simualtion
 template <class E>
 double get_current_env_value(simulation<E> &s)
 {
-    return s.get_env().get_current_target_value();
+    return s.get_env().get_current_optimum();
 }
 
 ///Returns the individuals in the simualtion
@@ -327,7 +327,7 @@ void tick(simulation<E> &s)
 
     if(is_environment_changing(s)){
 
-        switch_target(s.get_env());
+        s.get_env().switch_target();
     }
 
     select_inds(s);

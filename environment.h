@@ -34,17 +34,32 @@ public:
                                    m_ref_target_values,
                                    m_current_target_value);
     ///Returns the target value of the environment
-    double get_current_target_value() const noexcept {return m_current_target_value;}
-    const std::vector<double>& get_ref_target_values() const noexcept {return m_ref_target_values;}
+    double get_current_optimum() const noexcept {return m_current_target_value;}
 
-    ///Sets current target value
-    void set_current_target_value(double target_value) {m_current_target_value = target_value;}
+    ///Returns the 2 possible target values
+    const auto& get_ref_target_values() const noexcept {return m_ref_target_values;}
 
+    ///Sets the target value to an arbitrary number, ised for TESTS
+    void for_test_set_arbitrary_target(double new_target) noexcept {m_current_target_value = new_target;}
+
+    ///Changes the current environmental optimum
+    void switch_target(){
+        //Check which target value is the current one and switch it over to the other
+
+        if (m_current_target_value ==  m_ref_target_values.first)
+          {
+           m_current_target_value = m_ref_target_values.second;
+          }
+        else
+          {
+            m_current_target_value = m_ref_target_values.first;
+          }
+      }
 
 private:
 
     ///The target value of the environment
-    std::vector<double> m_ref_target_values;
+    std::pair<double, double> m_ref_target_values;
 
     double m_current_target_value;
 };
@@ -54,7 +69,7 @@ template<env_change_type T>
 bool operator== (const environment<T> &lhs, const environment<T> &rhs)
 {
   bool ref_t_values = lhs.get_ref_target_values() == rhs.get_ref_target_values();
-  bool current_t_value = are_equal_with_tolerance(lhs.get_current_target_value(), rhs.get_current_target_value());
+  bool current_t_value = are_equal_with_tolerance(lhs.get_current_optimum(), rhs.get_current_optimum());
 
   return ref_t_values && current_t_value;
 }
@@ -63,32 +78,15 @@ bool operator== (const environment<T> &lhs, const environment<T> &rhs)
 template<env_change_type T>
 double get_target_valueA(const environment<T>& e)
 {
-  return e.get_ref_target_values()[0];
+  return e.get_ref_target_values().first;
 }
 
 ///get the target value B
 template<env_change_type T>
 double get_target_valueB(const environment<T>& e)
 {
-  return e.get_ref_target_values()[1];
+  return e.get_ref_target_values().second;
 }
-
-template <env_change_type T>
-void switch_target(environment<T> &e){
-    //Check which target value is the current one and switch it over to the other
-
-    if (are_equal_with_tolerance(e.get_current_target_value(),
-                                 get_target_valueA(e))
-        )
-      {
-        e.set_current_target_value(get_target_valueB(e));
-      }
-    else
-      {
-        e.set_current_target_value(get_target_valueA(e));
-      }
-  }
-
 
 void test_environment() noexcept;
 

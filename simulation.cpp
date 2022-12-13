@@ -110,7 +110,7 @@ void test_simulation() noexcept//!OCLINT test may be many
 
         //change target value to match output of ind 0 net
         size_t best_ind = 0;
-        change_current_target_value(s, response(get_nth_ind(s, best_ind))[0]);
+        for_test_change_current_target_value(s, response(get_nth_ind(s, best_ind))[0]);
         auto best_net = get_nth_ind_net(s, best_ind);
         auto resp_best = response(get_nth_ind(s, best_ind))[0];
 
@@ -144,7 +144,7 @@ void test_simulation() noexcept//!OCLINT test may be many
 
 
         //change target value to match output of ind 0 net
-        change_current_target_value(s, response(get_nth_ind(s, 0))[0]);
+        for_test_change_current_target_value(s, response(get_nth_ind(s, 0))[0]);
 
         calc_fitness(s);
 
