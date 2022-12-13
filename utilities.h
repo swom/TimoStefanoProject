@@ -10,6 +10,7 @@ bool are_equal_with_tolerance(double lhs, double rhs);
 
 bool are_not_equal_with_tolerance(double lhs, double rhs);
 
+bool are_equal_with_high_tolerance(double lhs, double rhs);
 
 bool are_equal_with_tolerance(int lhs, int rhs);
 

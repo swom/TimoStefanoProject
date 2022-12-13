@@ -128,7 +128,7 @@ void test_environment() noexcept
         environment<env_change_type::noise> e{ep};
 
         int repeats =1000;
-        std::vector<double> optima(repeats);
+        std::vector<double> optima;
 
         for(int i = 0; i != repeats; i++)
         {
@@ -139,8 +139,8 @@ void test_environment() noexcept
         auto mean = calc_mean(optima);
         auto std = calc_stdev(optima);
 
-        assert(are_equal_with_tolerance(mean, target_A));
-        assert(are_equal_with_tolerance(std, step_size));
+        assert(are_equal_with_high_tolerance(mean, target_A));
+        assert(are_equal_with_high_tolerance(std, step_size));
     }
 }
 #endif
