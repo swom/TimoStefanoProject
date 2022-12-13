@@ -17,6 +17,11 @@ std::string convert_env_change_type_to_string(env_change_type e)
         return string;
         break;
 
+    case env_change_type::noise :
+        string = "noise";
+        return string;
+        break;
+
     case env_change_type::None :
         string = "None";
         return string;

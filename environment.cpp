@@ -114,10 +114,33 @@ void test_environment() noexcept
         assert(std::abs(first_optimum - second_optimum) == step_size);
         assert(std::abs(second_optimum - third_optimum) == step_size);
     }
-    ///An environment cna have different types of change:
-    /// 2. an environment can change by drifting with a fixed step size
-    {
 
+
+    ///An environment cna have different types of change:
+    /// 3. an environment can change by sampling the optimal value from
+    /// a normal distribution of
+    /// mean = targetA and
+    /// variance = step-size
+    {
+        double step_size = 0.5;
+        double target_A = 1.234;
+        env_param ep{.targetA = target_A, .targetB = 0, .step_size= step_size};
+        environment<env_change_type::noise> e{ep};
+
+        int repeats =1000;
+        std::vector<double> optima(repeats);
+
+        for(int i = 0; i != repeats; i++)
+        {
+            e.switch_target();
+            optima.push_back(e.get_current_optimum());
+        }
+
+        auto mean = calc_mean(optima);
+        auto std = calc_stdev(optima);
+
+        assert(are_equal_with_tolerance(mean, target_A));
+        assert(are_equal_with_tolerance(std, step_size));
     }
 }
 #endif

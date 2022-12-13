@@ -72,6 +72,10 @@ public:
         {
             m_current_target_value += m_step_size * (std::bernoulli_distribution(0.5)(m_env_rng) ? 1 : -1);
         }
+        else if constexpr(T == env_change_type::noise)
+        {
+            m_current_target_value = std::normal_distribution<double>(m_ref_target_values.first, m_step_size)(m_env_rng);
+        }
 
       }
 

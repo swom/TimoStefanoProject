@@ -9,6 +9,7 @@ enum class env_change_type
 {
     two_optima,
     drift,
+    noise,
     None
 };
 
@@ -16,6 +17,7 @@ static std::map<std::string, env_change_type> string_to_env_change_map
 {
     {"two_optima",env_change_type::two_optima},
     {"drift", env_change_type::drift},
+    {"noise", env_change_type::noise},
     {"None", env_change_type::None}
 };
 
