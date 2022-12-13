@@ -28,7 +28,7 @@ env_param convert_env_args(const cxxopts::ParseResult& results)
         .targetA = results["targetA"].as<double>(),
          .targetB = results["targetB"].as<double>(),
            .step_size = results["step_size"].as<double>(),
-                .env_change_type = string_to_env_change_map.find(results["env_change_type"].as<std::string>())->second
+                .env_change_t = string_to_env_change_map.find(results["env_change_type"].as<std::string>())->second
     };
 }
 
