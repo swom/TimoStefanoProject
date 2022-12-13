@@ -4,6 +4,29 @@
 
 #include "parser.h"
 
+#include "Stopwatch.hpp"
+
+///Executes a simulation for n generations
+template<class S, class O>
+void exec(S &s , O &o)
+{
+    using namespace stopwatch;
+    Stopwatch sw;
+    o.store_par(s);
+
+    while(s.get_time() < s.get_n_gen())
+    {
+        tick(s);
+        o.store_avg_fit_and_env(s);
+        o.store_data_about_inds(s);
+        if(s.get_time() % 1000 == 0)
+        {
+            std::cout << "Cycle " << s.get_time() << ". Elapsed: " << sw.lap<stopwatch::s>() << " seconds." << std::endl;
+        }
+    }
+}
+
+
 #ifndef NDEBUG
 void test() {
     std::cout << "testing environment:";
