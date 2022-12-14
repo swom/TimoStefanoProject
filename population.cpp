@@ -89,9 +89,9 @@ population calc_fitness(population p, const double& env_value,const double &sel_
     return p;
 }
 
-rndutils::mutable_discrete_distribution<>  create_mut_dist_fit(population& p)
+rndutils::mutable_discrete_distribution<int, rndutils::all_zero_policy_uni, std::vector<double>>  create_mut_dist_fit(population& p)
 {
-    rndutils::mutable_discrete_distribution<> mut_dist;
+    rndutils::mutable_discrete_distribution<int, rndutils::all_zero_policy_uni, std::vector<double>> mut_dist;
     mut_dist.mutate_transform(p.get_inds().begin(),
                               p.get_inds().end(),
                               [](const individual& i) {return i.get_fitness();});
@@ -139,7 +139,7 @@ std::vector<double> extract_fitnesses(const std::vector<individual>& inds)
 }
 
 void select_new_pop(population& p,
-                    const rndutils::mutable_discrete_distribution<>& mut_dist,
+                    const rndutils::mutable_discrete_distribution<int, rndutils::all_zero_policy_uni, std::vector<double>>& mut_dist,
                     std::mt19937_64& rng)
 {
     for( size_t i = 0; i != p.get_inds().size(); i++)

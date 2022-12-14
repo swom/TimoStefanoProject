@@ -73,7 +73,7 @@ population calc_fitness(population p, const double &env_value, const double &sel
 void change_nth_ind_net(population& p, size_t ind_index, network n);
 
 ///Creates a mutable distribution from whihc to draw inds based on fitness
-rndutils::mutable_discrete_distribution<>  create_mut_dist_fit(population& p);
+rndutils::mutable_discrete_distribution<int, rndutils::all_zero_policy_uni, std::vector<double>>  create_mut_dist_fit(population& p);
 
 ///Extracts a vector of the fitnesses of individuals into a double vectors
 std::vector<double> extract_fitnesses(const std::vector<individual>& inds);
@@ -101,7 +101,7 @@ void reproduce(population& p, std::mt19937_64& rng);
 ///Select inds for new pop from old pop based on mutable dist
 /// and mutates them
 void select_new_pop(population& p,
-                    const rndutils::mutable_discrete_distribution<>& mut_dist,
+                    const rndutils::mutable_discrete_distribution<int, rndutils::all_zero_policy_uni, std::vector<double> > &mut_dist,
                     std::mt19937_64 &rng);
 
 ///Sets the fitness of the individuals to the one contained in the fitness vector
